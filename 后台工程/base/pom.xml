@@ -7,11 +7,14 @@
 	<artifactId>base</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>common</module>
-		<module>user</module>
-		<module>biz</module>
-        <module>littleapp</module>
-    </modules>
+		<module>public/common</module>
+		<module>public/user</module>
+		<module>public/example</module>
+        <module>public/littleapp</module>
+        <module>public/main</module>
+		<module>private/biz-department</module>
+
+	</modules>
 	<packaging>pom</packaging>
 
 	<name>base</name>
@@ -39,11 +42,6 @@
             <!-- ================================================= -->
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>web</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.base</groupId>
 				<artifactId>common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
@@ -54,7 +52,22 @@
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
+				<artifactId>example</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
 				<artifactId>littleapp</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>main</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-department</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
             <!-- ================================================= -->
