@@ -2,26 +2,45 @@ package com.base.biz.department.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * @author:小M
  * @date:2020/3/27 2:01 AM
  */
+@Entity
+@Table(name = "company")
 public class CampanyDO {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private Date GmtCreate;
+
+    @Column
     private Date GmtModified;
 
     // 单位code
+    @Column
     private String code;
 
     // 单位名称
+    @Column
     private String name;
 
     // 单位描述
+    @Column
     private String desc;
 
     // 父单位
+    @Column
     private String fatherCode;
 
     public Long getId() {

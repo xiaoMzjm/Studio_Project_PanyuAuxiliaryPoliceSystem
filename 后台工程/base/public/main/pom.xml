@@ -34,6 +34,11 @@
             <groupId>com.base</groupId>
             <artifactId>user</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>biz-department</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
 
         <!-- ================================================= -->
@@ -56,6 +61,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!-- 静态资源路由 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- ================================================= -->
         <!-- 数据                                               -->
         <!-- ================================================= -->
