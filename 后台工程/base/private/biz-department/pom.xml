@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <relativePath>../../pom.xml</relativePath>
         <artifactId>base</artifactId>
         <groupId>com.base</groupId>
         <version>0.0.1-SNAPSHOT</version>
@@ -18,6 +19,10 @@
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>biz-department-client</artifactId>
         </dependency>
         <!-- ================================================= -->
         <!-- web                                               -->

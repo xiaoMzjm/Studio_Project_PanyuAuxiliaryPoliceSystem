@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <relativePath>../../pom.xml</relativePath>
         <artifactId>base</artifactId>
         <groupId>com.base</groupId>
         <version>0.0.1-SNAPSHOT</version>
@@ -19,12 +20,10 @@
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>biz-department</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
@@ -37,7 +36,10 @@
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>biz-department</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>biz-department-client</artifactId>
         </dependency>
 
 
@@ -92,4 +94,21 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
     </dependencies>
+
+    <!--<build>-->
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>src/main/resources</directory>-->
+            <!--</resource>-->
+        <!--</resources>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.springframework.boot</groupId>-->
+                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<includeSystemScope>true</includeSystemScope>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 </project>

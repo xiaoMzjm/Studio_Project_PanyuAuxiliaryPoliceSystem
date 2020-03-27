@@ -1,8 +1,8 @@
 package com.base.example.api;
 
+import com.base.common.annotation.ResultFilter;
 import com.base.common.exception.BaseException;
 import com.base.common.util.LogUtil;
-import com.base.example.filter.ApiFilter;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +24,14 @@ public class BaseResource {
         return "信息展示";
     }
 
-    @ApiFilter
+    @ResultFilter
     @ApiOperation(value = "hello接口" , notes = "hello")
     @RequestMapping(value = "/hello/{name}" , method = RequestMethod.GET)
     public Object hello(@PathVariable String name){
         return "hello " + name ;
     }
 
-    @ApiFilter
+    @ResultFilter
     @ApiOperation(value = "抛异常" , notes = "抛异常")
     @RequestMapping(value = "/throwEx" , method = RequestMethod.GET)
     public Object throwEx() throws Exception{

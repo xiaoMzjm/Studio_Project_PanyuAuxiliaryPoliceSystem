@@ -13,6 +13,7 @@
         <module>public/littleapp</module>
         <module>public/main</module>
 		<module>private/biz-department</module>
+        <module>private/biz-department-client</module>
 
 	</modules>
 	<packaging>pom</packaging>
@@ -68,6 +69,11 @@
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>biz-department</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-department-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
             <!-- ================================================= -->
@@ -157,4 +163,6 @@
 
 		</dependencies>
 	</dependencyManagement>
+
+
 </project>
