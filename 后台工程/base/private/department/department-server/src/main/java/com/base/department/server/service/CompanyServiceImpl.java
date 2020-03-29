@@ -40,6 +40,10 @@ public class CompanyServiceImpl{
         List<CompanyVO> list = Lists.newArrayList();
 
         companyVOList.forEach(companyVO -> {
+
+            if ("".equals(companyVO.getFatherCode())) {
+                companyVO.setFatherCode(null);
+            }
             if (Objects.equals(fatherCode, companyVO.getFatherCode())) {
                 companyVO.setSub(buildCompanyTree(companyVOList, companyVO.getCode()));
                 list.add(companyVO);
