@@ -16,7 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "authority",
-    indexes = {@Index(name = "idx_code",  columnList="code", unique = true)})
+    indexes = {@Index(name = "idx_code",  columnList="code", unique = true),
+        @Index(name = "idx_name",  columnList="code", unique = true)})
 public class AuthorityDO {
 
     @Id
@@ -38,7 +39,7 @@ public class AuthorityDO {
     @Column(nullable = false, length = 64)
     private String type;
 
-    @Column(nullable = false, length = 64)
+    @Column(length = 64)
     private String fatherCode;
 
     public Long getId() {

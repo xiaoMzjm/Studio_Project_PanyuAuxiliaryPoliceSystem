@@ -34,7 +34,7 @@ public class CompanyController {
     @ApiOperation(value = "单位列表页面" ,  notes="单位列表页面")
     @GetMapping("")
     public String companyView(){
-        return "company";
+        return "companylist";
     }
 
     @ResultFilter
