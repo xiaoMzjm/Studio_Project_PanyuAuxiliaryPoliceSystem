@@ -7,17 +7,29 @@
 	<artifactId>base</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
+		<module>public/main</module>
 		<module>public/common</module>
-		<module>public/user</module>
 		<module>public/example</module>
-        <module>public/littleapp</module>
-        <module>public/main</module>
+
+		<module>public/user</module>
+		<module>public/user/user-server</module>
+		<module>public/user/user-client</module>
+
+		<module>public/littleapp</module>
+        <module>public/littleapp/littleapp-server</module>
+		<module>public/littleapp/littleapp-client</module>
+
 		<module>public/authority</module>
 		<module>public/authority/authority-server</module>
 		<module>public/authority/authority-client</module>
+
 		<module>private/department</module>
 		<module>private/department/department-server</module>
         <module>private/department/department-client</module>
+
+		<module>private/biz-user</module>
+		<module>private/biz-user/biz-user-server</module>
+		<module>private/biz-user/biz-user-client</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -42,16 +54,11 @@
 	<dependencyManagement>
 		<dependencies>
             <!-- ================================================= -->
-            <!-- 模块                                               -->
+            <!-- 子模块                                               -->
             <!-- ================================================= -->
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>common</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>user</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -61,12 +68,39 @@
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
+				<artifactId>main</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 用户 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 小程序 -->
+			<dependency>
+				<groupId>com.base</groupId>
 				<artifactId>littleapp</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>main</artifactId>
+				<artifactId>littleapp-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>littleapp-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<!-- 单位管理 -->
@@ -101,6 +135,24 @@
 				<artifactId>authority-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
+			<!-- 个性化用户 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user
+				</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
             <!-- ================================================= -->
             <!-- 工具类                                             -->
             <!-- ================================================= -->

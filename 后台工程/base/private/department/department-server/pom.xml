@@ -23,6 +23,10 @@
             <groupId>com.base</groupId>
             <artifactId>department-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>user-client</artifactId>
+        </dependency>
         <!-- ================================================= -->
         <!-- web                                               -->
         <!-- ================================================= -->

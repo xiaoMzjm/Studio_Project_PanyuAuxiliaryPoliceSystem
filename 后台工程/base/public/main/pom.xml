@@ -23,11 +23,11 @@
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>littleapp</artifactId>
+            <artifactId>littleapp-server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>user</artifactId>
+            <artifactId>user-server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
@@ -36,6 +36,10 @@
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>authority-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>biz-user-server</artifactId>
         </dependency>
 
         <!-- ================================================= -->

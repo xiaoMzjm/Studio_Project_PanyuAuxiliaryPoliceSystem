@@ -10,6 +10,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+    <modules>
+        <module>department-client</module>
+        <module>department-server</module>
+    </modules>
 
     <artifactId>department</artifactId>
 

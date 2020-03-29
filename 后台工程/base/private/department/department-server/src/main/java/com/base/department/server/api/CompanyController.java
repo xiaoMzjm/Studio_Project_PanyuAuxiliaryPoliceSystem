@@ -8,6 +8,7 @@ import com.base.department.server.service.CompanyServiceImpl;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.department.client.model.CompanyVO;
+import com.base.user.client.model.TokenFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,6 +39,7 @@ public class CompanyController {
     }
 
     @ResultFilter
+    //@TokenFilter
     @ApiOperation(value = "获取单位树" ,  notes="获取单位树")
     @RequestMapping(value = "/listall", method = RequestMethod.POST)
     @ResponseBody
