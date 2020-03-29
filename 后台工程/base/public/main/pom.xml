@@ -19,10 +19,6 @@
         <!-- ================================================= -->
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>biz-department</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.base</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>
@@ -35,13 +31,12 @@
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>biz-department</artifactId>
+            <artifactId>department-server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>biz-department-client</artifactId>
+            <artifactId>authority-server</artifactId>
         </dependency>
-
 
         <!-- ================================================= -->
         <!-- spring                                               -->
@@ -95,20 +90,4 @@
         </dependency>
     </dependencies>
 
-    <!--<build>-->
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/resources</directory>-->
-            <!--</resource>-->
-        <!--</resources>-->
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>org.springframework.boot</groupId>-->
-                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<includeSystemScope>true</includeSystemScope>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-    <!--</build>-->
 </project>

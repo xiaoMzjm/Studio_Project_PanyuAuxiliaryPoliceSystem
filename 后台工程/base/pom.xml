@@ -12,9 +12,12 @@
 		<module>public/example</module>
         <module>public/littleapp</module>
         <module>public/main</module>
-		<module>private/biz-department</module>
-        <module>private/biz-department-client</module>
-
+		<module>public/authority</module>
+		<module>public/authority/authority-server</module>
+		<module>public/authority/authority-client</module>
+		<module>private/department</module>
+		<module>private/department/department-server</module>
+        <module>private/department/department-client</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -66,14 +69,36 @@
 				<artifactId>main</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
+			<!-- 单位管理 -->
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>biz-department</artifactId>
+				<artifactId>department</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>biz-department-client</artifactId>
+				<artifactId>department-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>department-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 权限管理 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
             <!-- ================================================= -->
