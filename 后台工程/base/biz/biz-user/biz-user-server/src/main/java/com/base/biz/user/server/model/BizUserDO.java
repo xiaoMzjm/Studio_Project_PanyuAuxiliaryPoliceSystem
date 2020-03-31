@@ -1,5 +1,7 @@
 package com.base.biz.user.server.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,14 +24,23 @@ public class BizUserDO {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Date gmtCreate;
+
+    @Column(nullable = false)
+    private Date gmtModified;
+
     @Column(length = 64 , nullable = false)
     private String code;
 
     @Column(length = 64 , nullable = false)
-    private String identityCard;
+    private String password;
 
     @Column(length = 64 , nullable = false)
-    private String password;
+    private String identityCard;
+
+
+
 
     public Long getId() {
         return id;
