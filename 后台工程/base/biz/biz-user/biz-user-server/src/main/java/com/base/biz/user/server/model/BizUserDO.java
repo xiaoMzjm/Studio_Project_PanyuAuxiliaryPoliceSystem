@@ -36,8 +36,51 @@ public class BizUserDO {
     @Column(length = 64 , nullable = false)
     private String password;
 
+    @Column(length = 64)
+    private String name; // 姓名
+
+    @Column
+    private Date birthdate; // 生日
+
+    @Column
+    private Integer nation; // 名族 @see NationEnum
+
+    @Column
+    private Integer politicalLandscape; // 政治面貌 @see PoliticalLandscapeEnum
+
+    @Column(length = 128)
+    private String graduateSchool; // 毕业院校
+
+    @Column(length = 64)
+    private String policeCode; // 警号
+
+    @Column(length = 64)
+    private String drivingType; // 准驾车型 @see DrivingTypeEnum
+
+    @Column(length = 4096)
+    private String speciality; // 特长
+
+    @Column
+    private Integer exserviceman; // 是否退役军人 @see ExservicemanEnum
+
+    @Column(length = 512)
+    private String permanentResidenceAddress; // 户籍地址
+
+    @Column(length = 512)
+    private String familyAddress; //家庭住址
+
+    @Column
+    private Integer sex; // 性别 @see SexEnum
+
+    @Column
+    private Integer age; // 年龄
+
+    @Column(length = 512)
+    private String nativePlace; // 籍贯
+
     @Column(length = 64 , nullable = false)
     private String identityCard;
+
 
 
 

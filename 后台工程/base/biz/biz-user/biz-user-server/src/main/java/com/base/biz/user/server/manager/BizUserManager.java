@@ -7,8 +7,6 @@ import com.base.biz.user.server.model.BizUserConvertor;
 import com.base.biz.user.server.model.BizUserDO;
 import com.base.biz.user.server.model.BizUserDTO;
 import com.base.common.exception.BaseException;
-import com.base.user.client.model.UserVO;
-import com.base.user.client.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
