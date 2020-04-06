@@ -9,7 +9,7 @@ import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
 import com.base.biz.user.client.common.Enums.ExservicemanEnum;
 import com.base.biz.user.client.common.Enums.JobCategoryEnum;
-import com.base.biz.user.client.common.Enums.JopGradeEnum;
+import com.base.biz.user.client.common.Enums.JobGradeEnum;
 import com.base.biz.user.client.common.Enums.MaritalStatusEnum;
 import com.base.biz.user.client.common.Enums.NationEnum;
 import com.base.biz.user.client.common.Enums.PersonnelTypeEnum;
@@ -22,6 +22,7 @@ import com.base.common.constant.Result;
 import com.base.user.client.model.TokenFilter;
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,10 +30,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author:小M
  * @date:2020/4/6 1:20 PM
  */
-@Api("人员管理枚举")
+@Api(description = "人员管理枚举")
 @Controller
 @ResponseBody
 @RequestMapping(value = "/user/enum/" , produces = "application/json;charset=UTF-8")
+@CrossOrigin(origins = "http://192.168.1.2:8080")
 public class BizUserEnumController {
 
     @ResultFilter
@@ -109,7 +111,7 @@ public class BizUserEnumController {
     @TokenFilter
     @RequestMapping("jobgrade")
     public String jobgrade(){
-        return JSON.toJSONString(Result.success(JopGradeEnum.getAll()));
+        return JSON.toJSONString(Result.success(JobGradeEnum.getAll()));
     }
 
     @ResultFilter
