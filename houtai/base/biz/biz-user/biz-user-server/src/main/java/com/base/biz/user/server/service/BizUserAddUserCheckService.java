@@ -1,6 +1,6 @@
 package com.base.biz.user.server.service;
 
-import java.util.Date;
+import java.util.*;
 
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
@@ -18,11 +18,13 @@ import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.biz.user.server.model.BizUserAddParam;
-import com.base.biz.user.server.model.BizUserAddParam.AddParamExperience;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.department.client.model.CompanyVO;
 import com.base.department.client.service.CompanyService;
+import com.base.resource.client.model.ResourceVO;
+import com.base.resource.client.service.ResourceService;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class BizUserAddUserCheckService {
 
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private ResourceService resourceService;
+
 
     public void check(BizUserAddParam param) throws BaseException {
         // 姓名
@@ -46,6 +51,14 @@ public class BizUserAddUserCheckService {
                 throw new BaseException(String.format("姓名[%s]长度不能超过64个字符",param.name));
             }
         }
+        // 头像
+        if (StringUtils.isNotEmpty(param.headPicCode)) {
+            Map<String,ResourceVO> resourceVOMap = resourceService.findByNameList(Lists.newArrayList(param.headPicCode));
+            if(resourceVOMap == null || resourceVOMap.get(param.headPicCode) == null) {
+                throw new BaseException(String.format("头像Code不存在[%s]",param.headPicCode));
+            }
+        }
+
         // 生日
         if (StringUtils.isNotEmpty(param.birthdate)) {
             Date birthday = DateUtil.convert2Date(param.birthdate, "yyyy/mm/dd");

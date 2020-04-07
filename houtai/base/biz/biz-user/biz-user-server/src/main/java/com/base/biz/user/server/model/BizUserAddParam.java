@@ -32,6 +32,8 @@ public class BizUserAddParam {
 
     @ApiParam(name="姓名",value="name")
     public String name;
+    @ApiParam(name="头像",value="headPicCode")
+    public String headPicCode;
     @ApiParam(name="出生日期",value="birthdate")
     public String birthdate;
 
