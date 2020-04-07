@@ -141,10 +141,19 @@ public class BizUserAddParam {
 
     @ApiParam(name="工作单位",value="workUnitCode")
     public String workUnitCode;
+    @ApiParam(name="工作单位",value="workUnitName")
+    public String workUnitName;
+
     @ApiParam(name="编制单位",value="organizationUnitCode")
     public String organizationUnitCode;
+    @ApiParam(name="编制单位",value="organizationUnitName")
+    public String organizationUnitName;
+
     @ApiParam(name="岗位类别",value="jobCategory")
     public Integer jobCategory;
+    @ApiParam(name="岗位类别",value="jobCategoryStr")
+    public String jobCategoryStr;
+
     @ApiParam(name="职务",value="duty")
     public String duty;
     @ApiParam(name="社保编码",value="socialSecurityNumber")
@@ -155,6 +164,10 @@ public class BizUserAddParam {
     public String contractExpirationDate;
     @ApiParam(name="离职时间",value="dimissionDate")
     public String dimissionDate;
+    @ApiParam(name="离职原因",value="dimissionReason")
+    public String dimissionReason;
+
+
     @ApiParam(name="个人经历",value="personalExperience")
     public List<AddParamExperience> personalExperience;
     @ApiParam(name="家庭成员",value="familyMember")
@@ -164,7 +177,7 @@ public class BizUserAddParam {
     @ApiParam(name="考核情况",value="assessment")
     public List<AddParamAssessment> assessment;
 
-    static class AddParamExperience {
+    public static class AddParamExperience {
         @ApiParam(name="起始日期",value="timeStart")
         public String timeStart;
         @ApiParam(name="结束日期",value="timeEnd")
@@ -177,16 +190,24 @@ public class BizUserAddParam {
         public String duty;
     }
 
-    static class AddParamFamilyMember {
+    public static class AddParamFamilyMember {
         @ApiParam(name="姓名",value="name")
         public String name;
         @ApiParam(name="关系",value="relation")
         public String relation;
         @ApiParam(name="单位",value="company")
         public String company;
+        @ApiParam(name="单位",value="duty")
+        public String duty;
+        @ApiParam(name="身份证",value="identityCard")
+        public String identityCard;
+        @ApiParam(name="手机",value="phone")
+        public String phone;
+        @ApiParam(name="政治面貌",value="politicalLandscapeCode")
+        public Integer politicalLandscapeCode;
     }
 
-    static class AddParamAward {
+    public static class AddParamAward {
         @ApiParam(name="奖惩名称",value="name")
         public String name;
         @ApiParam(name="奖惩时间",value="time")
@@ -197,7 +218,7 @@ public class BizUserAddParam {
         public String company;
     }
 
-    static class AddParamAssessment{
+    public static class AddParamAssessment{
         @ApiParam(name="发生时间",value="time")
         public String time;
         @ApiParam(name="等级",value="grade")

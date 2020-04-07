@@ -8,6 +8,7 @@ import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
 import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
 import com.base.biz.user.client.common.Enums.ExservicemanEnum;
+import com.base.biz.user.client.common.Enums.JobCategoryEnum;
 import com.base.biz.user.client.common.Enums.JobGradeEnum;
 import com.base.biz.user.client.common.Enums.MaritalStatusEnum;
 import com.base.biz.user.client.common.Enums.NationEnum;
@@ -17,9 +18,14 @@ import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.biz.user.server.model.BizUserAddParam;
+import com.base.biz.user.server.model.BizUserAddParam.AddParamExperience;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
+import com.base.department.client.model.CompanyVO;
+import com.base.department.client.service.CompanyService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,7 +36,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizUserAddUserCheckService {
 
-    public static void check(BizUserAddParam param) throws BaseException {
+    @Autowired
+    private CompanyService companyService;
+
+    public void check(BizUserAddParam param) throws BaseException {
         // 姓名
         if (StringUtils.isNotEmpty(param.name)) {
             if (param.name.length() > 64) {
@@ -309,8 +318,222 @@ public class BizUserAddUserCheckService {
         }
         // 工作单位
         if (StringUtils.isNotEmpty(param.workUnitCode)) {
-
+            CompanyVO companyVO = companyService.findByCode(param.workUnitCode);
+            if (companyVO == null) {
+                throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitCode));
+            }
         }
+        if (StringUtils.isNotEmpty(param.workUnitName)) {
+            CompanyVO companyVO = companyService.findByName(param.workUnitName);
+            if (companyVO == null) {
+                throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitName));
+            }
+        }
+        // 编制单位
+        if (StringUtils.isNotEmpty(param.organizationUnitCode)) {
+            CompanyVO companyVO = companyService.findByCode(param.organizationUnitCode);
+            if (companyVO == null) {
+                throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitCode));
+            }
+        }
+        if (StringUtils.isNotEmpty(param.organizationUnitName)) {
+            CompanyVO companyVO = companyService.findByName(param.organizationUnitName);
+            if (companyVO == null) {
+                throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitName));
+            }
+        }
+        // 岗位类别
+        if (param.jobCategory != null) {
+            JobCategoryEnum e = JobCategoryEnum.get(param.jobCategory);
+            if (e == null) {
+                throw new BaseException(String.format("岗位类别[%s]格式错误，正确格式为[%s]",param.jobCategory, JobCategoryEnum.getAllCode()));
+            }
+        }
+        if (StringUtils.isNotEmpty(param.jobCategoryStr)) {
+            JobCategoryEnum e = JobCategoryEnum.get(param.jobCategoryStr);
+            if (e == null) {
+                throw new BaseException(String.format("岗位类别[%s]格式错误，正确格式为[%s]",param.jobCategoryStr, JobCategoryEnum.getAllName()));
+            }
+        }
+        // 职务
+        if(StringUtils.isNotEmpty(param.duty)) {
+            if(param.duty.length() > 128) {
+                throw new BaseException(String.format("职务[%s]长度不能超过128个字符",param.duty));
+            }
+        }
+        // 社保编码
+        if(StringUtils.isNotEmpty(param.socialSecurityNumber)) {
+            if(param.socialSecurityNumber.length() > 64) {
+                throw new BaseException(String.format("社保编码[%s]长度不能超过64个字符",param.socialSecurityNumber));
+            }
+        }
+        //入职公安时间
+        if (StringUtils.isNotEmpty(param.beginPoliceWorkTime)) {
+            Date date = DateUtil.convert2Date(param.beginPoliceWorkTime,"yyyy/mm/dd");
+            if (date == null) {
+                throw new BaseException(String.format("入职公安时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.beginPoliceWorkTime));
+            }
+        }
+        // 合同失效时间
+        if (StringUtils.isNotEmpty(param.contractExpirationDate)) {
+            Date date = DateUtil.convert2Date(param.contractExpirationDate,"yyyy/mm/dd");
+            if (date == null) {
+                throw new BaseException(String.format("合同失效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.contractExpirationDate));
+            }
+        }
+        // 离职时间
+        if (StringUtils.isNotEmpty(param.dimissionDate)) {
+            Date date = DateUtil.convert2Date(param.dimissionDate,"yyyy/mm/dd");
+            if (date == null) {
+                throw new BaseException(String.format("离职时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.dimissionDate));
+            }
+        }
+        // 离职原因
+        if(StringUtils.isNotEmpty(param.dimissionReason)) {
+            if(param.dimissionReason.length() > 512) {
+                throw new BaseException(String.format("离职原因[%s]长度不能超过512个字符",param.dimissionReason));
+            }
+        }
+        // 工作经历
+        if(CollectionUtils.isNotEmpty(param.personalExperience)) {
+            for(BizUserAddParam.AddParamExperience addParamExperience : param.personalExperience) {
+                // 起始日期
+                if(StringUtils.isNotEmpty(addParamExperience.timeStart)) {
+                    Date date = DateUtil.convert2Date(addParamExperience.timeStart,"yyyy/mm/dd");
+                    if (date == null) {
+                        throw new BaseException(String.format("工作经历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
+                    }
+                }
+                // 结束日期
+                if(StringUtils.isNotEmpty(addParamExperience.timeEnd)) {
+                    Date date = DateUtil.convert2Date(addParamExperience.timeEnd,"yyyy/mm/dd");
+                    if (date == null) {
+                        throw new BaseException(String.format("工作经历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
+                    }
+                }
+                // 单位或组织名称
+                if(StringUtils.isNotEmpty(addParamExperience.unit)) {
+                    if(addParamExperience.unit.length() > 128) {
+                        throw new BaseException(String.format("工作经历-单位或组织名称[%s]长度不能超过128个字符",addParamExperience.unit));
+                    }
+                }
+                // 部门
+                if(StringUtils.isNotEmpty(addParamExperience.department)) {
+                    if(addParamExperience.department.length() > 128) {
+                        throw new BaseException(String.format("工作经历-部门[%s]长度不能超过128个字符",addParamExperience.department));
+                    }
+                }
+                // 职务
+                if(StringUtils.isNotEmpty(addParamExperience.duty)) {
+                    if(addParamExperience.duty.length() > 128) {
+                        throw new BaseException(String.format("工作经历-职务[%s]长度不能超过128个字符",addParamExperience.duty));
+                    }
+                }
+            }
+        }
+        // 家庭成员
+        if(CollectionUtils.isNotEmpty(param.familyMember)) {
+            for(BizUserAddParam.AddParamFamilyMember addParamFamilyMember : param.familyMember) {
 
+                // 姓名
+                if(StringUtils.isNotEmpty(addParamFamilyMember.name)) {
+                    if(addParamFamilyMember.name.length() > 64) {
+                        throw new BaseException(String.format("家庭成员-姓名[%s]长度不能超过64个字符",addParamFamilyMember.name));
+                    }
+                }
+                // 关系
+                if(StringUtils.isNotEmpty(addParamFamilyMember.relation)) {
+                    if(addParamFamilyMember.relation.length() > 64) {
+                        throw new BaseException(String.format("家庭成员-关系[%s]长度不能超过64个字符",addParamFamilyMember.relation));
+                    }
+                }
+                // 单位
+                if(StringUtils.isNotEmpty(addParamFamilyMember.company)) {
+                    if(addParamFamilyMember.company.length() > 64) {
+                        throw new BaseException(String.format("家庭成员-单位[%s]长度不能超过64个字符",addParamFamilyMember.company));
+                    }
+                }
+                // 职务
+                if(StringUtils.isNotEmpty(addParamFamilyMember.duty)) {
+                    if(addParamFamilyMember.duty.length() > 128) {
+                        throw new BaseException(String.format("家庭成员-部门[%s]长度不能超过128个字符",addParamFamilyMember.duty));
+                    }
+                }
+                // 身份证
+                if (StringUtils.isNotEmpty(addParamFamilyMember.identityCard)) {
+                    if (addParamFamilyMember.identityCard.length() > 64) {
+                        throw new BaseException(String.format("家庭成员-身份证[%s]长度不能超过64个字符",addParamFamilyMember.identityCard));
+                    }
+                }
+                // 电话
+                if (StringUtils.isNotEmpty(addParamFamilyMember.phone)) {
+                    if (addParamFamilyMember.phone.length() > 64) {
+                        throw new BaseException(String.format("家庭成员-手机[%s]长度不能超过64个字符",addParamFamilyMember.phone));
+                    }
+                }
+                // 政治身份
+                if (addParamFamilyMember.politicalLandscapeCode != null) {
+                    PoliticalLandscapeEnum e = PoliticalLandscapeEnum.get(addParamFamilyMember.politicalLandscapeCode);
+                    if (e == null) {
+                        throw new BaseException(String.format("家庭成员-政治身份[%s]格式错误，正确格式范围为[%s]",addParamFamilyMember.politicalLandscapeCode, PoliticalLandscapeEnum.getAllCode()));
+                    }
+                }
+            }
+        }
+        // 奖惩情况
+        if(CollectionUtils.isNotEmpty(param.award)) {
+            for(BizUserAddParam.AddParamAward award : param.award) {
+                // 奖惩名称
+                if (StringUtils.isNotEmpty(award.name)) {
+                    if (award.name.length() > 128) {
+                        throw new BaseException(String.format("奖惩情况-奖惩名称[%s]长度不能超过128个字符",award.name));
+                    }
+                }
+                // 奖惩时间
+                if (StringUtils.isNotEmpty(award.time)) {
+                    Date date = DateUtil.convert2Date(award.time,"yyyy/mm/dd");
+                    if (date == null) {
+                        throw new BaseException(String.format("奖惩情况-奖惩时间[%s]格式错误，正确格式为：yyyy/mm/dd",award.time));
+                    }
+                }
+                // 奖惩原因
+                if (StringUtils.isNotEmpty(award.reason)) {
+                    if (award.reason.length() > 512) {
+                        throw new BaseException(String.format("奖惩情况-奖惩原因[%s]长度不能超过512个字符",award.name));
+                    }
+                }
+                // 批准单位
+                if (StringUtils.isNotEmpty(award.company)) {
+                    if (award.company.length() > 512) {
+                        throw new BaseException(String.format("奖惩情况-批准单位[%s]长度不能超过512个字符",award.company));
+                    }
+                }
+            }
+        }
+        // 考核情况
+        if(CollectionUtils.isNotEmpty(param.assessment)){
+            for(BizUserAddParam.AddParamAssessment addParamAssessment : param.assessment) {
+
+                // 发生时间
+                if (StringUtils.isNotEmpty(addParamAssessment.time)) {
+                    Date date = DateUtil.convert2Date(addParamAssessment.time,"yyyy/mm/dd");
+                    if (date == null) {
+                        throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy/mm/dd",addParamAssessment.time));
+                    }
+                }
+                // 等级
+                if (StringUtils.isNotEmpty(addParamAssessment.grade)) {
+                    if (addParamAssessment.grade.length() > 64) {
+                        throw new BaseException(String.format("考核情况-等级[%s]长度不能超过64个字符",addParamAssessment.grade));
+                    }
+                }
+                // 备注
+                if (StringUtils.isNotEmpty(addParamAssessment.remark)) {
+                    if (addParamAssessment.remark.length() > 64) {
+                        throw new BaseException(String.format("考核情况-备注[%s]长度不能超过512个字符",addParamAssessment.remark));
+                    }
+                }
+            }
+        }
     }
 }
