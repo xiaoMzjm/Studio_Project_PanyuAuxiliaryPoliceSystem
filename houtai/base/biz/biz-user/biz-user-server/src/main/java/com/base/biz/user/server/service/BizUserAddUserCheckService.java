@@ -2,6 +2,7 @@ package com.base.biz.user.server.service;
 
 import java.util.*;
 
+import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
@@ -45,6 +46,9 @@ public class BizUserAddUserCheckService {
 
 
     public void check(BizUserAddParam param) throws BaseException {
+        if (StringUtils.isEmpty(param.identityCard)) {
+            throw new BaseException(String.format("身份证信息不能为空"));
+        }
         // 姓名
         if (StringUtils.isNotEmpty(param.name)) {
             if (param.name.length() > 64) {
@@ -61,7 +65,7 @@ public class BizUserAddUserCheckService {
 
         // 生日
         if (StringUtils.isNotEmpty(param.birthdate)) {
-            Date birthday = DateUtil.convert2Date(param.birthdate, "yyyy/mm/dd");
+            Date birthday = DateUtil.convert2Date(param.birthdate, BizUserConstant.DateFormat);
             if (birthday == null) {
                 throw new BaseException(String.format("生日[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
             }
@@ -297,21 +301,21 @@ public class BizUserAddUserCheckService {
         }
         // 参加工作时间
         if (StringUtils.isNotEmpty(param.beginWorkTime)) {
-            Date date = DateUtil.convert2Date(param.beginWorkTime, "yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.beginWorkTime, BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("参加工作时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
             }
         }
         // 合同生效时间
         if (StringUtils.isNotEmpty(param.effectiveDateOfTheContract)) {
-            Date date = DateUtil.convert2Date(param.effectiveDateOfTheContract, "yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.effectiveDateOfTheContract, BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
             }
         }
         // 退休时间
         if (StringUtils.isNotEmpty(param.retirementDate)) {
-            Date date = DateUtil.convert2Date(param.retirementDate, "yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.retirementDate, BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("退休时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
             }
@@ -382,21 +386,21 @@ public class BizUserAddUserCheckService {
         }
         //入职公安时间
         if (StringUtils.isNotEmpty(param.beginPoliceWorkTime)) {
-            Date date = DateUtil.convert2Date(param.beginPoliceWorkTime,"yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.beginPoliceWorkTime,BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("入职公安时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.beginPoliceWorkTime));
             }
         }
         // 合同失效时间
         if (StringUtils.isNotEmpty(param.contractExpirationDate)) {
-            Date date = DateUtil.convert2Date(param.contractExpirationDate,"yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.contractExpirationDate,BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("合同失效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.contractExpirationDate));
             }
         }
         // 离职时间
         if (StringUtils.isNotEmpty(param.dimissionDate)) {
-            Date date = DateUtil.convert2Date(param.dimissionDate,"yyyy/mm/dd");
+            Date date = DateUtil.convert2Date(param.dimissionDate,BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("离职时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.dimissionDate));
             }
@@ -412,14 +416,14 @@ public class BizUserAddUserCheckService {
             for(BizUserAddParam.AddParamExperience addParamExperience : param.personalExperience) {
                 // 起始日期
                 if(StringUtils.isNotEmpty(addParamExperience.timeStart)) {
-                    Date date = DateUtil.convert2Date(addParamExperience.timeStart,"yyyy/mm/dd");
+                    Date date = DateUtil.convert2Date(addParamExperience.timeStart,BizUserConstant.DateFormat);
                     if (date == null) {
                         throw new BaseException(String.format("工作经历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
                     }
                 }
                 // 结束日期
                 if(StringUtils.isNotEmpty(addParamExperience.timeEnd)) {
-                    Date date = DateUtil.convert2Date(addParamExperience.timeEnd,"yyyy/mm/dd");
+                    Date date = DateUtil.convert2Date(addParamExperience.timeEnd,BizUserConstant.DateFormat);
                     if (date == null) {
                         throw new BaseException(String.format("工作经历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
                     }
@@ -504,7 +508,7 @@ public class BizUserAddUserCheckService {
                 }
                 // 奖惩时间
                 if (StringUtils.isNotEmpty(award.time)) {
-                    Date date = DateUtil.convert2Date(award.time,"yyyy/mm/dd");
+                    Date date = DateUtil.convert2Date(award.time,BizUserConstant.DateFormat);
                     if (date == null) {
                         throw new BaseException(String.format("奖惩情况-奖惩时间[%s]格式错误，正确格式为：yyyy/mm/dd",award.time));
                     }
@@ -529,7 +533,7 @@ public class BizUserAddUserCheckService {
 
                 // 发生时间
                 if (StringUtils.isNotEmpty(addParamAssessment.time)) {
-                    Date date = DateUtil.convert2Date(addParamAssessment.time,"yyyy/mm/dd");
+                    Date date = DateUtil.convert2Date(addParamAssessment.time,BizUserConstant.DateFormat);
                     if (date == null) {
                         throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy/mm/dd",addParamAssessment.time));
                     }
