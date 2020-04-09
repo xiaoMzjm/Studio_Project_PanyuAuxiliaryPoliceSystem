@@ -1,5 +1,7 @@
 package com.base.department.server.service;
 
+import java.util.List;
+
 import com.base.department.client.model.CompanyVO;
 import com.base.department.client.service.CompanyService;
 import com.base.department.server.manager.CompanyManager;
@@ -29,4 +31,11 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDTO companyDTO = companyManager.findByName(name);
         return CompanyConvertor.dto2vo(companyDTO);
     }
+
+    @Override
+    public List<CompanyVO> findByCodeList(List<String> codeList) {
+        List<CompanyDTO> companyDTOList = companyManager.findByCodeList(codeList);
+        return CompanyConvertor.dto2voList(companyDTOList);
+    }
+
 }
