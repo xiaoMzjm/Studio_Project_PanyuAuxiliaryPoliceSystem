@@ -105,8 +105,8 @@ public class BizUserAddParam {
 
     @ApiParam(name="编制类别",value="authorizedStrengthType")
     public Integer authorizedStrengthType;
-   @ApiParam(name="编制类别",value="authorizedStrengthTypeStr")
-   public String authorizedStrengthTypeStr;
+    @ApiParam(name="编制类别",value="authorizedStrengthTypeStr")
+    public String authorizedStrengthTypeStr;
 
     @ApiParam(name="工作岗位",value="placeOfWork")
     public Integer placeOfWork;

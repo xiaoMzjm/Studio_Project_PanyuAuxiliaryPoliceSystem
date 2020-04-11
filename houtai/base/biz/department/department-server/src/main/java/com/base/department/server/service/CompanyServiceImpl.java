@@ -38,4 +38,10 @@ public class CompanyServiceImpl implements CompanyService {
         return CompanyConvertor.dto2voList(companyDTOList);
     }
 
+    @Override
+    public List<CompanyVO> findAll() {
+        List<CompanyDTO> companyDTOList = companyManager.findAll();
+        return CompanyConvertor.dto2voList(companyDTOList);
+    }
+
 }

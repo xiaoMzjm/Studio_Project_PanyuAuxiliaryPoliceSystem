@@ -7,6 +7,7 @@ import java.util.List;
  * @date:2020/4/10 1:46 AM
  */
 public class BizUserDetailVO {
+    private String code;
     private String name;
     private String headPicUrl;
     private String birthdate;
@@ -571,6 +572,14 @@ public class BizUserDetailVO {
 
     public void setAssessment(List<Assessment> assessment) {
         this.assessment = assessment;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public static class Experience {

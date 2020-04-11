@@ -49,6 +49,9 @@ public class BizUserAddUserCheckService {
         if (StringUtils.isEmpty(param.identityCard)) {
             throw new BaseException(String.format("身份证信息不能为空"));
         }
+        if (StringUtils.isEmpty(param.name)) {
+            throw new BaseException(String.format("姓名不能为空"));
+        }
         // 姓名
         if (StringUtils.isNotEmpty(param.name)) {
             if (param.name.length() > 64) {
