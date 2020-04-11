@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.base</groupId>
+	<artifactId>base</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<modules>
+		<module>public/main</module>
+		<module>public/common</module>
+		<module>public/example</module>
+
+		<module>public/user</module>
+		<module>public/user/user-server</module>
+		<module>public/user/user-client</module>
+
+		<module>public/littleapp</module>
+        <module>public/littleapp/littleapp-server</module>
+		<module>public/littleapp/littleapp-client</module>
+
+		<module>public/authority</module>
+		<module>public/authority/authority-server</module>
+		<module>public/authority/authority-client</module>
+
+		<module>public/resource</module>
+		<module>public/resource/resource-client</module>
+		<module>public/resource/resource-server</module>
+
+		<module>biz/department</module>
+		<module>biz/department/department-server</module>
+        <module>biz/department/department-client</module>
+
+		<module>biz/biz-user</module>
+		<module>biz/biz-user/biz-user-server</module>
+		<module>biz/biz-user/biz-user-client</module>
+    </modules>
+	<packaging>pom</packaging>
+
+	<name>base</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+
+		<swagger.version>2.9.2</swagger.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+            <!-- ================================================= -->
+            <!-- 子模块                                               -->
+            <!-- ================================================= -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>example</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>main</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 用户 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>user-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 资源 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>resource</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>resource-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>resource-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 小程序 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>littleapp</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>littleapp-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>littleapp-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 单位管理 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>department</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>department-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>department-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 权限管理 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>authority-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<!-- 个性化用户 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user
+				</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-user-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+            <!-- ================================================= -->
+            <!-- 工具类                                             -->
+            <!-- ================================================= -->
+            <!-- swagger -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+			<!-- fastjson -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.46</version>
+			</dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.8.1</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.3</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>25.0-jre</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/net.iharder/base64 -->
+			<dependency>
+				<groupId>net.iharder</groupId>
+				<artifactId>base64</artifactId>
+				<version>2.3.8</version>
+			</dependency>
+			<!-- 解密 -->
+			<dependency>
+				<groupId>org.codehaus.xfire</groupId>
+				<artifactId>xfire-core</artifactId>
+				<version>1.2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk16</artifactId>
+				<version>1.46</version>
+			</dependency>
+            <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.6</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- ================================================= -->
+            <!-- 数据库                                             -->
+            <!-- ================================================= -->
+            <!-- jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>2.9.0</version>
+            </dependency>
+
+			<!-- ================================================= -->
+			<!-- 网络                                               -->
+			<!-- ================================================= -->
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>fluent-hc</artifactId>
+				<version>4.5.3</version>
+			</dependency>
+
+
+
+
+		</dependencies>
+	</dependencyManagement>
+
+
+</project>

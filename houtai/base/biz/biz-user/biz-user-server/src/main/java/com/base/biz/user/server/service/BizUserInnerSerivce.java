@@ -1,0 +1,535 @@
+package com.base.biz.user.server.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.base.biz.user.client.common.BizUserConstant;
+import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
+import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
+import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
+import com.base.biz.user.client.common.Enums.EducationEnum;
+import com.base.biz.user.client.common.Enums.EnrollWayEnum;
+import com.base.biz.user.client.common.Enums.ExservicemanEnum;
+import com.base.biz.user.client.common.Enums.JobCategoryEnum;
+import com.base.biz.user.client.common.Enums.JobGradeEnum;
+import com.base.biz.user.client.common.Enums.MaritalStatusEnum;
+import com.base.biz.user.client.common.Enums.NationEnum;
+import com.base.biz.user.client.common.Enums.PersonnelTypeEnum;
+import com.base.biz.user.client.common.Enums.PlaceOfWorkEnum;
+import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
+import com.base.biz.user.client.common.Enums.SexEnum;
+import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
+import com.base.biz.user.client.model.BizUserDetailVO;
+import com.base.biz.user.client.model.BizUserDetailVO.Experience;
+import com.base.biz.user.client.model.BizUserLoginVO;
+import com.base.biz.user.client.model.BizUserPageListVO;
+import com.base.biz.user.server.manager.AssessmentManager;
+import com.base.biz.user.server.manager.AwardManager;
+import com.base.biz.user.server.manager.BizUserManager;
+import com.base.biz.user.server.manager.FamilyMemberManager;
+import com.base.biz.user.server.manager.PersonalExperienceManager;
+import com.base.biz.user.server.model.AssessmentDTO;
+import com.base.biz.user.server.model.AwardDTO;
+import com.base.biz.user.server.model.BizUserAddParam;
+import com.base.biz.user.server.model.BizUserConvertor;
+import com.base.biz.user.server.model.BizUserDTO;
+import com.base.biz.user.server.model.FamilyMemberDTO;
+import com.base.biz.user.server.model.PersonalExperienceDTO;
+import com.base.biz.user.server.model.SuperPageListParam;
+import com.base.biz.user.server.model.UpdateParam;
+import com.base.common.exception.BaseException;
+import com.base.common.util.DateUtil;
+import com.base.common.util.VerifyUtil;
+import com.base.department.client.model.CompanyVO;
+import com.base.department.client.service.CompanyService;
+import com.base.resource.client.model.ResourceVO;
+import com.base.resource.client.service.ResourceService;
+import com.base.user.client.model.UserVO;
+import com.base.user.client.service.UserService;
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * @author:小M
+ * @date:2020/3/30 12:03 AM
+ */
+@Service
+public class BizUserInnerSerivce {
+
+    @Autowired
+    private BizUserManager bizUserManager;
+    @Autowired
+    private BizUserAddUserCheckService bizUserAddUserCheckService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PersonalExperienceManager personalExperienceManager;
+    @Autowired
+    private FamilyMemberManager familyMemberManager;
+    @Autowired
+    private AwardManager awardManager;
+    @Autowired
+    private AssessmentManager assessmentManager;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private ResourceService resourceService;
+
+
+    /**
+     *
+     * @param name
+     * @param companyList
+     * @return
+     */
+    public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) {
+        List<String> companyCodes = null;
+        if(org.springframework.util.CollectionUtils.isEmpty(companyList)) {
+            if(CollectionUtils.isEmpty(companyCodes)) {
+                List<CompanyVO> companyVOList = companyService.findAll();
+                companyCodes = Lists.newArrayList();
+                for(CompanyVO companyVO : companyVOList) {
+                    companyCodes.add(companyVO.getCode());
+                }
+            }
+            companyList = companyCodes;
+        }
+        List<BizUserDTO> bizUserDTOList = bizUserManager.findByNameAndCompany(name, companyList);
+        if(CollectionUtils.isEmpty(bizUserDTOList)) {
+            return Lists.newArrayList();
+        }
+        List<BizUserPageListVO> result = Lists.newArrayList();
+        List<String> companyCodeList = Lists.newArrayList();
+        for(BizUserDTO bizUserDTO : bizUserDTOList) {
+            if (bizUserDTO.getCode().equals("admin")) {
+                continue;
+            }
+            BizUserPageListVO bizUserPageListVO = new BizUserPageListVO();
+            bizUserPageListVO.setCode(bizUserDTO.getCode());
+            bizUserPageListVO.setName(bizUserDTO.getName());
+            bizUserPageListVO.setCompanyCode(bizUserDTO.getWorkUnitCode());
+            result.add(bizUserPageListVO);
+            companyCodeList.add(bizUserDTO.getWorkUnitCode());
+        }
+        Map<String,CompanyVO> companyVOMap = new HashMap<>();
+        if(CollectionUtils.isNotEmpty(companyCodeList)) {
+            List<CompanyVO> companyVOList = companyService.findByCodeList(companyCodeList);
+            if (CollectionUtils.isNotEmpty(companyVOList)) {
+                for(CompanyVO companyVO : companyVOList) {
+                    companyVOMap.put(companyVO.getCode(), companyVO);
+                }
+            }
+        }
+        for(BizUserPageListVO bizUserPageListVO : result) {
+            CompanyVO companyVO = companyVOMap.get(bizUserPageListVO.getCompanyCode());
+            if(companyVO != null) {
+                bizUserPageListVO.setCompanyName(companyVO.getName());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据code查询详情
+     * @param code
+     * @return
+     */
+    public BizUserDetailVO findByCode(String code) throws Exception{
+        BizUserDTO dto = bizUserManager.findByCode(code);
+        BizUserDetailVO vo = new BizUserDetailVO();
+        vo.setName(dto.getName());
+        String picName = dto.getPicUrl();
+        Map<String,ResourceVO> resourceVOMap = resourceService.findByNameList(Lists.newArrayList(picName));
+        if(MapUtils.isNotEmpty(resourceVOMap)) {
+            ResourceVO resourceVO = resourceVOMap.get(picName);
+            if (resourceVO != null) {
+                vo.setHeadPicUrl(resourceVO.getUrl());
+                vo.setHeadPicCode(resourceVO.getName());
+            }
+        }
+        vo.setBeginWorkTime(DateUtil.convert2String(dto.getBeginWorkTime(), BizUserConstant.DateFormat));
+        vo.setCode(dto.getCode());
+        vo.setBirthdate(DateUtil.convert2String(dto.getBirthdate(), BizUserConstant.DateFormat));
+        vo.setNation(dto.getNation());
+        vo.setNationStr(NationEnum.getName(dto.getNation()));
+        vo.setPoliticalLandscape(dto.getPoliticalLandscape());
+        vo.setPoliticalLandscapeStr(PoliticalLandscapeEnum.getName(dto.getPoliticalLandscape()));
+        vo.setGraduateInstitutions(dto.getGraduateSchool());
+        vo.setPoliceCode(dto.getPoliceCode());
+        vo.setQuasiDrivingType(dto.getDrivingType());
+        vo.setQuasiDrivingTypeStr(DrivingTypeEnum.getName(dto.getDrivingType()));
+        vo.setSpeciality(dto.getSpeciality());
+        vo.setExserviceman(dto.getExserviceman());
+        vo.setExservicemanStr(ExservicemanEnum.getName(dto.getExserviceman()));
+        vo.setPermanentResidenceAddress(dto.getPermanentResidenceAddress());
+        vo.setFamilyAddress(dto.getFamilyAddress());
+        vo.setSex(dto.getSex());
+        vo.setSexStr(SexEnum.getName(dto.getSex()));
+        vo.setAge(dto.getAge());
+        vo.setNativePlace(dto.getNativePlace());
+        vo.setEducation(dto.getEducation());
+        vo.setEducationStr(EducationEnum.getName(dto.getEducation()));
+        vo.setMajor(dto.getMajor());
+        vo.setMaritalStatus(dto.getMaritalStatus());
+        vo.setMaritalStatusStr(MaritalStatusEnum.getName(dto.getMaritalStatus()));
+        vo.setIdentityCard(dto.getIdentityCard());
+        vo.setPhone(dto.getPhone());
+        vo.setPersonnelType(dto.getPersonnelType());
+        vo.setPersonnelTypeStr(PersonnelTypeEnum.getName(dto.getPersonnelType()));
+        vo.setAuthorizedStrengthType(dto.getAuthorizedStrengthType());
+        vo.setAuthorizedStrengthTypeStr(AuthorizedStrengthTypeEnum.getName(dto.getAuthorizedStrengthType()));
+        vo.setPlaceOfWork(dto.getPlaceOfWork());
+        vo.setPlaceOfWorkStr(PlaceOfWorkEnum.getName(dto.getPlaceOfWork()));
+        vo.setJobGrade(dto.getJobGrade());
+        vo.setJobCategoryStr(JobGradeEnum.getName(dto.getJobGrade()));
+        vo.setTreatmentGrade(dto.getTreatmentGrade());
+        vo.setTreatmentGradeStr(TreatmentGradeEnum.getName(dto.getTreatmentGrade()));
+        vo.setEnrollWay(dto.getEnrollWay());
+        vo.setEnrollWayStr(EnrollWayEnum.getName(dto.getEnrollWay()));
+        vo.setBeginPoliceWorkTime(DateUtil.convert2String(dto.getBeginPoliceWorkTime(), BizUserConstant.DateFormat));
+        vo.setEffectiveDateOfTheContract(DateUtil.convert2String(dto.getEffectiveDateOfTheContrace(), BizUserConstant.DateFormat));
+        vo.setRetirementDate(DateUtil.convert2String(dto.getRetirementDate(), BizUserConstant.DateFormat));
+        vo.setDimissionType(dto.getDimssionType());
+        vo.setDimissionTypeStr(DimssionTypeEnum.getName(dto.getDimssionType()));
+        vo.setWorkUnitCode(dto.getWorkUnitCode());
+        List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getWorkUnitCode()));
+        if (CollectionUtils.isNotEmpty(companyVOList)) {
+            CompanyVO companyVO = companyVOList.get(0);
+            vo.setWorkUnitName(companyVO.getName());
+        }
+        vo.setOrganizationUnitCode(dto.getOrganizationUnitCode());
+        companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getOrganizationUnitCode()));
+        if (CollectionUtils.isNotEmpty(companyVOList)) {
+            CompanyVO companyVO = companyVOList.get(0);
+            vo.setOrganizationUnitName(companyVO.getName());
+        }
+        vo.setJobCategory(dto.getJobCategory());
+        vo.setJobCategoryStr(JobCategoryEnum.getName(dto.getJobCategory()));
+        vo.setDuty(dto.getDuty());
+        vo.setSocialSecurityNumber(dto.getSocialSecurityNumber());
+        vo.setBeginPoliceWorkTime(DateUtil.convert2String(dto.getBeginPoliceWorkTime(), BizUserConstant.DateFormat));
+        vo.setContractExpirationDate(DateUtil.convert2String(dto.getContractExpirationDate(), BizUserConstant.DateFormat));
+        vo.setDimissionDate(DateUtil.convert2String(dto.getDimssionDate(), BizUserConstant.DateFormat));
+        vo.setDimissionReason(dto.getDimssionReason());
+
+        // 个人经历
+        List<PersonalExperienceDTO> personalExperienceList = personalExperienceManager.findByUserCode(dto.getCode());
+        if(CollectionUtils.isNotEmpty(personalExperienceList)) {
+            List<BizUserDetailVO.Experience> personalExperiences = Lists.newArrayList();
+            for(PersonalExperienceDTO personalExperienceDTO : personalExperienceList) {
+                Experience experience = new Experience();
+                experience.setTimeStart(DateUtil.convert2String(personalExperienceDTO.getTimeStart(), BizUserConstant.DateFormat));
+                experience.setTimeEnd(DateUtil.convert2String(personalExperienceDTO.getTimeEnd(), BizUserConstant.DateFormat));
+                experience.setUnit(personalExperienceDTO.getUnit());
+                experience.setDepartment(personalExperienceDTO.getCompany());
+                experience.setDuty(personalExperienceDTO.getDuty());
+                personalExperiences.add(experience);
+            }
+            vo.setPersonalExperience(personalExperiences);
+        }
+
+        // 家庭成员
+        List<FamilyMemberDTO> familyMemberDTOList = familyMemberManager.findByUserCode(dto.getCode());
+        if(CollectionUtils.isNotEmpty(familyMemberDTOList)) {
+            List<BizUserDetailVO.FamilyMember> familyMembers = Lists.newArrayList();
+            for(FamilyMemberDTO familyMemberDTO : familyMemberDTOList) {
+                BizUserDetailVO.FamilyMember familyMember = new BizUserDetailVO.FamilyMember();
+                familyMember.setName(familyMemberDTO.getName());
+                familyMember.setRelation(familyMemberDTO.getRelation());
+                familyMember.setCompany(familyMemberDTO.getCompany());
+                familyMember.setDuty(familyMemberDTO.getDuty());
+                familyMember.setIdentityCard(familyMemberDTO.getIdentityCard());
+                familyMember.setPhone(familyMemberDTO.getPhone());
+                familyMember.setPoliticalLandscapeCode(familyMemberDTO.getPoliticalLandscapeCode());
+                familyMembers.add(familyMember);
+            }
+            vo.setFamilyMember(familyMembers);
+        }
+
+        // 奖惩
+        List<AwardDTO> awardDTOList = awardManager.findByUserCode(dto.getCode());
+        if(CollectionUtils.isNotEmpty(awardDTOList)) {
+            List<BizUserDetailVO.Award> awardList = Lists.newArrayList();
+            for(AwardDTO awardDTO : awardDTOList) {
+                BizUserDetailVO.Award award = new BizUserDetailVO.Award();
+                award.setName(awardDTO.getName());
+                award.setCompany(awardDTO.getCompany());
+                award.setReason(awardDTO.getReason());
+                award.setTime(DateUtil.convert2String(awardDTO.getTime(), BizUserConstant.DateFormat));
+                awardList.add(award);
+            }
+            vo.setAward(awardList);
+        }
+
+        // 考核
+        List<AssessmentDTO> assessmentDTOList = assessmentManager.findByUserCode(dto.getCode());
+        if(CollectionUtils.isNotEmpty(assessmentDTOList)) {
+            List<BizUserDetailVO.Assessment> assessmentList = Lists.newArrayList();
+            for(AssessmentDTO assessmentDTO : assessmentDTOList) {
+                BizUserDetailVO.Assessment assessment = new BizUserDetailVO.Assessment();
+                assessment.setTime(DateUtil.convert2String(assessmentDTO.getTime(), BizUserConstant.DateFormat));
+                assessment.setGrade(assessmentDTO.getGrade());
+                assessment.setRemark(assessmentDTO.getRemark());
+                assessmentList.add(assessment);
+            }
+            vo.setAssessment(assessmentList);
+        }
+
+        return vo;
+    }
+
+    /**
+     * 超级查询
+     * @param param
+     * @throws Exception
+     */
+    public List<BizUserPageListVO> superPageList(SuperPageListParam param) throws Exception{
+        List<String> companyCodes = null;
+        if(org.springframework.util.CollectionUtils.isEmpty(param.companyCodeList)) {
+            if(CollectionUtils.isEmpty(companyCodes)) {
+                List<CompanyVO> companyVOList = companyService.findAll();
+                companyCodes = Lists.newArrayList();
+                for(CompanyVO companyVO : companyVOList) {
+                    companyCodes.add(companyVO.getCode());
+                }
+            }
+            param.companyCodeList = companyCodes;
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.birthdateBegin)) {
+            param.birthdateBeginDate = DateUtil.convert2Date(param.birthdateBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.birthdateEnd)) {
+            param.birthdateEndDate = DateUtil.convert2Date(param.birthdateEnd, BizUserConstant.DateFormat);
+        }
+        if(CollectionUtils.isEmpty(param.nationList)) {
+            param.nationList = NationEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.politicalLandscapeList)) {
+            param.politicalLandscapeList = PoliticalLandscapeEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.quasiDrivingTypeList)) {
+            param.quasiDrivingTypeList = DrivingTypeEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.exservicemanList)) {
+            param.exservicemanList = ExservicemanEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.sexList)) {
+            param.sexList = SexEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.educationList)) {
+            param.educationList = EducationEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.maritalStatusList)) {
+            param.maritalStatusList = MaritalStatusEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.personnelTypeList)) {
+            param.personnelTypeList = PersonnelTypeEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.authorizedStrengthTypeList)) {
+            param.authorizedStrengthTypeList = AuthorizedStrengthTypeEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.placeOfWorkList)) {
+            param.placeOfWorkList = PlaceOfWorkEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.treatmentGradeList)) {
+            param.treatmentGradeList = TreatmentGradeEnum.getAllCodeList();
+        }
+        if(CollectionUtils.isEmpty(param.enrollWayList)) {
+            param.enrollWayList = EnrollWayEnum.getAllCodeList();
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.beginWorkTimeBegin)) {
+            param.beginWorkTimeBeginDate = DateUtil.convert2Date(param.beginWorkTimeBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.beginWorkTimeEnd)) {
+            param.beginWorkTimeEndDate = DateUtil.convert2Date(param.beginWorkTimeEnd, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.effectiveDateOfTheContractBegin)) {
+            param.effectiveDateOfTheContractBeginDate = DateUtil.convert2Date(param.effectiveDateOfTheContractBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.effectiveDateOfTheContractEnd)) {
+            param.effectiveDateOfTheContractEndDate = DateUtil.convert2Date(param.effectiveDateOfTheContractEnd, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.retirementDateBegin)) {
+            param.retirementDateBeginDate = DateUtil.convert2Date(param.retirementDateBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.retirementDateEnd)) {
+            param.retirementDateEndDate = DateUtil.convert2Date(param.retirementDateEnd, BizUserConstant.DateFormat);
+        }
+        if(CollectionUtils.isEmpty(param.dimissionTypeList)) {
+            param.dimissionTypeList = DimssionTypeEnum.getAllCodeList();
+        }
+        if(org.springframework.util.CollectionUtils.isEmpty(param.workUnitCodeList)) {
+            if(CollectionUtils.isEmpty(companyCodes)) {
+                List<CompanyVO> companyVOList = companyService.findAll();
+                companyCodes = Lists.newArrayList();
+                for(CompanyVO companyVO : companyVOList) {
+                    companyCodes.add(companyVO.getCode());
+                }
+            }
+            param.workUnitCodeList = companyCodes;
+        }
+        if(org.springframework.util.CollectionUtils.isEmpty(param.organizationUnitCodeList)) {
+            if(CollectionUtils.isEmpty(companyCodes)) {
+                List<CompanyVO> companyVOList = companyService.findAll();
+                companyCodes = Lists.newArrayList();
+                for(CompanyVO companyVO : companyVOList) {
+                    companyCodes.add(companyVO.getCode());
+                }
+            }
+            param.organizationUnitCodeList = companyCodes;
+        }
+        if(CollectionUtils.isEmpty(param.jobCategoryList)) {
+            param.jobCategoryList = JobCategoryEnum.getAllCodeList();
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.beginPoliceWorkTimeBegin)) {
+            param.beginPoliceWorkTimeBeginDate = DateUtil.convert2Date(param.beginPoliceWorkTimeBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.beginPoliceWorkTimeEnd)) {
+            param.beginPoliceWorkTimeEndDate = DateUtil.convert2Date(param.beginPoliceWorkTimeEnd, BizUserConstant.DateFormat);
+        }
+
+        if(!org.springframework.util.StringUtils.isEmpty(param.contractExpirationDateBegin)) {
+            param.contractExpirationDateBeginDate = DateUtil.convert2Date(param.contractExpirationDateBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.contractExpirationDateEnd)) {
+            param.contractExpirationDateEndDate = DateUtil.convert2Date(param.contractExpirationDateEnd, BizUserConstant.DateFormat);
+        }
+
+        if(!org.springframework.util.StringUtils.isEmpty(param.dimissionDateBegin)) {
+            param.dimissionDateBeginDate = DateUtil.convert2Date(param.dimissionDateBegin, BizUserConstant.DateFormat);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(param.dimissionDateEnd)) {
+            param.dimissionDateEndDate = DateUtil.convert2Date(param.dimissionDateEnd, BizUserConstant.DateFormat);
+        }
+
+
+
+
+
+        List<BizUserDTO> bizUserDTOList = bizUserManager.findBySuperParam(param);
+        if(CollectionUtils.isEmpty(bizUserDTOList)) {
+            return Lists.newArrayList();
+        }
+        List<BizUserPageListVO> result = Lists.newArrayList();
+        List<String> companyCodeList = Lists.newArrayList();
+        for(BizUserDTO bizUserDTO : bizUserDTOList) {
+            if (bizUserDTO.getCode().equals("admin")) {
+                continue;
+            }
+            BizUserPageListVO bizUserPageListVO = new BizUserPageListVO();
+            bizUserPageListVO.setCode(bizUserDTO.getCode());
+            bizUserPageListVO.setName(bizUserDTO.getName());
+            bizUserPageListVO.setCompanyCode(bizUserDTO.getWorkUnitCode());
+            result.add(bizUserPageListVO);
+            companyCodeList.add(bizUserDTO.getWorkUnitCode());
+        }
+        Map<String,CompanyVO> companyVOMap = new HashMap<>();
+        if(CollectionUtils.isNotEmpty(companyCodeList)) {
+            List<CompanyVO> companyVOList = companyService.findByCodeList(companyCodeList);
+            if (CollectionUtils.isNotEmpty(companyVOList)) {
+                for(CompanyVO companyVO : companyVOList) {
+                    companyVOMap.put(companyVO.getCode(), companyVO);
+                }
+            }
+        }
+        for(BizUserPageListVO bizUserPageListVO : result) {
+            CompanyVO companyVO = companyVOMap.get(bizUserPageListVO.getCompanyCode());
+            if(companyVO != null) {
+                bizUserPageListVO.setCompanyName(companyVO.getName());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 登录
+     * @param account
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public BizUserLoginVO login(String account, String password) throws Exception{
+
+        VerifyUtil.isNotNull(account, "", "账户为空");
+        VerifyUtil.isNotNull(account, "", "密码为空");
+
+        BizUserDTO bizUserDTO = bizUserManager.findByCodeAndPassword(account, password);
+
+        UserVO userVO = userService.updateToken(bizUserDTO.getCode());
+
+        BizUserLoginVO bizUserVO = BizUserConvertor.dto2vo(bizUserDTO);
+
+        bizUserVO.setToken(userVO.getToken());
+
+        return bizUserVO;
+    }
+
+    /**
+     * 添加人员
+     * @param param
+     * @return
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    public BizUserDTO add(BizUserAddParam param) throws Exception {
+        bizUserAddUserCheckService.check(param);
+        BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(param.identityCard);
+        if (bizUserDTO != null) {
+            throw new BaseException(String.format("该身份证[%s]已存在",param.identityCard));
+        }
+        userService.add(param.identityCard);
+        bizUserDTO = bizUserManager.add(param);
+        personalExperienceManager.add(param.identityCard, param.personalExperience);
+        familyMemberManager.add(param.identityCard, param.familyMember);
+        awardManager.add(param.identityCard, param.award);
+        assessmentManager.add(param.identityCard, param.assessment);
+        return bizUserDTO;
+    }
+
+    /**
+     * 修改
+     * @param param
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    public void update(UpdateParam param) throws Exception {
+        bizUserAddUserCheckService.check(param);
+        if (StringUtils.isEmpty(param.getCode())) {
+            throw new BaseException("人员Code为空");
+        }
+        deleteByCode(param.code, false);
+        bizUserManager.update(param);
+        personalExperienceManager.add(param.identityCard, param.personalExperience);
+        familyMemberManager.add(param.identityCard, param.familyMember);
+        awardManager.add(param.identityCard, param.award);
+        assessmentManager.add(param.identityCard, param.assessment);
+    }
+
+    /**
+     * 删除人员
+     * @param code
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteByCode(String code, boolean deleteUser) throws Exception{
+        if(deleteUser) {
+            bizUserManager.deleteByCode(code);
+            userService.deleteByCode(code);
+        }
+        personalExperienceManager.deleteByUserCode(code);
+        familyMemberManager.deleteByUserCode(code);
+        awardManager.deleteByUserCode(code);
+        assessmentManager.deleteByUserCode(code);
+    }
+
+
+
+
+}

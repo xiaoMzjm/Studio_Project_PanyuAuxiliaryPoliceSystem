@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <relativePath>../../pom.xml</relativePath>
+        <artifactId>base</artifactId>
+        <groupId>com.base</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>main</artifactId>
+
+
+    <dependencies>
+        <!-- ================================================= -->
+        <!-- 子模块                                             -->
+        <!-- ================================================= -->
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>littleapp-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>user-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>department-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>authority-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>biz-user-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>resource-server</artifactId>
+        </dependency>
+
+        <!-- ================================================= -->
+        <!-- spring                                               -->
+        <!-- ================================================= -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- 静态资源路由 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- ================================================= -->
+        <!-- 数据                                               -->
+        <!-- ================================================= -->
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- springcache -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
