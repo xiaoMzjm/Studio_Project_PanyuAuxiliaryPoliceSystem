@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AwardDao extends JpaRepository<AwardDO,Long> {
+
+    void deleteByUserCode(String userCode);
 }

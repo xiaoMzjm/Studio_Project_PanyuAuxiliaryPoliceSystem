@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FamilyMemberDao extends JpaRepository<FamilyMemberDO,Long> {
+
+    void deleteByUserCode(String userCode);
 }

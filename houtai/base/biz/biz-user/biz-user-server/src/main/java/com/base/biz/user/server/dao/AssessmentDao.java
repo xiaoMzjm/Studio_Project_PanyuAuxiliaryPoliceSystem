@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AssessmentDao extends JpaRepository<AssessmentDO,Long> {
+
+    void deleteByUserCode(String userCode);
 }

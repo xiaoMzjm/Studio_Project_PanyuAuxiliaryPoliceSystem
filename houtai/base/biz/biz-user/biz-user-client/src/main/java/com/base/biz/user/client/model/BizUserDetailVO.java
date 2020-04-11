@@ -87,7 +87,7 @@ public class BizUserDetailVO {
     private String dimissionReason;
 
 
-    private List<AddParamExperience> personalExperience;
+    private List<Experience> personalExperience;
     private List<FamilyMember> familyMember;
     private List<Award> award;
     private List<Assessment> assessment;
@@ -540,12 +540,12 @@ public class BizUserDetailVO {
         this.dimissionReason = dimissionReason;
     }
 
-    public List<AddParamExperience> getPersonalExperience() {
+    public List<Experience> getPersonalExperience() {
         return personalExperience;
     }
 
     public void setPersonalExperience(
-        List<AddParamExperience> personalExperience) {
+        List<Experience> personalExperience) {
         this.personalExperience = personalExperience;
     }
 
@@ -573,7 +573,7 @@ public class BizUserDetailVO {
         this.assessment = assessment;
     }
 
-    private static class AddParamExperience {
+    public static class Experience {
         private String timeStart;
         private String timeEnd;
         private String unit;
@@ -621,7 +621,7 @@ public class BizUserDetailVO {
         }
     }
 
-    private static class FamilyMember {
+    public static class FamilyMember {
         private String name;
         private String relation;
         private String company;
@@ -687,7 +687,7 @@ public class BizUserDetailVO {
         }
     }
 
-    private static class Award {
+    public static class Award {
         private String name;
         private String time;
         private String reason;
@@ -726,7 +726,7 @@ public class BizUserDetailVO {
         }
     }
 
-    private static class Assessment{
+    public static class Assessment{
         private String time;
         private String grade;
         private String remark;

@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PersonalExperienceDao extends JpaRepository<PersonalExperienceDO,Long> {
+
+    void deleteByUserCode(String userCode);
 }

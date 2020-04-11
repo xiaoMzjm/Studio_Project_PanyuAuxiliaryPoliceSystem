@@ -6,11 +6,16 @@ import java.util.List;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.server.dao.FamilyMemberDao;
 import com.base.biz.user.server.model.BizUserAddParam.AddParamFamilyMember;
+import com.base.biz.user.server.model.FamilyMemberConvertor;
 import com.base.biz.user.server.model.FamilyMemberDO;
+import com.base.biz.user.server.model.FamilyMemberDTO;
+import com.base.biz.user.server.model.PersonalExperienceConvertor;
 import com.base.biz.user.server.model.PersonalExperienceDO;
+import com.base.biz.user.server.model.PersonalExperienceDTO;
 import com.base.common.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,5 +47,26 @@ public class FamilyMemberManager {
             familyMemberDO.setPoliticalLandscapeCode(addParamFamilyMember.politicalLandscapeCode);
             familyMemberDao.save(familyMemberDO);
         }
+    }
+
+    /**
+     * 根据userCode查询个人经历
+     * @param userCode
+     * @return
+     */
+    public List<FamilyMemberDTO> findByUserCode(String userCode) {
+        FamilyMemberDO ddo = new FamilyMemberDO();
+        ddo.setUserCode(userCode);
+        Example<FamilyMemberDO> example = Example.of(ddo);
+        List<FamilyMemberDO> list = familyMemberDao.findAll(example);
+        return FamilyMemberConvertor.do2dtoList(list);
+    }
+
+    /**
+     * 根据人员code删除
+     * @param userCode
+     */
+    public void deleteByUserCode(String userCode) {
+        familyMemberDao.deleteByUserCode(userCode);
     }
 }
