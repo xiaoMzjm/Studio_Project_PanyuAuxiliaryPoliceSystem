@@ -9,6 +9,7 @@ import java.util.List;
 public class BizUserDetailVO {
     private String code;
     private String name;
+    private String headPicCode;
     private String headPicUrl;
     private String birthdate;
 
@@ -580,6 +581,14 @@ public class BizUserDetailVO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getHeadPicCode() {
+        return headPicCode;
+    }
+
+    public void setHeadPicCode(String headPicCode) {
+        this.headPicCode = headPicCode;
     }
 
     public static class Experience {
