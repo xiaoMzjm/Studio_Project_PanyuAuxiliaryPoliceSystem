@@ -55,16 +55,7 @@ public class InitService {
         AuthorityVO vo = null;
 
 
-        // 系统管理
-        try {
-            vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("角色绑定管理", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
-        }catch (Exception e) {}
+
 
 
         // 单位管理
@@ -87,7 +78,7 @@ public class InitService {
 
         // 基础数据统计
         try {
-            vo = authorityService.add("基础数据统计", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityService.add("年月报表管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
             vo = authorityService.add("年度报表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
@@ -104,6 +95,78 @@ public class InitService {
         try {
             vo = authorityService.add("年度考核列表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
         }catch (Exception e) {}
+
+
+        // 到期管理
+        try {
+            vo = authorityService.add("到期管理", "ExpireManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("工作证到期提醒", "ExpireEmployeeCard", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("合同证到期提醒", "ExpireContract", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("退休提醒", "ExpireRetire", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+        }catch (Exception e) {}
+
+
+        // 工资管理
+        try {
+            vo = authorityService.add("工资管理", "WagesManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("工资明细", "WagesDetail", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("工资报销封面", "WagesReimbursement", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("工资变动", "WagesChange", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
+
+
+        // 考核管理
+        try {
+            vo = authorityService.add("年度考核管理", "AssessmentManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("年度考核列表", "AssessmentList", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("年度考核结果登记", "AssessmentResult", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
+        }catch (Exception e) {}
+
+
+        // 轮岗管理
+        try {
+            vo = authorityService.add("轮岗管理", "WorkShiftManger", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("轮岗人员列表", "WorkShiftList", AuthorityTypeEnum.Page.getType(),"WorkShiftManger");
+        }catch (Exception e) {}
+
+        // 图表管理
+        try {
+            vo = authorityService.add("图表管理", "ChartManger", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("图表列表", "ChartList", AuthorityTypeEnum.Page.getType(),"ChartManger");
+        }catch (Exception e) {}
+
+
+        // 系统管理
+        try {
+            vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("角色绑定管理", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {}
+
     }
 
 

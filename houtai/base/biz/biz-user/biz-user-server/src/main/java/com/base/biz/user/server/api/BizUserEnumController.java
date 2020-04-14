@@ -16,6 +16,7 @@ import com.base.biz.user.client.common.Enums.PersonnelTypeEnum;
 import com.base.biz.user.client.common.Enums.PlaceOfWorkEnum;
 import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
+import com.base.biz.user.client.common.Enums.SpecialPeopleEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
@@ -140,5 +141,12 @@ public class BizUserEnumController {
     @RequestMapping("jobcategory")
     public String jobcategory(){
         return JSON.toJSONString(Result.success(JobCategoryEnum.getAll()));
+    }
+
+    @ResultFilter
+    @TokenFilter
+    @RequestMapping("specialpeople")
+    public String specialpeople(){
+        return JSON.toJSONString(Result.success(SpecialPeopleEnum.getAll()));
     }
 }
