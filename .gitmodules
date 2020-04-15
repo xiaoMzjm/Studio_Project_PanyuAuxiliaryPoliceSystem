@@ -1,0 +1,3 @@
+[submodule "houtai/base/lib"]
+	path = houtai/base/lib
+	url = https://github.com/xiaoMzjm/Studio_Submodule.git

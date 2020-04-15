@@ -18,26 +18,32 @@
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>biz-user-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>user-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>authority-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>department-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
             <artifactId>resource-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- ================================================= -->
         <!-- web                                               -->

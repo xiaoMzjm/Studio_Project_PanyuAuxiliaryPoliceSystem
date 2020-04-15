@@ -7,34 +7,15 @@
 	<artifactId>base</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>public/main</module>
-		<module>public/common</module>
-		<module>public/example</module>
+		<module>lib</module>
 
-		<module>public/user</module>
-		<module>public/user/user-server</module>
-		<module>public/user/user-client</module>
-
-		<module>public/littleapp</module>
-        <module>public/littleapp/littleapp-server</module>
-		<module>public/littleapp/littleapp-client</module>
-
-		<module>public/authority</module>
-		<module>public/authority/authority-server</module>
-		<module>public/authority/authority-client</module>
-
-		<module>public/resource</module>
-		<module>public/resource/resource-client</module>
-		<module>public/resource/resource-server</module>
+		<module>biz/main</module>
 
 		<module>biz/department</module>
-		<module>biz/department/department-server</module>
-        <module>biz/department/department-client</module>
 
 		<module>biz/biz-user</module>
-		<module>biz/biz-user/biz-user-server</module>
-		<module>biz/biz-user/biz-user-client</module>
-    </modules>
+
+	</modules>
 	<packaging>pom</packaging>
 
 	<name>base</name>
@@ -57,41 +38,32 @@
 
 	<dependencyManagement>
 		<dependencies>
-            <!-- ================================================= -->
-            <!-- 子模块                                               -->
-            <!-- ================================================= -->
+
+			<!-- lib-公共 -->
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
+
+			<!-- lib-权限 -->
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>example</artifactId>
+				<artifactId>authority</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>main</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<!-- 用户 -->
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>user</artifactId>
+				<artifactId>authority-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>user-server</artifactId>
+				<artifactId>authority-server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>user-client</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<!-- 资源 -->
+
+			<!-- lib-resource-->
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>resource</artifactId>
@@ -107,22 +79,24 @@
 				<artifactId>resource-server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
-			<!-- 小程序 -->
+
+			<!-- lib-user -->
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>littleapp</artifactId>
+				<artifactId>user</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>littleapp-server</artifactId>
+				<artifactId>user-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.base</groupId>
-				<artifactId>littleapp-client</artifactId>
+				<artifactId>user-server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
+
 			<!-- 单位管理 -->
 			<dependency>
 				<groupId>com.base</groupId>
@@ -139,22 +113,7 @@
 				<artifactId>department-server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
-			<!-- 权限管理 -->
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>authority</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>authority-server</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.base</groupId>
-				<artifactId>authority-client</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
+
 			<!-- 个性化用户 -->
 			<dependency>
 				<groupId>com.base</groupId>
