@@ -17,6 +17,7 @@ import com.base.user.client.model.TokenFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://192.168.0.107:8080")
 public class ResourceController {
 
+    @Value("${ResourceStaticUrl}")
+    private String diskStaticUrl;
+
     @Autowired
     private ResourceService resourceService;
 
@@ -50,8 +54,6 @@ public class ResourceController {
         if (file == null) {
             return JSON.toJSONString(Result.error("未上传文件"));
         }
-
-        String diskStaticUrl = System.getProperty("ResourceStaticUrl");
 
         if(StringUtils.isEmpty(diskStaticUrl)) {
             return JSON.toJSONString(Result.error("ResourceStaticUrl is null"));

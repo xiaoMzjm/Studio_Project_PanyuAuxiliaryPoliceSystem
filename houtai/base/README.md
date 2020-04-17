@@ -23,6 +23,6 @@ mvn clean package
 scp web/target/web-0.0.1-SNAPSHOT.jar root@39.96.189.242:/home/admin/base
 
 4. 部署
-java -jar web-0.0.1-SNAPSHOT.jar --spring.profiles.active=online
+java -jar base.jar --spring.profiles.active=local --ResourceStaticUrl=/Users/zhangjiaming/Documents/fujing/static/
 
 把上面的命令用一个start.sh文件报错，后台启动：nohup ./start.sh &
