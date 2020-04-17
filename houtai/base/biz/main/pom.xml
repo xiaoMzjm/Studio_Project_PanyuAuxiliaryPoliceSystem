@@ -11,6 +11,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>main</artifactId>
+    <!--<packaging>war</packaging>-->
+
 
 
     <dependencies>
@@ -107,6 +109,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <!-- 打war包时，需要写provided-->
+            <!--<scope>provided</scope>-->
+        </dependency>
 
         <!-- ================================================= -->
         <!-- 工具                                               -->
@@ -126,6 +134,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>base</finalName>
     </build>
 
 </project>
