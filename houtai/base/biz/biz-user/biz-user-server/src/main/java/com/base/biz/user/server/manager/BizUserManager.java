@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import com.base.biz.user.client.common.BizUserConstant;
+import com.base.biz.user.client.common.Enums.NationEnum;
 import com.base.biz.user.server.dao.BizUserDao;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.biz.user.server.model.BizUserConvertor;

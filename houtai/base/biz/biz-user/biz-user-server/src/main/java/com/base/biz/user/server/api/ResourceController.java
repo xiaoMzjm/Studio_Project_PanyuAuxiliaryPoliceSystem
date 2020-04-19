@@ -48,8 +48,7 @@ public class ResourceController {
     @ApiOperation(value = "上传图片")
     @RequestMapping(value = "/uploadpic" ,method = RequestMethod.POST,produces = "multipart/form-data;charset=UTF-8")
     @ResponseBody
-    public String uploadPic(
-                            @RequestParam(value = "file", required = false)MultipartFile file,HttpSession session) throws Exception{
+    public String uploadPic(@RequestParam(value = "file", required = false)MultipartFile file) throws Exception{
 
         if (file == null) {
             return JSON.toJSONString(Result.error("未上传文件"));

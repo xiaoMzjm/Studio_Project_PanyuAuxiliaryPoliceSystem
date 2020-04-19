@@ -24,6 +24,8 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.biz.user.server.service.BizUserInnerSerivce;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
+import com.base.common.util.UUIDUtil;
+import com.base.resource.client.common.Constant;
 import com.base.user.client.common.UserConstant;
 import com.base.user.client.model.TokenFilter;
 import com.base.user.client.model.UserVO;
@@ -31,13 +33,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author:小M
@@ -48,6 +54,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "user", produces = {"application/json;charset=UTF-8"})
 @CrossOrigin(origins = "http://192.168.1.5:8080")
 public class BizUserController {
+
+    @Value("${ResourceStaticUrl}")
+    private String diskStaticUrl;
 
     @Autowired
     private BizUserInnerSerivce bizUserService;
@@ -205,4 +214,45 @@ public class BizUserController {
         }
     }
 
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导入人员" , notes = "导入人员")
+    @RequestMapping(value = "/importuser", method = RequestMethod.POST,produces = "multipart/form-data;charset=UTF-8")
+    @ResponseBody
+    public String importuser(@RequestParam(value = "file", required = false)MultipartFile file) throws Exception{
+        if (file == null) {
+            return JSON.toJSONString(Result.error("未上传文件"));
+        }
+
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            return JSON.toJSONString(Result.error("ResourceStaticUrl is null"));
+        }
+
+        String oriName = file.getOriginalFilename();
+
+        String diskPath = diskStaticUrl + "files";
+
+        // 创建目录
+        File pathFolder = new File(diskPath);
+        if (!pathFolder.exists()) {
+            pathFolder.mkdirs();
+        }
+
+        // 保存文件
+        String url = "";
+        try {
+            String name = UUIDUtil.get();
+            url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
+            file.transferTo(new File(url));
+            File f = new File(url);
+            bizUserService.importUser(f);
+        }finally {
+            File f = new File(url);
+            if(f.exists()) {
+                f.delete();
+            }
+        }
+
+        return JSON.toJSONString(Result.success(""));
+    }
 }

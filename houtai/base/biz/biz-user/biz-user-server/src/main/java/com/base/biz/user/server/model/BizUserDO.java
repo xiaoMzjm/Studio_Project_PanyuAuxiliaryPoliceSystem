@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "biz_user",
     indexes = {@Index(name = "idx_code",  columnList="code", unique = true),
+        @Index(name = "idx_police_code",  columnList="policeCode", unique = true),
         @Index(name = "idx_ide_pa",  columnList="identityCard,password", unique = true)})
 public class BizUserDO {
 

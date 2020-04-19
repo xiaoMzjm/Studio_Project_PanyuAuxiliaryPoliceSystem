@@ -117,7 +117,7 @@ public class Enums {
 
         public static NationEnum get(Integer code) {
             for (NationEnum e : NationEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -126,7 +126,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (NationEnum e : NationEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -135,7 +135,7 @@ public class Enums {
 
         public static NationEnum get(String name) {
             for (NationEnum e : NationEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -203,7 +203,7 @@ public class Enums {
 
         public static PoliticalLandscapeEnum get(Integer code) {
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -212,7 +212,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -221,7 +221,7 @@ public class Enums {
 
         public static PoliticalLandscapeEnum get(String name) {
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -308,7 +308,7 @@ public class Enums {
 
         public static DrivingTypeEnum get(Integer code) {
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -317,7 +317,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -332,7 +332,7 @@ public class Enums {
             StringBuilder sb = new StringBuilder();
             for(String code : codeArray) {
                 for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
-                    if (e.code.equals(Integer.valueOf(code))) {
+                    if (e.getCode().equals(Integer.valueOf(code))) {
                         sb.append(e.getName()).append(",");
                     }
                 }
@@ -347,7 +347,7 @@ public class Enums {
 
         public static DrivingTypeEnum get(String name) {
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -424,7 +424,7 @@ public class Enums {
 
         public static SpecialPeopleEnum get(Integer code) {
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -433,7 +433,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -448,7 +448,7 @@ public class Enums {
             StringBuilder sb = new StringBuilder();
             for(String code : codeArray) {
                 for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                    if (e.code.equals(Integer.valueOf(code))) {
+                    if (e.getCode().equals(Integer.valueOf(code))) {
                         sb.append(e.getName()).append(",");
                     }
                 }
@@ -463,7 +463,7 @@ public class Enums {
 
         public static SpecialPeopleEnum get(String name) {
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -537,7 +537,7 @@ public class Enums {
 
         public static ExservicemanEnum get(Integer code) {
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -546,7 +546,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -555,7 +555,7 @@ public class Enums {
 
         public static ExservicemanEnum get(String name) {
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -633,7 +633,7 @@ public class Enums {
 
         public static SexEnum get(Integer code) {
             for (SexEnum e : SexEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -642,7 +642,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (SexEnum e : SexEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -651,7 +651,7 @@ public class Enums {
 
         public static SexEnum get(String name) {
             for (SexEnum e : SexEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -731,7 +731,7 @@ public class Enums {
 
         public static EducationEnum get(Integer code) {
             for (EducationEnum e : EducationEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -740,7 +740,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (EducationEnum e : EducationEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -749,7 +749,7 @@ public class Enums {
 
         public static EducationEnum get(String name) {
             for (EducationEnum e : EducationEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -826,7 +826,7 @@ public class Enums {
 
         public static MaritalStatusEnum get(Integer code) {
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -835,7 +835,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -844,7 +844,7 @@ public class Enums {
 
         public static MaritalStatusEnum get(String name) {
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -923,7 +923,7 @@ public class Enums {
 
         public static PersonnelTypeEnum get(Integer code) {
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -932,7 +932,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -942,7 +942,7 @@ public class Enums {
 
         public static PersonnelTypeEnum get(String name) {
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1016,7 +1016,7 @@ public class Enums {
 
         public static AuthorizedStrengthTypeEnum get(Integer code) {
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1025,7 +1025,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1034,7 +1034,7 @@ public class Enums {
 
         public static AuthorizedStrengthTypeEnum get(String name) {
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1082,7 +1082,7 @@ public class Enums {
         XI_TONG_YUN_WEI_GUAN_LI(10 , "系统运维管理"),
         WANG_LUO_GUAN_LI(11, "网络管理"),
         YOU_XIAN_TONG_XIN_YUN_WEI_GUAN_LI(12, "有线通信运维管理"),
-        WU_XIAN_TONG_XIN_XI_TONG_GUAN_LI(13, "无限通信系统管理"),
+        WU_XIAN_TONG_XIN_XI_TONG_GUAN_LI(13, "无线通信系统管理"),
         SHI_PIN_TU_XIANG_CHU_LI_FEN_XI(14, "视频图像处理分析"),
         QUAN_JING_JI_SHU_GUAN_LI(15, "犬警技术管理"),
         KUAI_JI(16, "会计"),
@@ -1125,7 +1125,7 @@ public class Enums {
         JIE_CHU_JING_DIAO_DU(53, "接处警调度"),
         SHI_PIN_JIAN_KAN(54, "视频监看"),
         FA_YI_ZHU_JIAN_YUAN(55, "法医助员"),
-        AN_JIAN_BAN_LI_XIE_QIN(56, "按键办理协勤")
+        AN_JIAN_BAN_LI_XIE_QIN(56, "案件办理协勤")
         ;
 
         private Integer code;
@@ -1162,7 +1162,7 @@ public class Enums {
 
         public static PlaceOfWorkEnum get(Integer code) {
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1171,7 +1171,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1180,7 +1180,7 @@ public class Enums {
 
         public static PlaceOfWorkEnum get(String name) {
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1255,7 +1255,7 @@ public class Enums {
 
         public static JobGradeEnum get(Integer code) {
             for (JobGradeEnum e : JobGradeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1264,7 +1264,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (JobGradeEnum e : JobGradeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1273,7 +1273,7 @@ public class Enums {
 
         public static JobGradeEnum get(String name) {
             for (JobGradeEnum e : JobGradeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1348,7 +1348,7 @@ public class Enums {
 
         public static TreatmentGradeEnum get(Integer code) {
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1357,7 +1357,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1366,7 +1366,7 @@ public class Enums {
 
         public static TreatmentGradeEnum get(String name) {
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1442,7 +1442,7 @@ public class Enums {
 
         public static EnrollWayEnum get(Integer code) {
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1451,7 +1451,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1460,7 +1460,7 @@ public class Enums {
 
         public static EnrollWayEnum get(String name) {
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1537,7 +1537,7 @@ public class Enums {
 
         public static DimssionTypeEnum get(Integer code) {
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1546,7 +1546,7 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e.getName();
                 }
             }
@@ -1555,7 +1555,7 @@ public class Enums {
 
         public static DimssionTypeEnum get(String name) {
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }
@@ -1628,7 +1628,7 @@ public class Enums {
 
         public static JobCategoryEnum get(Integer code) {
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
-                if (e.code.equals(code)) {
+                if (e.getCode().equals(code)) {
                     return e;
                 }
             }
@@ -1637,8 +1637,8 @@ public class Enums {
 
         public static String getName(Integer code) {
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
-                if (e.code.equals(code)) {
-                    return e.name;
+                if (e.getCode().equals(code)) {
+                    return e.getName();
                 }
             }
             return null;
@@ -1646,7 +1646,7 @@ public class Enums {
 
         public static JobCategoryEnum get(String name) {
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
-                if (e.name.equals(name)) {
+                if (e.getName().equals(name)) {
                     return e;
                 }
             }

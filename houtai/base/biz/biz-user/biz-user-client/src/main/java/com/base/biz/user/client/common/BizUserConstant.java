@@ -6,7 +6,7 @@ package com.base.biz.user.client.common;
  */
 public class BizUserConstant {
 
-    public static final String DateFormat = "yyyy/mm/dd";
+    public static final String DateFormat = "yyyy/MM/dd";
 
     public static final String DateYYYYFormat = "yyyy";
 

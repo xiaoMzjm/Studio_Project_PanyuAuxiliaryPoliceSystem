@@ -1,5 +1,7 @@
 package com.base.biz.user.server.service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserDetailVO.Experience;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
+import com.base.biz.user.server.excel.BizUserAddExcelReader;
 import com.base.biz.user.server.manager.AssessmentManager;
 import com.base.biz.user.server.manager.AwardManager;
 import com.base.biz.user.server.manager.BizUserManager;
@@ -297,11 +300,6 @@ public class BizUserInnerSerivce {
      */
     public List<BizUserPageListVO> superPageList(SuperPageListParam param) throws Exception{
 
-
-
-
-
-
         List<BizUserDTO> bizUserDTOList = bizUserManager.findBySuperParam(param);
         if(CollectionUtils.isEmpty(bizUserDTOList)) {
             return Lists.newArrayList();
@@ -417,7 +415,17 @@ public class BizUserInnerSerivce {
         assessmentManager.deleteByUserCode(code);
     }
 
-
-
-
+    /**
+     * 导入人员
+     * @param file
+     */
+    public void importUser(File file)throws Exception {
+        List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(file);
+        if(CollectionUtils.isNotEmpty(bizUserAddParamList)) {
+            for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
+                bizUserAddUserCheckService.check(bizUserAddParam);
+                bizUserManager.add(bizUserAddParam);
+            }
+        }
+    }
 }
