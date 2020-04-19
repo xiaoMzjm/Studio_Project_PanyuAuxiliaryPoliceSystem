@@ -40,9 +40,13 @@ public class BizUserDTO {
 
     private String policeCode; // 警号
 
-    private Integer drivingType; // 准驾车型 @see DrivingTypeEnum
+    private String drivingType; // 准驾车型,逗号隔开 @see DrivingTypeEnum
 
     private String speciality; // 特长
+
+    private String specialPeople; // 特殊人员
+
+    private String qualification; // 资格证书
 
     private Integer exserviceman; // 是否退役军人 @see ExservicemanEnum
 
@@ -200,11 +204,11 @@ public class BizUserDTO {
         this.policeCode = policeCode;
     }
 
-    public Integer getDrivingType() {
+    public String getDrivingType() {
         return drivingType;
     }
 
-    public void setDrivingType(Integer drivingType) {
+    public void setDrivingType(String drivingType) {
         this.drivingType = drivingType;
     }
 
@@ -454,5 +458,21 @@ public class BizUserDTO {
 
     public void setDimssionReason(String dimssionReason) {
         this.dimssionReason = dimssionReason;
+    }
+
+    public String getSpecialPeople() {
+        return specialPeople;
+    }
+
+    public void setSpecialPeople(String specialPeople) {
+        this.specialPeople = specialPeople;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
     }
 }

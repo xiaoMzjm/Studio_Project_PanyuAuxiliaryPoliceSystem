@@ -12,6 +12,7 @@ import com.base.department.server.model.CompanyConvertor;
 import com.base.department.server.model.CompanyDTO;
 import com.base.department.server.model.CompanyDO;
 import com.base.common.util.UUIDUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
@@ -107,12 +108,16 @@ public class CompanyManager {
      * @param fatherCode
      * @return
      */
-    public CompanyDTO add(String name, String desc, String fatherCode){
+    public CompanyDTO add(String name, String desc, String fatherCode, String code){
         CompanyDO companyDO = new CompanyDO();
         Date date = new Date();
         companyDO.setGmtCreate(date);
         companyDO.setGmtModified(date);
-        companyDO.setCode(UUIDUtil.get());
+        if(StringUtils.isEmpty(code)) {
+            companyDO.setCode(UUIDUtil.get());
+        }else {
+            companyDO.setCode(code);
+        }
         companyDO.setName(name);
         companyDO.setDescription(desc);
         companyDO.setFatherCode(fatherCode);

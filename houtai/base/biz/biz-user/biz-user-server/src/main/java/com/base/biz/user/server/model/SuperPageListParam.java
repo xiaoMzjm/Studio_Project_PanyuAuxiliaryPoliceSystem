@@ -20,7 +20,6 @@ public class SuperPageListParam {
 
     @ApiParam(name="birthdateBegin",value="birthdateBegin")
     public String birthdateBegin;
-    public Date birthdateBeginDate;
 
     @ApiParam(name="birthdateEnd",value="birthdateEnd")
     public String birthdateEnd;
@@ -41,8 +40,17 @@ public class SuperPageListParam {
     @ApiParam(name="quasiDrivingTypeList",value="quasiDrivingTypeList")
     public List<Integer> quasiDrivingTypeList;
 
+    @ApiParam(name="specialPeopleListList",value="specialPeopleListList")
+    public List<Integer> specialPeopleList;
+
     @ApiParam(name="exservicemanList",value="exservicemanList")
     public List<Integer> exservicemanList;
+
+    @ApiParam(name="specialPeople",value="specialPeople")
+    public String specialPeople;
+
+    @ApiParam(name="qualification",value="qualification")
+    public String qualification;
 
     @ApiParam(name="permanentResidenceAddress",value="permanentResidenceAddress")
     public String permanentResidenceAddress;

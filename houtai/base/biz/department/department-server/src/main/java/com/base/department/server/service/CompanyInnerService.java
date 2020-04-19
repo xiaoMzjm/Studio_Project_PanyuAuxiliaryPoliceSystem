@@ -69,7 +69,7 @@ public class CompanyInnerService {
         if (exist != null) {
             throw new BaseException(String.format("名称[%s]已存在",name));
         }
-        CompanyDTO companyDTO = companyManager.add(name, desc, fatherCode);
+        CompanyDTO companyDTO = companyManager.add(name, desc, fatherCode, null);
         if (companyDTO == null || companyDTO.getId() == null) {
             throw new BaseException("添加失败，请重试");
         }

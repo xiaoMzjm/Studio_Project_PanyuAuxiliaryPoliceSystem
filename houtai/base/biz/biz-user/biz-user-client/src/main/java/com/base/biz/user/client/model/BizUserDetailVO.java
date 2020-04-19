@@ -21,10 +21,17 @@ public class BizUserDetailVO {
 
     private String graduateInstitutions;
     private String policeCode;
-    private Integer quasiDrivingType;
+
+    private String quasiDrivingType;
     private String quasiDrivingTypeStr;
 
     private String speciality;
+
+    private String specialPeople;
+    private String specialPeopleStr;
+
+    private String qualification;
+
     private Integer exserviceman;
     private String exservicemanStr;
     private String permanentResidenceAddress;
@@ -166,11 +173,11 @@ public class BizUserDetailVO {
         this.policeCode = policeCode;
     }
 
-    public Integer getQuasiDrivingType() {
+    public String getQuasiDrivingType() {
         return quasiDrivingType;
     }
 
-    public void setQuasiDrivingType(Integer quasiDrivingType) {
+    public void setQuasiDrivingType(String quasiDrivingType) {
         this.quasiDrivingType = quasiDrivingType;
     }
 
@@ -589,6 +596,30 @@ public class BizUserDetailVO {
 
     public void setHeadPicCode(String headPicCode) {
         this.headPicCode = headPicCode;
+    }
+
+    public String getSpecialPeople() {
+        return specialPeople;
+    }
+
+    public void setSpecialPeople(String specialPeople) {
+        this.specialPeople = specialPeople;
+    }
+
+    public String getSpecialPeopleStr() {
+        return specialPeopleStr;
+    }
+
+    public void setSpecialPeopleStr(String specialPeopleStr) {
+        this.specialPeopleStr = specialPeopleStr;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
     }
 
     public static class Experience {

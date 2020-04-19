@@ -54,10 +54,6 @@ public class InitService {
     private void initAuthority() throws Exception{
         AuthorityVO vo = null;
 
-
-
-
-
         // 单位管理
         try {
             vo = authorityService.add("单位管理", "CompanyManager", AuthorityTypeEnum.Page.getType(),null);

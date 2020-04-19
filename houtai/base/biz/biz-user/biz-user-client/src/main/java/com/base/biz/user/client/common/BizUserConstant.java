@@ -8,4 +8,6 @@ public class BizUserConstant {
 
     public static final String DateFormat = "yyyy/mm/dd";
 
+    public static final String DateYYYYFormat = "yyyy";
+
 }

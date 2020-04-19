@@ -19,6 +19,7 @@ import com.base.biz.user.client.common.Enums.PersonnelTypeEnum;
 import com.base.biz.user.client.common.Enums.PlaceOfWorkEnum;
 import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
+import com.base.biz.user.client.common.Enums.SpecialPeopleEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserDetailVO.Experience;
@@ -166,6 +167,9 @@ public class BizUserInnerSerivce {
         vo.setPoliceCode(dto.getPoliceCode());
         vo.setQuasiDrivingType(dto.getDrivingType());
         vo.setQuasiDrivingTypeStr(DrivingTypeEnum.getName(dto.getDrivingType()));
+        vo.setSpecialPeople(dto.getSpecialPeople());
+        vo.setSpecialPeopleStr(SpecialPeopleEnum.getName(dto.getSpecialPeople()));
+        vo.setQualification(dto.getQualification());
         vo.setSpeciality(dto.getSpeciality());
         vo.setExserviceman(dto.getExserviceman());
         vo.setExservicemanStr(ExservicemanEnum.getName(dto.getExserviceman()));
@@ -292,123 +296,7 @@ public class BizUserInnerSerivce {
      * @throws Exception
      */
     public List<BizUserPageListVO> superPageList(SuperPageListParam param) throws Exception{
-        List<String> companyCodes = null;
-        if(org.springframework.util.CollectionUtils.isEmpty(param.companyCodeList)) {
-            if(CollectionUtils.isEmpty(companyCodes)) {
-                List<CompanyVO> companyVOList = companyService.findAll();
-                companyCodes = Lists.newArrayList();
-                for(CompanyVO companyVO : companyVOList) {
-                    companyCodes.add(companyVO.getCode());
-                }
-            }
-            param.companyCodeList = companyCodes;
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.birthdateBegin)) {
-            param.birthdateBeginDate = DateUtil.convert2Date(param.birthdateBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.birthdateEnd)) {
-            param.birthdateEndDate = DateUtil.convert2Date(param.birthdateEnd, BizUserConstant.DateFormat);
-        }
-        if(CollectionUtils.isEmpty(param.nationList)) {
-            param.nationList = NationEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.politicalLandscapeList)) {
-            param.politicalLandscapeList = PoliticalLandscapeEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.quasiDrivingTypeList)) {
-            param.quasiDrivingTypeList = DrivingTypeEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.exservicemanList)) {
-            param.exservicemanList = ExservicemanEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.sexList)) {
-            param.sexList = SexEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.educationList)) {
-            param.educationList = EducationEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.maritalStatusList)) {
-            param.maritalStatusList = MaritalStatusEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.personnelTypeList)) {
-            param.personnelTypeList = PersonnelTypeEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.authorizedStrengthTypeList)) {
-            param.authorizedStrengthTypeList = AuthorizedStrengthTypeEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.placeOfWorkList)) {
-            param.placeOfWorkList = PlaceOfWorkEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.treatmentGradeList)) {
-            param.treatmentGradeList = TreatmentGradeEnum.getAllCodeList();
-        }
-        if(CollectionUtils.isEmpty(param.enrollWayList)) {
-            param.enrollWayList = EnrollWayEnum.getAllCodeList();
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.beginWorkTimeBegin)) {
-            param.beginWorkTimeBeginDate = DateUtil.convert2Date(param.beginWorkTimeBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.beginWorkTimeEnd)) {
-            param.beginWorkTimeEndDate = DateUtil.convert2Date(param.beginWorkTimeEnd, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.effectiveDateOfTheContractBegin)) {
-            param.effectiveDateOfTheContractBeginDate = DateUtil.convert2Date(param.effectiveDateOfTheContractBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.effectiveDateOfTheContractEnd)) {
-            param.effectiveDateOfTheContractEndDate = DateUtil.convert2Date(param.effectiveDateOfTheContractEnd, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.retirementDateBegin)) {
-            param.retirementDateBeginDate = DateUtil.convert2Date(param.retirementDateBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.retirementDateEnd)) {
-            param.retirementDateEndDate = DateUtil.convert2Date(param.retirementDateEnd, BizUserConstant.DateFormat);
-        }
-        if(CollectionUtils.isEmpty(param.dimissionTypeList)) {
-            param.dimissionTypeList = DimssionTypeEnum.getAllCodeList();
-        }
-        if(org.springframework.util.CollectionUtils.isEmpty(param.workUnitCodeList)) {
-            if(CollectionUtils.isEmpty(companyCodes)) {
-                List<CompanyVO> companyVOList = companyService.findAll();
-                companyCodes = Lists.newArrayList();
-                for(CompanyVO companyVO : companyVOList) {
-                    companyCodes.add(companyVO.getCode());
-                }
-            }
-            param.workUnitCodeList = companyCodes;
-        }
-        if(org.springframework.util.CollectionUtils.isEmpty(param.organizationUnitCodeList)) {
-            if(CollectionUtils.isEmpty(companyCodes)) {
-                List<CompanyVO> companyVOList = companyService.findAll();
-                companyCodes = Lists.newArrayList();
-                for(CompanyVO companyVO : companyVOList) {
-                    companyCodes.add(companyVO.getCode());
-                }
-            }
-            param.organizationUnitCodeList = companyCodes;
-        }
-        if(CollectionUtils.isEmpty(param.jobCategoryList)) {
-            param.jobCategoryList = JobCategoryEnum.getAllCodeList();
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.beginPoliceWorkTimeBegin)) {
-            param.beginPoliceWorkTimeBeginDate = DateUtil.convert2Date(param.beginPoliceWorkTimeBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.beginPoliceWorkTimeEnd)) {
-            param.beginPoliceWorkTimeEndDate = DateUtil.convert2Date(param.beginPoliceWorkTimeEnd, BizUserConstant.DateFormat);
-        }
 
-        if(!org.springframework.util.StringUtils.isEmpty(param.contractExpirationDateBegin)) {
-            param.contractExpirationDateBeginDate = DateUtil.convert2Date(param.contractExpirationDateBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.contractExpirationDateEnd)) {
-            param.contractExpirationDateEndDate = DateUtil.convert2Date(param.contractExpirationDateEnd, BizUserConstant.DateFormat);
-        }
-
-        if(!org.springframework.util.StringUtils.isEmpty(param.dimissionDateBegin)) {
-            param.dimissionDateBeginDate = DateUtil.convert2Date(param.dimissionDateBegin, BizUserConstant.DateFormat);
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(param.dimissionDateEnd)) {
-            param.dimissionDateEndDate = DateUtil.convert2Date(param.dimissionDateEnd, BizUserConstant.DateFormat);
-        }
 
 
 

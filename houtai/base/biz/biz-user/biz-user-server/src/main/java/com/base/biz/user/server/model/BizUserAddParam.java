@@ -53,12 +53,20 @@ public class BizUserAddParam {
     public String policeCode;
 
     @ApiParam(name="准驾车型",value="quasiDrivingType")
-    public Integer quasiDrivingType;
+    public String quasiDrivingType;
     @ApiParam(name="准驾车型",value="quasiDrivingTypeStr")
     public String quasiDrivingTypeStr;
 
     @ApiParam(name="特长",value="speciality")
     public String speciality;
+
+    @ApiParam(name="特殊人员",value="specialPeople")
+    public String specialPeople;
+    @ApiParam(name="特殊人员",value="specialPeopleStr")
+    public String specialPeopleStr;
+
+    @ApiParam(name="资格证书",value="qualification")
+    public String qualification;
 
     @ApiParam(name="是否退役军人",value="exserviceman")
     public Integer exserviceman;

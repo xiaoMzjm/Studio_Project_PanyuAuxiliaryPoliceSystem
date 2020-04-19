@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.base.biz.user.client.model.EnumVO;
 import com.google.common.collect.Lists;
+import com.sun.deploy.util.StringUtils;
 
 /**
  * @author:小M
@@ -323,6 +324,27 @@ public class Enums {
             return null;
         }
 
+        public static String getName(String codeStr) {
+            if(codeStr == null) {
+                return null;
+            }
+            String[] codeArray = codeStr.split(",");
+            StringBuilder sb = new StringBuilder();
+            for(String code : codeArray) {
+                for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
+                    if (e.code.equals(Integer.valueOf(code))) {
+                        sb.append(e.getName()).append(",");
+                    }
+                }
+
+            }
+            String result = sb.toString();
+            if (result.endsWith(",")) {
+                result = result.substring(0, result.length() - 1);
+            }
+            return result;
+        }
+
         public static DrivingTypeEnum get(String name) {
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                 if (e.name.equals(name)) {
@@ -335,6 +357,122 @@ public class Enums {
         public static List<EnumVO> getAll(){
             List<EnumVO> list = Lists.newArrayList();
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
+                list.add(new EnumVO(e.getCode(), e.getName()));
+            }
+            return list;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    /**
+     * 特殊人员
+     */
+    public enum SpecialPeopleEnum {
+        TuiYiJunRen(1, "退役军人"),
+        A1JiaZhao(2, "A1驾照"),
+        MoTuoChePai(3, "摩托车牌"),
+        JiSuanJi(4, "计算机相关专业"),
+        ZhongWenWenMi(5, "中文文秘相关专业"),
+        KuaiJi(6, "会计相关专业")
+        ;
+        private Integer code;
+        private String name;
+
+        SpecialPeopleEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getAllCode(){
+            StringBuilder sb = new StringBuilder();
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                sb.append(e.getCode()).append(",");
+            }
+            return sb.toString().substring(0,sb.toString().length()-1);
+        }
+
+        public static List<Integer> getAllCodeList(){
+            List<Integer> list = Lists.newArrayList();
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                list.add(e.getCode());
+            }
+            return list;
+        }
+
+        public static String getAllName(){
+            StringBuilder sb = new StringBuilder();
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                sb.append(e.getName()).append(",");
+            }
+            return sb.toString().substring(0,sb.toString().length()-1);
+        }
+
+        public static SpecialPeopleEnum get(Integer code) {
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                if (e.code.equals(code)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static String getName(Integer code) {
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                if (e.code.equals(code)) {
+                    return e.getName();
+                }
+            }
+            return null;
+        }
+
+        public static String getName(String codeStr) {
+            if(codeStr == null) {
+                return null;
+            }
+            String[] codeArray = codeStr.split(",");
+            StringBuilder sb = new StringBuilder();
+            for(String code : codeArray) {
+                for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                    if (e.code.equals(Integer.valueOf(code))) {
+                        sb.append(e.getName()).append(",");
+                    }
+                }
+
+            }
+            String result = sb.toString();
+            if (result.endsWith(",")) {
+                result = result.substring(0, result.length() - 1);
+            }
+            return result;
+        }
+
+        public static SpecialPeopleEnum get(String name) {
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
+                if (e.name.equals(name)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static List<EnumVO> getAll(){
+            List<EnumVO> list = Lists.newArrayList();
+            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
             }
             return list;
@@ -1518,102 +1656,6 @@ public class Enums {
         public static List<EnumVO> getAll(){
             List<EnumVO> list = Lists.newArrayList();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
-                list.add(new EnumVO(e.getCode(), e.getName()));
-            }
-            return list;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
-        public void setCode(Integer code) {
-            this.code = code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    /**
-     * 特殊人员
-     */
-    public enum SpecialPeopleEnum {
-        one(1, "退役军人"),
-        two(2, "A1驾照"),
-        three(3, "摩托车牌"),
-        four(4, "计算机等专业"),
-        fire(5, "中文文秘等专业"),
-        six(6, "会计等专业"),
-        ;
-
-        private Integer code;
-        private String name;
-
-        SpecialPeopleEnum(Integer code, String name) {
-            this.code = code;
-            this.name = name;
-        }
-
-        public static String getAllCode(){
-            StringBuilder sb = new StringBuilder();
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                sb.append(e.getCode()).append(",");
-            }
-            return sb.toString().substring(0,sb.toString().length()-1);
-        }
-
-        public static List<Integer> getAllCodeList(){
-            List<Integer> list = Lists.newArrayList();
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                list.add(e.getCode());
-            }
-            return list;
-        }
-
-        public static String getAllName(){
-            StringBuilder sb = new StringBuilder();
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                sb.append(e.getName()).append(",");
-            }
-            return sb.toString().substring(0,sb.toString().length()-1);
-        }
-
-        public static SpecialPeopleEnum get(Integer code) {
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.code.equals(code)) {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public static String getName(Integer code) {
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.code.equals(code)) {
-                    return e.name;
-                }
-            }
-            return null;
-        }
-
-        public static SpecialPeopleEnum get(String name) {
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
-                if (e.name.equals(name)) {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public static List<EnumVO> getAll(){
-            List<EnumVO> list = Lists.newArrayList();
-            for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
             }
             return list;

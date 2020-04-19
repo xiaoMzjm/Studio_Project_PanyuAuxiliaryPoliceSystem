@@ -1,15 +1,12 @@
 package com.base.biz.user.server.manager;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Id;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.server.dao.BizUserDao;
@@ -22,15 +19,11 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MD5Util;
-import com.base.department.client.service.CompanyService;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.util.unit.DataUnit;
 
 /**
  * @author:小M
@@ -41,6 +34,8 @@ public class BizUserManager {
 
     @Autowired
     private BizUserDao bizUserDao;
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     /**
      * 根据code查询
@@ -114,57 +109,197 @@ public class BizUserManager {
         return BizUserConvertor.do2dtoList(bizUserDOList);
     }
 
+    private String strList(List<String> list){
+        if(CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(String s : list) {
+            sb.append("'" + s + "'").append(",");
+        }
+        String str = sb.toString();
+        if(str.endsWith(",")) {
+            str = str.substring(0,str.length()-1);
+        }
+        return "(" + str + ")";
+    }
+
+    private String intList(List<Integer> list){
+        if(CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(Integer i : list) {
+            sb.append(i).append(",");
+        }
+        String str = sb.toString();
+        if(str.endsWith(",")) {
+            str = str.substring(0,str.length()-1);
+        }
+        return "(" + str + ")";
+    }
+
     /**
      * 超级查询
      * @param param
      * @return
      */
     public List<BizUserDTO> findBySuperParam(SuperPageListParam param) {
-        List<BizUserDO> bizUserDOList = bizUserDao.findByParam(
-            param.companyCodeList,
-            param.name,
-            param.birthdateBeginDate,
-            param.birthdateEndDate,
-            param.nationList,
-            param.politicalLandscapeList,
-            param.graduateInstitutions,
-            param.policeCode,
-            param.quasiDrivingTypeList,
-            param.exservicemanList,
-            param.permanentResidenceAddress,
-            param.sexList,
-            param.ageBegin,
-            param.ageEnd,
-            param.nativePlace,
-            param.educationList,
-            param.major,
-            param.maritalStatusList,
-            param.identityCard,
-            param.phone,
-            param.personnelTypeList,
-            param.authorizedStrengthTypeList,
-            param.placeOfWorkList,
-            param.treatmentGradeList,
-            param.enrollWayList,
-            param.beginWorkTimeBeginDate,
-            param.beginWorkTimeEndDate,
-            param.effectiveDateOfTheContractBeginDate,
-            param.effectiveDateOfTheContractEndDate,
-            param.retirementDateBeginDate,
-            param.retirementDateEndDate,
-            param.dimissionTypeList,
-            param.workUnitCodeList,
-            param.organizationUnitCodeList,
-            param.jobCategoryList,
-            param.duty,
-            param.socialSecurityNumber,
-            param.beginPoliceWorkTimeBeginDate,
-            param.beginPoliceWorkTimeEndDate,
-            param.contractExpirationDateBeginDate,
-            param.contractExpirationDateEndDate,
-            param.dimissionDateBeginDate,
-            param.dimissionDateEndDate,
-            param.dimissionReason);
+
+        String sql = "select * from biz_user where 1=1 ";
+        if(CollectionUtils.isNotEmpty(param.companyCodeList)) {
+            sql += " and work_unit_code in " + strList(param.companyCodeList);
+        }
+        if(StringUtils.isNotEmpty(param.name)) {
+            sql += " and name like '%%" + param.name + "%%' ";
+        }
+        if(StringUtils.isNotEmpty(param.birthdateBegin)) {
+            sql += " and birthdate >= '" + param.birthdateBegin + "'";
+        }
+        if(StringUtils.isNotEmpty(param.birthdateEnd)) {
+            sql += " and birthdate <= '" + param.birthdateEnd + "'";
+        }
+        if(CollectionUtils.isNotEmpty(param.nationList)) {
+            sql += " and nation in " + intList(param.nationList);
+        }
+        if(CollectionUtils.isNotEmpty(param.politicalLandscapeList)) {
+            sql += " and political_landscape in " + intList(param.politicalLandscapeList);
+        }
+        if(StringUtils.isNotEmpty(param.policeCode)) {
+            sql += " and police_code like '%" + param.policeCode + "%' ";
+        }
+        if(CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
+            sql += " and driving_type in " + intList(param.quasiDrivingTypeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.exservicemanList)) {
+            sql += " and exserviceman in " + intList(param.exservicemanList);
+        }
+        if(StringUtils.isNotEmpty(param.specialPeople)) {
+            sql += " and (";
+            String[] specialPeopleArray = param.specialPeople.split(",");
+            for(String specialPeople : specialPeopleArray) {
+                sql += " special_people like '%" + Integer.valueOf(specialPeople) + "%' or";
+            }
+            if(sql.endsWith("or")) {
+                sql = sql.substring(0, sql.length() - 2) ;
+            }
+            sql += ") ";
+        }
+        if(StringUtils.isNotEmpty(param.qualification)) {
+            sql += " and qualification like '%%"+param.qualification+"%%'";
+        }
+        if(StringUtils.isNotEmpty(param.permanentResidenceAddress)) {
+            sql += " and permanent_residence_address like '%%"+param.permanentResidenceAddress+"%%'";
+        }
+        if(CollectionUtils.isNotEmpty(param.sexList)) {
+            sql += " and sex in " + intList(param.sexList);
+        }
+        if(param.ageBegin != null) {
+            sql += " and age >= " + param.ageBegin;
+        }
+        if(param.ageEnd != null) {
+            sql += " and age <= " + param.ageEnd;
+        }
+        if(StringUtils.isNotEmpty(param.nativePlace)) {
+            sql += " and native_place like '%%"+ param.nativePlace +"%%'";
+        }
+        if(CollectionUtils.isNotEmpty(param.educationList)) {
+            sql += " and education in " + intList(param.educationList);
+        }
+        if(StringUtils.isNotEmpty(param.major)) {
+            sql += " and major like '%%"+param.major+"%%'";
+        }
+        if(CollectionUtils.isNotEmpty(param.maritalStatusList)) {
+            sql += " and marital_status in " + intList(param.maritalStatusList);
+        }
+        if(StringUtils.isNotEmpty(param.identityCard)) {
+            sql += " and identity_card like '%%"+param.identityCard+"%%'";
+        }
+        if(StringUtils.isNotEmpty(param.phone)) {
+            sql += " and phone like '%%"+param.phone+"%%'";
+        }
+        if(CollectionUtils.isNotEmpty(param.personnelTypeList)) {
+            sql += " and personnel_type in " + intList(param.personnelTypeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.authorizedStrengthTypeList)) {
+            sql += " and authorized_strength_type in " + intList(param.authorizedStrengthTypeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.placeOfWorkList)) {
+            sql += " and place_of_work in " + intList(param.placeOfWorkList);
+        }
+        if (CollectionUtils.isNotEmpty(param.treatmentGradeList)) {
+            sql += " and treatment_grade in " + intList(param.treatmentGradeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.enrollWayList)) {
+            sql += " and enroll_way in " + intList(param.enrollWayList);
+        }
+        if(StringUtils.isNotEmpty(param.beginWorkTimeBegin)) {
+            sql += " and begin_work_time >= '"+param.beginWorkTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.beginWorkTimeEnd)) {
+            sql += " and begin_work_time <= '"+param.beginWorkTimeEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.effectiveDateOfTheContractBegin)) {
+            sql += " and effective_date_of_the_contrace >= '"+param.effectiveDateOfTheContractBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.effectiveDateOfTheContractEnd)) {
+            sql += " and effective_date_of_the_contrace <= '"+param.effectiveDateOfTheContractEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.retirementDateBegin)) {
+            sql += " and retirement_date >= '"+param.retirementDateBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.retirementDateEnd)) {
+            sql += " and retirement_date <= '"+param.retirementDateEnd+"'";
+        }
+        if(CollectionUtils.isNotEmpty(param.dimissionTypeList)) {
+            sql += " and dimssion_type in " + intList(param.dimissionTypeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.workUnitCodeList)) {
+            sql += " and work_unit_code in " + strList(param.workUnitCodeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.organizationUnitCodeList)) {
+            sql += " and organization_unit_code in " + strList(param.organizationUnitCodeList);
+        }
+        if(CollectionUtils.isNotEmpty(param.jobCategoryList)) {
+            sql += " and job_category in " + intList(param.jobCategoryList);
+        }
+        if(StringUtils.isNotEmpty(param.duty)) {
+            sql += " and duty like '%%"+param.duty+"%%'";
+        }
+        if(StringUtils.isNotEmpty(param.socialSecurityNumber)) {
+            sql += " and social_security_number like '%%"+param.socialSecurityNumber+"%%'";
+        }
+        if(StringUtils.isNotEmpty(param.retirementDateBegin)) {
+            sql += " and begin_police_work_time >= '"+param.retirementDateBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.beginPoliceWorkTimeEnd)) {
+            sql += " and begin_police_work_time <= '"+param.beginPoliceWorkTimeEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.contractExpirationDateBegin)) {
+            sql += " and contract_expiration_date >= '"+param.contractExpirationDateBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.contractExpirationDateEnd)) {
+            sql += " and contract_expiration_date <= '"+param.contractExpirationDateEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.dimissionDateBegin)) {
+            sql += " and dimssion_date >= '"+param.dimissionDateBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.dimissionDateEnd)) {
+            sql += " and dimssion_date <= '"+param.dimissionDateEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.dimissionReason)) {
+            sql += " and dimssion_reason like '%%"+param.dimissionReason+"%%'";
+        }
+
+        System.out.println("==========");
+        System.out.println(sql);
+        System.out.println("==========");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
+        List<BizUserDO> bizUserDOList = query.getResultList();
+        entityManager.close();
+
         return BizUserConvertor.do2dtoList(bizUserDOList);
     }
 
@@ -261,6 +396,8 @@ public class BizUserManager {
         bizUserDO.setPoliceCode(param.policeCode);
         bizUserDO.setDrivingType(param.quasiDrivingType);
         bizUserDO.setSpeciality(param.speciality);
+        bizUserDO.setSpecialPeople(param.specialPeople);
+        bizUserDO.setQualification(param.qualification);
         bizUserDO.setExserviceman(param.exserviceman);
         bizUserDO.setPermanentResidenceAddress(param.permanentResidenceAddress);
         bizUserDO.setFamilyAddress(param.familyAddress);

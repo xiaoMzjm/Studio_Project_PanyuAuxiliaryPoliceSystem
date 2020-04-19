@@ -59,10 +59,16 @@ public class BizUserDO {
     private String policeCode; // 警号
 
     @Column
-    private Integer drivingType; // 准驾车型 @see DrivingTypeEnum
+    private String drivingType; // 准驾车型 @see DrivingTypeEnum
 
     @Column(length = 4096)
     private String speciality; // 特长
+
+    @Column(length = 512)
+    private String specialPeople; // 特殊人员，多个逗号隔开 @see SpecialPeopleEnum
+
+    @Column(length = 1024)
+    private String qualification; // 资格证书
 
     @Column
     private Integer exserviceman; // 是否退役军人 @see ExservicemanEnum
@@ -251,11 +257,11 @@ public class BizUserDO {
         this.policeCode = policeCode;
     }
 
-    public Integer getDrivingType() {
+    public String getDrivingType() {
         return drivingType;
     }
 
-    public void setDrivingType(Integer drivingType) {
+    public void setDrivingType(String drivingType) {
         this.drivingType = drivingType;
     }
 
@@ -504,6 +510,23 @@ public class BizUserDO {
     }
 
     public void setDimssionReason(String dimssionReason) {
+
         this.dimssionReason = dimssionReason;
+    }
+
+    public String getSpecialPeople() {
+        return specialPeople;
+    }
+
+    public void setSpecialPeople(String specialPeople) {
+        this.specialPeople = specialPeople;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
     }
 }

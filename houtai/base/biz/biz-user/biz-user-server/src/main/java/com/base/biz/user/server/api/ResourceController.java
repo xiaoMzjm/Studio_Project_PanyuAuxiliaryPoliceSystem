@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(description = "资源接口")
 @Controller
 @RequestMapping(value = "/resource", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.0.107:8080")
+@CrossOrigin(origins = "http://192.168.1.5:8080")
 public class ResourceController {
 
     @Value("${ResourceStaticUrl}")

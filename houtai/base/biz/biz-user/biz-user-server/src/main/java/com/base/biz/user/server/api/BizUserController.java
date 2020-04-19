@@ -46,21 +46,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Api(description = "用户接口")
 @Controller
 @RequestMapping(value = "user", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.0.107:8080")
+@CrossOrigin(origins = "http://192.168.1.5:8080")
 public class BizUserController {
 
     @Autowired
     private BizUserInnerSerivce bizUserService;
-
-
 
     @ApiOperation(value = "人员列表页面" ,  notes="人员列表页面")
     @GetMapping("")
     public String userListView(){
         return "userlist";
     }
-
-
 
     @ResultFilter
     @ApiOperation(value = "登录" ,  notes="登录")
@@ -76,6 +72,7 @@ public class BizUserController {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+
 
         return JSON.toJSONString(Result.success(bizUserLoginVO));
     }

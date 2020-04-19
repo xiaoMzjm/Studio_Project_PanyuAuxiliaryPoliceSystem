@@ -3,6 +3,7 @@ package com.base.biz.user.server.service;
 import java.util.*;
 
 import com.base.biz.user.client.common.BizUserConstant;
+import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
@@ -17,6 +18,7 @@ import com.base.biz.user.client.common.Enums.PersonnelTypeEnum;
 import com.base.biz.user.client.common.Enums.PlaceOfWorkEnum;
 import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
+import com.base.biz.user.client.common.Enums.SpecialPeopleEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.common.exception.BaseException;
@@ -113,21 +115,46 @@ public class BizUserAddUserCheckService {
         }
         // 准驾车型
         if (param.quasiDrivingType != null) {
-            DrivingTypeEnum e = DrivingTypeEnum.get(param.quasiDrivingType);
-            if (e == null) {
-                throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",param.quasiDrivingType, DrivingTypeEnum.getAllCode()));
+            String[] quasiDrivingTypeArray = param.quasiDrivingType.split(",");
+            for(String quasiDrivingType : quasiDrivingTypeArray) {
+                DrivingTypeEnum e = DrivingTypeEnum.get(Integer.valueOf(quasiDrivingType));
+                if (e == null) {
+                    throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",Integer.valueOf(quasiDrivingType), DrivingTypeEnum.getAllCode()));
+                }
             }
         }
         if (StringUtils.isNotEmpty(param.quasiDrivingTypeStr)) {
-            DrivingTypeEnum e = DrivingTypeEnum.get(param.quasiDrivingTypeStr);
-            if (e == null) {
-                throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",param.quasiDrivingTypeStr, DrivingTypeEnum.getAllName()));
+            String[] quasiDrivingTypeStrArray = param.quasiDrivingTypeStr.split(",");
+            for(String quasiDrivingTypeStr : quasiDrivingTypeStrArray) {
+                DrivingTypeEnum e = DrivingTypeEnum.get(quasiDrivingTypeStr);
+                if (e == null) {
+                    throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",quasiDrivingTypeStr, DrivingTypeEnum.getAllName()));
+                }
             }
         }
         // 特长
         if (StringUtils.isNotEmpty(param.speciality)) {
             if (param.speciality.length() > 4096) {
                 throw new BaseException(String.format("特长[%s]长度不能超过4096个字符",param.speciality));
+            }
+        }
+        // 特殊人员
+        if (StringUtils.isNotEmpty(param.specialPeople)) {
+            String[] specialPeopleArray = param.specialPeople.split(",");
+            for(String specialPeople : specialPeopleArray) {
+                SpecialPeopleEnum e = SpecialPeopleEnum.get(Integer.valueOf(specialPeople));
+                if (e == null) {
+                    throw new BaseException(String.format("特殊人员[%s]格式错误，正确格式范围为[%s]",Integer.valueOf(specialPeople), SpecialPeopleEnum.getAllCode()));
+                }
+            }
+        }
+        if (StringUtils.isNotEmpty(param.specialPeopleStr)) {
+            String[] specialPeopleStrArray = param.specialPeopleStr.split(",");
+            for(String specialPeopleStr : specialPeopleStrArray){
+                SpecialPeopleEnum e = SpecialPeopleEnum.get(specialPeopleStr);
+                if (e == null) {
+                    throw new BaseException(String.format("特殊人员[%s]格式错误，正确格式范围为[%s]",specialPeopleStr, SpecialPeopleEnum.getAllName()));
+                }
             }
         }
         // 是否退役军人
@@ -337,17 +364,20 @@ public class BizUserAddUserCheckService {
             }
         }
         // 工作单位
+        String workUnitName = "";
         if (StringUtils.isNotEmpty(param.workUnitCode)) {
             CompanyVO companyVO = companyService.findByCode(param.workUnitCode);
             if (companyVO == null) {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitCode));
             }
+            workUnitName = companyVO.getName();
         }
         if (StringUtils.isNotEmpty(param.workUnitName)) {
             CompanyVO companyVO = companyService.findByName(param.workUnitName);
             if (companyVO == null) {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitName));
             }
+            workUnitName = companyVO.getName();
         }
         // 编制单位
         if (StringUtils.isNotEmpty(param.organizationUnitCode)) {
@@ -421,33 +451,41 @@ public class BizUserAddUserCheckService {
                 if(StringUtils.isNotEmpty(addParamExperience.timeStart)) {
                     Date date = DateUtil.convert2Date(addParamExperience.timeStart,BizUserConstant.DateFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("工作经历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
+                        throw new BaseException(String.format("履历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
                     }
                 }
                 // 结束日期
                 if(StringUtils.isNotEmpty(addParamExperience.timeEnd)) {
                     Date date = DateUtil.convert2Date(addParamExperience.timeEnd,BizUserConstant.DateFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("工作经历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
+                        throw new BaseException(String.format("履历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
                     }
                 }
                 // 单位或组织名称
                 if(StringUtils.isNotEmpty(addParamExperience.unit)) {
                     if(addParamExperience.unit.length() > 128) {
-                        throw new BaseException(String.format("工作经历-单位或组织名称[%s]长度不能超过128个字符",addParamExperience.unit));
+                        throw new BaseException(String.format("履历-单位或组织名称[%s]长度不能超过128个字符", addParamExperience.unit));
                     }
                 }
                 // 部门
                 if(StringUtils.isNotEmpty(addParamExperience.department)) {
                     if(addParamExperience.department.length() > 128) {
-                        throw new BaseException(String.format("工作经历-部门[%s]长度不能超过128个字符",addParamExperience.department));
+                        throw new BaseException(String.format("履历-部门[%s]长度不能超过128个字符",addParamExperience.department));
                     }
                 }
                 // 职务
                 if(StringUtils.isNotEmpty(addParamExperience.duty)) {
                     if(addParamExperience.duty.length() > 128) {
-                        throw new BaseException(String.format("工作经历-职务[%s]长度不能超过128个字符",addParamExperience.duty));
+                        throw new BaseException(String.format("履历-职务[%s]长度不能超过128个字符",addParamExperience.duty));
                     }
+                }
+            }
+            BizUserAddParam.AddParamExperience lastAddParamExperienceparam = param.personalExperience.get(param.personalExperience.size() - 1);
+            // 单位或组织名称
+            if(StringUtils.isNotEmpty(lastAddParamExperienceparam.unit)) {
+                // 单位或组织名称必须实际工作单位一致
+                if (!lastAddParamExperienceparam.unit.equals(workUnitName)) {
+                    throw new BaseException(String.format("履历-最后一行[单位或组织名称]和当前的[工作岗位]必须一致，当前工作岗位为[%s]，最后一行单位或组织名称为[%s]",workUnitName, lastAddParamExperienceparam.unit));
                 }
             }
         }
@@ -536,9 +574,9 @@ public class BizUserAddUserCheckService {
 
                 // 发生时间
                 if (StringUtils.isNotEmpty(addParamAssessment.time)) {
-                    Date date = DateUtil.convert2Date(addParamAssessment.time,BizUserConstant.DateFormat);
+                    Date date = DateUtil.convert2Date(addParamAssessment.time,BizUserConstant.DateYYYYFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy/mm/dd",addParamAssessment.time));
+                        throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy",addParamAssessment.time));
                     }
                 }
                 // 等级
