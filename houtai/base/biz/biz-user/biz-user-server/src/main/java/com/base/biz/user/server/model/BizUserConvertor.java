@@ -1,8 +1,11 @@
 package com.base.biz.user.server.model;
 
+import java.util.Date;
 import java.util.List;
 
+import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserLoginVO;
+import com.base.common.util.DateUtil;
 import com.google.common.collect.Lists;
 import org.springframework.beans.BeanUtils;
 
@@ -18,6 +21,25 @@ public class BizUserConvertor {
         }
         BizUserDTO bizUserDTO = new BizUserDTO();
         BeanUtils.copyProperties(bizUserDO, bizUserDTO);
+        // 年龄 根据生日算出
+        Date birthday = bizUserDO.getBirthdate();
+        if(birthday != null) {
+            Date now = new Date();
+            int nowYear = DateUtil.getYear(now);
+            int birthdayYear = DateUtil.getYear(birthday);
+            bizUserDTO.setAge(nowYear - birthdayYear);
+        }
+
+        // 退休时间 男=出生日期+60，女=出生日期+50
+        if(birthday != null && bizUserDO.getSex() != null) {
+            if(bizUserDO.getSex() == SexEnum.MAN.getCode()) {
+                Date expireDate = DateUtil.addYears(birthday,60);
+                bizUserDTO.setRetirementDate(expireDate);
+            }else {
+                Date expireDate = DateUtil.addYears(birthday,50);
+                bizUserDTO.setRetirementDate(expireDate);
+            }
+        }
         return bizUserDTO;
     }
 

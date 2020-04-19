@@ -57,9 +57,6 @@ public class BizUserAddParam {
     @ApiParam(name="准驾车型",value="quasiDrivingTypeStr")
     public String quasiDrivingTypeStr;
 
-    @ApiParam(name="特长",value="speciality")
-    public String speciality;
-
     @ApiParam(name="特殊人员",value="specialPeople")
     public String specialPeople;
     @ApiParam(name="特殊人员",value="specialPeopleStr")
@@ -67,11 +64,6 @@ public class BizUserAddParam {
 
     @ApiParam(name="资格证书",value="qualification")
     public String qualification;
-
-    @ApiParam(name="是否退役军人",value="exserviceman")
-    public Integer exserviceman;
-    @ApiParam(name="是否退役军人",value="exservicemanStr")
-    public String exservicemanStr;
 
     @ApiParam(name="户籍地址",value="permanentResidenceAddress")
     public String permanentResidenceAddress;
@@ -83,8 +75,6 @@ public class BizUserAddParam {
     @ApiParam(name="性别",value="sexStr")
     public String sexStr;
 
-    @ApiParam(name="年龄",value="age")
-    public Integer age;
     @ApiParam(name="籍贯",value="nativePlace")
     public String nativePlace;
 
@@ -142,12 +132,6 @@ public class BizUserAddParam {
     public String effectiveDateOfTheContract;
     @ApiParam(name="退休时间",value="retirementDate")
     public String retirementDate;
-
-    @ApiParam(name="离职类别",value="dimissionType")
-    public Integer dimissionType;
-    @ApiParam(name="离职类别",value="dimissionTypeStr")
-    public String dimissionTypeStr;
-
 
     @ApiParam(name="工作单位",value="workUnitCode")
     public String workUnitCode;

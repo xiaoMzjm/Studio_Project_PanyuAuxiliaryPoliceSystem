@@ -245,7 +245,49 @@ public class BizUserController {
             url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
             file.transferTo(new File(url));
             File f = new File(url);
-            bizUserService.importUser(f);
+            // 导入
+            bizUserService.importUser(new FileInputStream(f));
+        }finally {
+            File f = new File(url);
+            if(f.exists()) {
+                f.delete();
+            }
+        }
+
+        return JSON.toJSONString(Result.success(""));
+    }
+
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导入相片" , notes = "导入相片")
+    @RequestMapping(value = "/importimage", method = RequestMethod.POST,produces = "multipart/form-data;charset=UTF-8")
+    @ResponseBody
+    public String importimage(@RequestParam(value = "file", required = false)MultipartFile file) throws Exception{
+        if (file == null) {
+            return JSON.toJSONString(Result.error("未上传文件"));
+        }
+
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            return JSON.toJSONString(Result.error("ResourceStaticUrl is null"));
+        }
+
+        String oriName = file.getOriginalFilename();
+
+        String diskPath = diskStaticUrl + "files";
+
+        // 创建目录
+        File pathFolder = new File(diskPath);
+        if (!pathFolder.exists()) {
+            pathFolder.mkdirs();
+        }
+
+        // 保存文件
+        String url = "";
+        try {
+            String name = UUIDUtil.get();
+            url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
+            file.transferTo(new File(url));
+            File f = new File(url);
         }finally {
             File f = new File(url);
             if(f.exists()) {

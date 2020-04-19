@@ -2,6 +2,7 @@ package com.base.biz.user.server.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -371,6 +372,13 @@ public class BizUserInnerSerivce {
         if (bizUserDTO != null) {
             throw new BaseException(String.format("该身份证[%s]已存在",param.identityCard));
         }
+        if(StringUtils.isNotEmpty(param.policeCode)) {
+            bizUserDTO = bizUserManager.findByPoliceCode(param.policeCode);
+            if (bizUserDTO != null) {
+                throw new BaseException(String.format("该身份证[%s]已存在",param.identityCard));
+            }
+        }
+
         userService.add(param.identityCard);
         bizUserDTO = bizUserManager.add(param);
         personalExperienceManager.add(param.identityCard, param.personalExperience);
@@ -417,15 +425,34 @@ public class BizUserInnerSerivce {
 
     /**
      * 导入人员
-     * @param file
+     * @param inputStream
      */
-    public void importUser(File file)throws Exception {
-        List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(file);
+    public void importUser(InputStream inputStream)throws Exception {
+        List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(inputStream);
         if(CollectionUtils.isNotEmpty(bizUserAddParamList)) {
             for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
+                BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(bizUserAddParam.identityCard);
+                if (bizUserDTO != null) {
+                    throw new BaseException(String.format("该身份证[%s]已存在",bizUserAddParam.identityCard));
+                }
+                if(StringUtils.isNotEmpty(bizUserAddParam.policeCode)) {
+                    bizUserDTO = bizUserManager.findByPoliceCode(bizUserAddParam.policeCode);
+                    if (bizUserDTO != null) {
+                        throw new BaseException(String.format("该身份证[%s]已存在",bizUserAddParam.identityCard));
+                    }
+                }
                 bizUserAddUserCheckService.check(bizUserAddParam);
                 bizUserManager.add(bizUserAddParam);
             }
         }
+    }
+
+    /**
+     * 导入相片
+     * @param file
+     * @throws Exception
+     */
+    public void importImage(File file) throws Exception {
+
     }
 }

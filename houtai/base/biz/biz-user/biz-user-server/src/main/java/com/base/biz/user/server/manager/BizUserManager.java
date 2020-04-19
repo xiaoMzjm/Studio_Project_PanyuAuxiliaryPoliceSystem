@@ -100,6 +100,23 @@ public class BizUserManager {
     }
 
     /**
+     * 根据警号查询
+     * @param policeCode
+     * @return
+     */
+    public BizUserDTO findByPoliceCode(String policeCode){
+        BizUserDO bizUserDO = new BizUserDO();
+        bizUserDO.setPoliceCode(policeCode);
+        Example<BizUserDO> example = Example.of(bizUserDO);
+        Optional<BizUserDO> optional = bizUserDao.findOne(example);
+        if (!optional.isPresent()) {
+            return null;
+        }
+        bizUserDO = optional.get();
+        return BizUserConvertor.do2dto(bizUserDO);
+    }
+
+    /**
      * genuine名称和单位code查询
      * @param name
      * @param companyCodeList
@@ -386,7 +403,6 @@ public class BizUserManager {
 
 
     private void fillWithByAddParam(BizUserAddParam param,BizUserDO bizUserDO){
-        bizUserDO.setAge(param.age);
         bizUserDO.setName(param.name);
         bizUserDO.setPassword(MD5Util.MD5("admin"));
         bizUserDO.setPicUrl(param.headPicCode);
@@ -396,10 +412,8 @@ public class BizUserManager {
         bizUserDO.setGraduateSchool(param.graduateInstitutions);
         bizUserDO.setPoliceCode(param.policeCode);
         bizUserDO.setDrivingType(param.quasiDrivingType);
-        bizUserDO.setSpeciality(param.speciality);
         bizUserDO.setSpecialPeople(param.specialPeople);
         bizUserDO.setQualification(param.qualification);
-        bizUserDO.setExserviceman(param.exserviceman);
         bizUserDO.setPermanentResidenceAddress(param.permanentResidenceAddress);
         bizUserDO.setFamilyAddress(param.familyAddress);
         bizUserDO.setSex(param.sex);
@@ -417,7 +431,6 @@ public class BizUserManager {
         bizUserDO.setBeginWorkTime(DateUtil.convert2Date(param.beginWorkTime,BizUserConstant.DateFormat));
         bizUserDO.setEffectiveDateOfTheContrace(DateUtil.convert2Date(param.effectiveDateOfTheContract,BizUserConstant.DateFormat));
         bizUserDO.setRetirementDate(DateUtil.convert2Date(param.retirementDate,BizUserConstant.DateFormat));
-        bizUserDO.setDimssionType(param.dimissionType);
         bizUserDO.setWorkUnitCode(param.workUnitCode);
         bizUserDO.setOrganizationUnitCode(param.organizationUnitCode);
         bizUserDO.setJobCategory(param.jobCategory);

@@ -141,12 +141,6 @@ public class BizUserAddUserCheckService {
             }
             param.quasiDrivingType = s;
         }
-        // 特长
-        if (StringUtils.isNotEmpty(param.speciality)) {
-            if (param.speciality.length() > 4096) {
-                throw new BaseException(String.format("特长[%s]长度不能超过4096个字符",param.speciality));
-            }
-        }
         // 特殊人员
         if (StringUtils.isNotEmpty(param.specialPeople)) {
             String[] specialPeopleArray = param.specialPeople.split(",");
@@ -173,19 +167,6 @@ public class BizUserAddUserCheckService {
             }
             param.specialPeople = s;
         }
-        // 是否退役军人
-        if (param.exserviceman != null) {
-            ExservicemanEnum e = ExservicemanEnum.get(param.exserviceman);
-            if (e == null) {
-                throw new BaseException(String.format("是否退役军人[%s]格式错误，正确格式范围为[%s]",param.exserviceman, ExservicemanEnum.getAllCode()));
-            }
-        }
-        if (StringUtils.isNotEmpty(param.exservicemanStr)) {
-            ExservicemanEnum e = ExservicemanEnum.get(param.exservicemanStr);
-            if (e == null) {
-                throw new BaseException(String.format("是否退役军人[%s]格式错误，正确格式范围为[%s]",param.exservicemanStr, ExservicemanEnum.getAllName()));
-            }
-        }
         // 户籍地址
         if (StringUtils.isNotEmpty(param.permanentResidenceAddress)) {
             if (param.permanentResidenceAddress.length() > 512) {
@@ -211,12 +192,6 @@ public class BizUserAddUserCheckService {
                 throw new BaseException(String.format("性别[%s]格式错误，正确格式范围为[%s]",param.sexStr, SexEnum.getAllName()));
             }
             param.sex = e.getCode();
-        }
-        // 年龄
-        if (param.age != null) {
-            if (param.age < 0 || param.age >= 100) {
-                throw new BaseException(String.format("年龄[%s]格式错误，应该大于0，小于100",param.age));
-            }
         }
         // 籍贯
         if (StringUtils.isNotEmpty(param.nativePlace)) {
@@ -373,19 +348,6 @@ public class BizUserAddUserCheckService {
             Date date = DateUtil.convert2Date(param.retirementDate, BizUserConstant.DateFormat);
             if (date == null) {
                 throw new BaseException(String.format("退休时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
-            }
-        }
-        // 离职类别
-        if (param.dimissionType != null) {
-            DimssionTypeEnum e = DimssionTypeEnum.get(param.dimissionType);
-            if (e == null) {
-                throw new BaseException(String.format("离职类别[%s]格式错误，正确格式为[%s]",param.dimissionType, DimssionTypeEnum.getAllCode()));
-            }
-        }
-        if (StringUtils.isNotEmpty(param.dimissionTypeStr)) {
-            DimssionTypeEnum e = DimssionTypeEnum.get(param.dimissionTypeStr);
-            if (e == null) {
-                throw new BaseException(String.format("离职类别[%s]格式错误，正确格式为[%s]",param.dimissionTypeStr, DimssionTypeEnum.getAllName()));
             }
         }
         // 工作单位

@@ -62,17 +62,11 @@ public class BizUserDO {
     @Column
     private String drivingType; // 准驾车型 @see DrivingTypeEnum
 
-    @Column(length = 4096)
-    private String speciality; // 特长
-
     @Column(length = 512)
     private String specialPeople; // 特殊人员，多个逗号隔开 @see SpecialPeopleEnum
 
     @Column(length = 1024)
     private String qualification; // 资格证书
-
-    @Column
-    private Integer exserviceman; // 是否退役军人 @see ExservicemanEnum
 
     @Column(length = 512)
     private String permanentResidenceAddress; // 户籍地址
@@ -82,9 +76,6 @@ public class BizUserDO {
 
     @Column
     private Integer sex; // 性别 @see SexEnum
-
-    @Column
-    private Integer age; // 年龄
 
     @Column(length = 512)
     private String nativePlace; // 籍贯
@@ -130,9 +121,6 @@ public class BizUserDO {
 
     @Column
     private Date retirementDate; // 退休日期。男：出生日期+60，女：出生日期+50
-
-    @Column
-    private Integer dimssionType;// 离职类别 @see DimssionTypeEnum
 
     @Column(length = 128)
     private String workUnitCode; // 工作单位 == 编制单位 关联 单位管理
@@ -266,22 +254,6 @@ public class BizUserDO {
         this.drivingType = drivingType;
     }
 
-    public String getSpeciality() {
-        return speciality;
-    }
-
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
-
-    public Integer getExserviceman() {
-        return exserviceman;
-    }
-
-    public void setExserviceman(Integer exserviceman) {
-        this.exserviceman = exserviceman;
-    }
-
     public String getPermanentResidenceAddress() {
         return permanentResidenceAddress;
     }
@@ -304,14 +276,6 @@ public class BizUserDO {
 
     public void setSex(Integer sex) {
         this.sex = sex;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public String getNativePlace() {
@@ -424,14 +388,6 @@ public class BizUserDO {
 
     public void setRetirementDate(Date retirementDate) {
         this.retirementDate = retirementDate;
-    }
-
-    public Integer getDimssionType() {
-        return dimssionType;
-    }
-
-    public void setDimssionType(Integer dimssionType) {
-        this.dimssionType = dimssionType;
     }
 
     public String getPicUrl() {

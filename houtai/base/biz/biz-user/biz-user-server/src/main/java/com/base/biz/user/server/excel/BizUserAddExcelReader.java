@@ -29,19 +29,18 @@ public class BizUserAddExcelReader {
 
     /**
      * 读取excel
-     * @param file
+     * @param inputStream
      * @return
      * @throws Exception
      */
-    public static List<BizUserAddParam> readExcel(File file) throws Exception {
-        FileInputStream fileInputStream = new FileInputStream(file);
-        Workbook workbook = getWorkbook(fileInputStream);
+    public static List<BizUserAddParam> readExcel(InputStream inputStream) throws Exception {
+        Workbook workbook = getWorkbook(inputStream);
         List<BizUserAddParam> result = Lists.newArrayList();
         try {
             result = parseExcel(workbook);
         }finally {
             workbook.close();
-            fileInputStream.close();
+            inputStream.close();
         }
         return result;
     }
