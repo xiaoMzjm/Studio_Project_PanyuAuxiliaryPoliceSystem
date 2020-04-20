@@ -93,8 +93,6 @@ public class WordUtil {
                                     File picFile = new File(rules.get(key));
                                     String fileName = rules.get(key).substring(rules.get(key).lastIndexOf("/"));
                                     FileInputStream fileInputStream = new FileInputStream(picFile);
-
-
                                     p.createRun().addPicture(fileInputStream, Document.PICTURE_TYPE_PNG, fileName, Units.pixelToEMU(140), Units.pixelToEMU(200));
                                 }else {
                                     String t = text.replace(key,rules.get(key));

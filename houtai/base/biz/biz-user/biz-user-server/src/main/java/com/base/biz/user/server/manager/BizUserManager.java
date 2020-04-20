@@ -179,10 +179,9 @@ public class BizUserManager {
         if(CollectionUtils.isNotEmpty(param.exservicemanList)) {
             sql += " and exserviceman in " + inIntList(param.exservicemanList);
         }
-        if(StringUtils.isNotEmpty(param.specialPeople)) {
+        if(CollectionUtils.isNotEmpty(param.specialPeople)) {
             sql += " and (";
-            String[] specialPeopleArray = param.specialPeople.split(",");
-            for(String specialPeople : specialPeopleArray) {
+            for(String specialPeople : param.specialPeople) {
                 sql += " special_people like '%" + Integer.valueOf(specialPeople) + "%' or";
             }
             if(sql.endsWith("or")) {

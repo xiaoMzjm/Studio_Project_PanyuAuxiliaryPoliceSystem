@@ -47,7 +47,7 @@ public class SuperPageListParam {
     public List<Integer> exservicemanList;
 
     @ApiParam(name="specialPeople",value="specialPeople")
-    public String specialPeople;
+    public List<String> specialPeople;
 
     @ApiParam(name="qualification",value="qualification")
     public String qualification;
