@@ -24,7 +24,7 @@ public class BizUserDTO {
     private String password;
 
 
-
+    private String picCode;
 
     private String picUrl;
 
@@ -473,6 +473,16 @@ public class BizUserDTO {
     }
 
     public void setQualification(String qualification) {
+
+
         this.qualification = qualification;
+    }
+
+    public String getPicCode() {
+        return picCode;
+    }
+
+    public void setPicCode(String picCode) {
+        this.picCode = picCode;
     }
 }

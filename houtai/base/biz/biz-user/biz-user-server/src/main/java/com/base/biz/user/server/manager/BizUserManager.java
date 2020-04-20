@@ -9,7 +9,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import com.base.biz.user.client.common.BizUserConstant;
-import com.base.biz.user.client.common.Enums.NationEnum;
 import com.base.biz.user.server.dao.BizUserDao;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.biz.user.server.model.BizUserConvertor;
@@ -100,6 +99,22 @@ public class BizUserManager {
     }
 
     /**
+     * 根据身份证查询
+     * @param identityCodeList
+     * @return
+     */
+    public List<BizUserDTO> findByIdentityCardList(List<String> identityCodeList){
+        BizUserDO bizUserDO = new BizUserDO();
+        String sql = "select * from biz_user where identity_card in " + inStrList(identityCodeList);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
+        List<BizUserDO> bizUserDOList = query.getResultList();
+        entityManager.close();
+
+        return BizUserConvertor.do2dtoList(bizUserDOList);
+    }
+
+    /**
      * 根据警号查询
      * @param policeCode
      * @return
@@ -127,35 +142,7 @@ public class BizUserManager {
         return BizUserConvertor.do2dtoList(bizUserDOList);
     }
 
-    private String strList(List<String> list){
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        for(String s : list) {
-            sb.append("'" + s + "'").append(",");
-        }
-        String str = sb.toString();
-        if(str.endsWith(",")) {
-            str = str.substring(0,str.length()-1);
-        }
-        return "(" + str + ")";
-    }
 
-    private String intList(List<Integer> list){
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        for(Integer i : list) {
-            sb.append(i).append(",");
-        }
-        String str = sb.toString();
-        if(str.endsWith(",")) {
-            str = str.substring(0,str.length()-1);
-        }
-        return "(" + str + ")";
-    }
 
     /**
      * 超级查询
@@ -166,7 +153,7 @@ public class BizUserManager {
 
         String sql = "select * from biz_user where 1=1 ";
         if(CollectionUtils.isNotEmpty(param.companyCodeList)) {
-            sql += " and work_unit_code in " + strList(param.companyCodeList);
+            sql += " and work_unit_code in " + inStrList(param.companyCodeList);
         }
         if(StringUtils.isNotEmpty(param.name)) {
             sql += " and name like '%%" + param.name + "%%' ";
@@ -178,19 +165,19 @@ public class BizUserManager {
             sql += " and birthdate <= '" + param.birthdateEnd + "'";
         }
         if(CollectionUtils.isNotEmpty(param.nationList)) {
-            sql += " and nation in " + intList(param.nationList);
+            sql += " and nation in " + inIntList(param.nationList);
         }
         if(CollectionUtils.isNotEmpty(param.politicalLandscapeList)) {
-            sql += " and political_landscape in " + intList(param.politicalLandscapeList);
+            sql += " and political_landscape in " + inIntList(param.politicalLandscapeList);
         }
         if(StringUtils.isNotEmpty(param.policeCode)) {
             sql += " and police_code like '%" + param.policeCode + "%' ";
         }
         if(CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
-            sql += " and driving_type in " + intList(param.quasiDrivingTypeList);
+            sql += " and driving_type in " + inIntList(param.quasiDrivingTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.exservicemanList)) {
-            sql += " and exserviceman in " + intList(param.exservicemanList);
+            sql += " and exserviceman in " + inIntList(param.exservicemanList);
         }
         if(StringUtils.isNotEmpty(param.specialPeople)) {
             sql += " and (";
@@ -210,7 +197,7 @@ public class BizUserManager {
             sql += " and permanent_residence_address like '%%"+param.permanentResidenceAddress+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.sexList)) {
-            sql += " and sex in " + intList(param.sexList);
+            sql += " and sex in " + inIntList(param.sexList);
         }
         if(param.ageBegin != null) {
             sql += " and age >= " + param.ageBegin;
@@ -222,13 +209,13 @@ public class BizUserManager {
             sql += " and native_place like '%%"+ param.nativePlace +"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.educationList)) {
-            sql += " and education in " + intList(param.educationList);
+            sql += " and education in " + inIntList(param.educationList);
         }
         if(StringUtils.isNotEmpty(param.major)) {
             sql += " and major like '%%"+param.major+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.maritalStatusList)) {
-            sql += " and marital_status in " + intList(param.maritalStatusList);
+            sql += " and marital_status in " + inIntList(param.maritalStatusList);
         }
         if(StringUtils.isNotEmpty(param.identityCard)) {
             sql += " and identity_card like '%%"+param.identityCard+"%%'";
@@ -237,19 +224,19 @@ public class BizUserManager {
             sql += " and phone like '%%"+param.phone+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.personnelTypeList)) {
-            sql += " and personnel_type in " + intList(param.personnelTypeList);
+            sql += " and personnel_type in " + inIntList(param.personnelTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.authorizedStrengthTypeList)) {
-            sql += " and authorized_strength_type in " + intList(param.authorizedStrengthTypeList);
+            sql += " and authorized_strength_type in " + inIntList(param.authorizedStrengthTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.placeOfWorkList)) {
-            sql += " and place_of_work in " + intList(param.placeOfWorkList);
+            sql += " and place_of_work in " + inIntList(param.placeOfWorkList);
         }
         if (CollectionUtils.isNotEmpty(param.treatmentGradeList)) {
-            sql += " and treatment_grade in " + intList(param.treatmentGradeList);
+            sql += " and treatment_grade in " + inIntList(param.treatmentGradeList);
         }
         if(CollectionUtils.isNotEmpty(param.enrollWayList)) {
-            sql += " and enroll_way in " + intList(param.enrollWayList);
+            sql += " and enroll_way in " + inIntList(param.enrollWayList);
         }
         if(StringUtils.isNotEmpty(param.beginWorkTimeBegin)) {
             sql += " and begin_work_time >= '"+param.beginWorkTimeBegin+"'";
@@ -270,16 +257,16 @@ public class BizUserManager {
             sql += " and retirement_date <= '"+param.retirementDateEnd+"'";
         }
         if(CollectionUtils.isNotEmpty(param.dimissionTypeList)) {
-            sql += " and dimssion_type in " + intList(param.dimissionTypeList);
+            sql += " and dimssion_type in " + inIntList(param.dimissionTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.workUnitCodeList)) {
-            sql += " and work_unit_code in " + strList(param.workUnitCodeList);
+            sql += " and work_unit_code in " + inStrList(param.workUnitCodeList);
         }
         if(CollectionUtils.isNotEmpty(param.organizationUnitCodeList)) {
-            sql += " and organization_unit_code in " + strList(param.organizationUnitCodeList);
+            sql += " and organization_unit_code in " + inStrList(param.organizationUnitCodeList);
         }
         if(CollectionUtils.isNotEmpty(param.jobCategoryList)) {
-            sql += " and job_category in " + intList(param.jobCategoryList);
+            sql += " and job_category in " + inIntList(param.jobCategoryList);
         }
         if(StringUtils.isNotEmpty(param.duty)) {
             sql += " and duty like '%%"+param.duty+"%%'";
@@ -394,6 +381,28 @@ public class BizUserManager {
     }
 
     /**
+     * 更新头像
+     * @param code
+     * @param imageCode
+     * @throws Exception
+     */
+    public void updateImage(String code , String imageCode) throws Exception{
+        BizUserDO bizUserDO = new BizUserDO();
+        bizUserDO.setCode(code);
+        Example<BizUserDO> example = Example.of(bizUserDO);
+        Optional<BizUserDO> optional = bizUserDao.findOne(example);
+        if(!optional.isPresent()) {
+            throw new BaseException(String.format("该用户不存在，Code[%s]",code));
+        }
+        bizUserDO = optional.get();
+
+        Date now = new Date();
+        bizUserDO.setGmtModified(now);
+        bizUserDO.setPicUrl(imageCode);
+        bizUserDao.save(bizUserDO);
+    }
+
+    /**
      * 根据code删除人员
       * @param code
      */
@@ -443,7 +452,35 @@ public class BizUserManager {
         bizUserDO.setBeginPoliceWorkTime(DateUtil.convert2Date(param.beginPoliceWorkTime,BizUserConstant.DateFormat));
     }
 
+    private String inStrList(List<String> list){
+        if(CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(String s : list) {
+            sb.append("'" + s + "'").append(",");
+        }
+        String str = sb.toString();
+        if(str.endsWith(",")) {
+            str = str.substring(0,str.length()-1);
+        }
+        return "(" + str + ")";
+    }
 
+    private String inIntList(List<Integer> list){
+        if(CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(Integer i : list) {
+            sb.append(i).append(",");
+        }
+        String str = sb.toString();
+        if(str.endsWith(",")) {
+            str = str.substring(0,str.length()-1);
+        }
+        return "(" + str + ")";
+    }
 
 
 

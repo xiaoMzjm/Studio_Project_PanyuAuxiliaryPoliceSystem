@@ -3,7 +3,6 @@ package com.base.biz.user.server.api;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -29,9 +28,11 @@ import com.base.resource.client.common.Constant;
 import com.base.user.client.common.UserConstant;
 import com.base.user.client.model.TokenFilter;
 import com.base.user.client.model.UserVO;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -283,18 +284,64 @@ public class BizUserController {
 
         // 保存文件
         String url = "";
+        List<String> successList = Lists.newArrayList();
         try {
             String name = UUIDUtil.get();
             url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
             file.transferTo(new File(url));
             File f = new File(url);
+            successList = bizUserService.importImage(f);
         }finally {
             File f = new File(url);
             if(f.exists()) {
                 f.delete();
             }
         }
+        if(CollectionUtils.isNotEmpty(successList)) {
+            return JSON.toJSONString(Result.success(String.format("成功导入了%d个头像，身份证如下：%s",successList.size(), successList.toString() )));
+        }else {
+            return JSON.toJSONString(Result.success(""));
+        }
+    }
+
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导出个人简历" , notes = "导出个人简历")
+    @RequestMapping(value = "/exportuser", method = RequestMethod.GET)
+    @ResponseBody
+    public String exportuser( String code, HttpServletResponse response) throws Exception{
+        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
+        File file = new File(path + "/" + "个人简历.docx");
+        File wordFile = null;
+        try {
+            wordFile = bizUserService.exportUser(code, file);
+
+            if (wordFile != null && wordFile.exists()) {
+                response.setHeader("Content-Disposition", "attachment; filename=" + new String("个人简历.docx".getBytes("UTF-8"),"ISO8859-1"));
+                Long contentLength = wordFile.length();
+                response.setHeader("content-length", contentLength + "");
+
+                OutputStream os = response.getOutputStream();
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(wordFile));
+                byte[] buff = new byte[1024];
+                int i = bis.read(buff);
+                while (i != -1) {
+                    os.write(buff, 0, buff.length);
+                    os.flush();
+                    i = bis.read(buff);
+                }
+                if (bis != null) {
+                    bis.close();
+                }
+            }
+
+        }finally {
+            if (wordFile != null && wordFile.exists()) {
+                wordFile.delete();
+            }
+        }
 
         return JSON.toJSONString(Result.success(""));
+
     }
 }

@@ -1,11 +1,12 @@
 package com.base.biz.user.server.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
@@ -28,7 +29,9 @@ import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserDetailVO.Experience;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
-import com.base.biz.user.server.excel.BizUserAddExcelReader;
+import com.base.biz.user.server.common.BizUserAddExcelReader;
+import com.base.biz.user.server.common.WordUtil;
+import com.base.biz.user.server.common.ZipUtil;
 import com.base.biz.user.server.manager.AssessmentManager;
 import com.base.biz.user.server.manager.AwardManager;
 import com.base.biz.user.server.manager.BizUserManager;
@@ -52,12 +55,13 @@ import com.base.resource.client.model.ResourceVO;
 import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +71,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class BizUserInnerSerivce {
+
+    @Value("${ResourceStaticUrl}")
+    private String diskStaticUrl;
 
     @Autowired
     private BizUserManager bizUserManager;
@@ -162,6 +169,8 @@ public class BizUserInnerSerivce {
         }
         vo.setBeginWorkTime(DateUtil.convert2String(dto.getBeginWorkTime(), BizUserConstant.DateFormat));
         vo.setCode(dto.getCode());
+        vo.setHeadPicUrl(dto.getPicUrl());
+        vo.setHeadPicCode(dto.getPicCode());
         vo.setBirthdate(DateUtil.convert2String(dto.getBirthdate(), BizUserConstant.DateFormat));
         vo.setNation(dto.getNation());
         vo.setNationStr(NationEnum.getName(dto.getNation()));
@@ -452,7 +461,90 @@ public class BizUserInnerSerivce {
      * @param file
      * @throws Exception
      */
-    public void importImage(File file) throws Exception {
+    public List<String> importImage(File file) throws Exception {
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            throw new BaseException("diskStaticUrl is null");
+        }
+        Map<String,String> imageCodeMap = ZipUtil.parseZipAndSaveImage(file, diskStaticUrl + "images/");
+        if(MapUtils.isEmpty(imageCodeMap)) {
+            throw new BaseException("该zip包中没有图片");
+        }
+        List<String> identityCardList = Lists.newArrayList();
+        Map<String,String> identityCard2ImageCode = new HashMap<>();
+        for(String oldName : imageCodeMap.keySet()) {
+            String newName = imageCodeMap.get(oldName);
+            String identityCard = oldName.substring(0,oldName.lastIndexOf("."));
+            String imageCode = newName.substring(0,newName.lastIndexOf("."));
+            identityCardList.add(identityCard);
+            identityCard2ImageCode.put(identityCard, imageCode);
+        }
 
+        // 查询身份信息
+        List<BizUserDTO> bizUserDTOList = bizUserManager.findByIdentityCardList(identityCardList);
+        if(CollectionUtils.isEmpty(bizUserDTOList)) {
+            throw new BaseException(String.format("经识别，zip中图片的身份证错误，找不到任何人员信息。身份证为：[%s]" , bizUserDTOList.toString()));
+        }
+
+        Map<String,BizUserDTO> identityCard2BizUserDTOMap = bizUserDTOList.stream().collect(Collectors.toMap(BizUserDTO::getIdentityCard, Function
+            .identity()));
+
+        // 更新
+        List<String> successIdentityCardList = Lists.newArrayList();
+        for(String identityCard : identityCard2BizUserDTOMap.keySet()) {
+            String imageCode = identityCard2ImageCode.get(identityCard);
+            BizUserDTO bizUserDTO = identityCard2BizUserDTOMap.get(identityCard);
+            bizUserManager.updateImage(bizUserDTO.getCode(), imageCode);
+            successIdentityCardList.add(identityCard);
+        }
+
+        return successIdentityCardList;
+    }
+
+    /**
+     * 导出人员
+     * @param code
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public File exportUser(String code, File file) throws Exception{
+        if(StringUtils.isEmpty(code)) {
+            throw new BaseException("code is null");
+        }
+        BizUserDetailVO vo = findByCode(code);
+        if(vo == null) {
+            throw new BaseException("找不到该人员，请重试");
+        }
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            throw new BaseException("diskStaticUrl is null");
+        }
+
+        Map<String,String> rules = new HashMap<>();
+        rules.put("${name}",vo.getName());
+        rules.put("${sex}",vo.getSexStr());
+        rules.put("${birthday}",vo.getBirthdate());
+        if(vo.getAge() != null) {
+            rules.put("${age}",String.valueOf(vo.getAge()));
+        }else {
+            rules.put("${age}","");
+        }
+        rules.put("${nation}",vo.getNationStr());
+        rules.put("${nativePlace}",vo.getNativePlace());
+        rules.put("${politicalLandscape}",vo.getPoliticalLandscapeStr());
+        rules.put("${education}",vo.getEducationStr());
+        rules.put("${graducateInstitutions}",vo.getGraduateInstitutions());
+        rules.put("${major}",vo.getMajor());
+        rules.put("${quasiDrivingType}",vo.getQuasiDrivingTypeStr());
+        rules.put("${maritalStatus}",vo.getMaritalStatusStr());
+        rules.put("${identityCard}",vo.getIdentityCard());
+        rules.put("${phone}",vo.getPhone());
+        rules.put("${permanentResidenceAddress}",vo.getPermanentResidenceAddress());
+        rules.put("${familyAddress}",vo.getFamilyAddress());
+        rules.put("${headPic}",diskStaticUrl + "images/" + vo.getHeadPicUrl() + ".png");
+
+        String savePath = diskStaticUrl + "files/";
+        String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+        String wordPath = savePath + wordName;
+        return new File(wordPath);
     }
 }
