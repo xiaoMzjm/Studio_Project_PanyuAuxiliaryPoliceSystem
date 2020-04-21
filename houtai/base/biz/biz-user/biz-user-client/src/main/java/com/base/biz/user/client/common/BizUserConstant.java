@@ -10,4 +10,8 @@ public class BizUserConstant {
 
     public static final String DateYYYYFormat = "yyyy";
 
+    public static final String DateYYYYNianMMyueFormat = "yyyy年MM月";
+
+    public static final String DateYYYYNianMMyueddriFormat = "yyyy年MM月dd日";
+
 }

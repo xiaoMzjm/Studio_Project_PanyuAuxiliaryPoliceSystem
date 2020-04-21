@@ -2,6 +2,7 @@ package com.base.biz.user.server.service;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,15 @@ import com.base.biz.user.client.common.Enums.SpecialPeopleEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserDetailVO.Experience;
+import com.base.biz.user.client.model.BizUserDetailVO.FamilyMember;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
 import com.base.biz.user.server.common.BizUserAddExcelReader;
 import com.base.biz.user.server.common.WordUtil;
+import com.base.biz.user.server.common.WordUtil.PicDTO;
+import com.base.biz.user.server.common.WordUtil.RowCellDTO;
+import com.base.biz.user.server.common.WordUtil.RowDTO;
+import com.base.biz.user.server.common.WordUtil.TextDTO;
 import com.base.biz.user.server.common.ZipUtil;
 import com.base.biz.user.server.manager.AssessmentManager;
 import com.base.biz.user.server.manager.AwardManager;
@@ -93,7 +99,6 @@ public class BizUserInnerSerivce {
     private CompanyService companyService;
     @Autowired
     private ResourceService resourceService;
-
 
     /**
      *
@@ -169,8 +174,8 @@ public class BizUserInnerSerivce {
         }
         vo.setBeginWorkTime(DateUtil.convert2String(dto.getBeginWorkTime(), BizUserConstant.DateFormat));
         vo.setCode(dto.getCode());
-        vo.setHeadPicUrl(dto.getPicUrl());
-        vo.setHeadPicCode(dto.getPicCode());
+        //vo.setHeadPicUrl(dto.getPicUrl());
+        //vo.setHeadPicCode(dto.getPicCode());
         vo.setBirthdate(DateUtil.convert2String(dto.getBirthdate(), BizUserConstant.DateFormat));
         vo.setNation(dto.getNation());
         vo.setNationStr(NationEnum.getName(dto.getNation()));
@@ -206,7 +211,7 @@ public class BizUserInnerSerivce {
         vo.setPlaceOfWork(dto.getPlaceOfWork());
         vo.setPlaceOfWorkStr(PlaceOfWorkEnum.getName(dto.getPlaceOfWork()));
         vo.setJobGrade(dto.getJobGrade());
-        vo.setJobCategoryStr(JobGradeEnum.getName(dto.getJobGrade()));
+        vo.setJobGradeStr(JobGradeEnum.getName(dto.getJobGrade()));
         vo.setTreatmentGrade(dto.getTreatmentGrade());
         vo.setTreatmentGradeStr(TreatmentGradeEnum.getName(dto.getTreatmentGrade()));
         vo.setEnrollWay(dto.getEnrollWay());
@@ -408,6 +413,10 @@ public class BizUserInnerSerivce {
         if (StringUtils.isEmpty(param.getCode())) {
             throw new BaseException("人员Code为空");
         }
+        BizUserDTO dto = bizUserManager.findByCode(param.getCode());
+        if(dto == null) {
+            throw new BaseException(String.format("该人员不存在[%s]", param.getCode()));
+        }
         deleteByCode(param.code, false);
         bizUserManager.update(param);
         personalExperienceManager.add(param.identityCard, param.personalExperience);
@@ -422,6 +431,10 @@ public class BizUserInnerSerivce {
      */
     @Transactional(rollbackFor = Throwable.class)
     public void deleteByCode(String code, boolean deleteUser) throws Exception{
+        BizUserDTO dto = bizUserManager.findByCode(code);
+        if(dto == null) {
+            throw new BaseException(String.format("该人员不存在[%s]", code));
+        }
         if(deleteUser) {
             bizUserManager.deleteByCode(code);
             userService.deleteByCode(code);
@@ -494,6 +507,7 @@ public class BizUserInnerSerivce {
             String imageCode = identityCard2ImageCode.get(identityCard);
             BizUserDTO bizUserDTO = identityCard2BizUserDTOMap.get(identityCard);
             bizUserManager.updateImage(bizUserDTO.getCode(), imageCode);
+            resourceService.add("/static/images", imageCode, "png", imageCode);
             successIdentityCardList.add(identityCard);
         }
 
@@ -519,32 +533,190 @@ public class BizUserInnerSerivce {
             throw new BaseException("diskStaticUrl is null");
         }
 
-        Map<String,String> rules = new HashMap<>();
-        rules.put("${name}",vo.getName());
-        rules.put("${sex}",vo.getSexStr());
-        rules.put("${birthday}",vo.getBirthdate());
+        Map<String,Object> rules = new HashMap<>();
+        rules.put("${name}",new TextDTO(vo.getName(),true));
+        rules.put("${sex}",new TextDTO(vo.getSexStr(),true));
+        rules.put("${birthday}",new TextDTO(vo.getBirthdate(),true));
         if(vo.getAge() != null) {
-            rules.put("${age}",String.valueOf(vo.getAge()));
+            rules.put("${age}",new TextDTO(String.valueOf(vo.getAge()),true));
         }else {
-            rules.put("${age}","");
+            rules.put("${age}",new TextDTO("",true));
         }
-        rules.put("${nation}",vo.getNationStr());
-        rules.put("${nativePlace}",vo.getNativePlace());
-        rules.put("${politicalLandscape}",vo.getPoliticalLandscapeStr());
-        rules.put("${education}",vo.getEducationStr());
-        rules.put("${graducateInstitutions}",vo.getGraduateInstitutions());
-        rules.put("${major}",vo.getMajor());
-        rules.put("${quasiDrivingType}",vo.getQuasiDrivingTypeStr());
-        rules.put("${maritalStatus}",vo.getMaritalStatusStr());
-        rules.put("${identityCard}",vo.getIdentityCard());
-        rules.put("${phone}",vo.getPhone());
-        rules.put("${permanentResidenceAddress}",vo.getPermanentResidenceAddress());
-        rules.put("${familyAddress}",vo.getFamilyAddress());
-        rules.put("${headPic}",diskStaticUrl + "images/" + vo.getHeadPicUrl() + ".png");
+        rules.put("${nation}",new TextDTO(vo.getNationStr(),true));
+        rules.put("${nativePlace}",new TextDTO(vo.getNativePlace(),true));
+        rules.put("${politicalLandscape}",new TextDTO(vo.getPoliticalLandscapeStr(),true));
+        rules.put("${education}",new TextDTO(vo.getEducationStr(),true));
+        rules.put("${graducateInstitutions}",new TextDTO(vo.getGraduateInstitutions(),true));
+        rules.put("${major}",new TextDTO(vo.getMajor(),true));
+        rules.put("${quasiDrivingType}",new TextDTO(vo.getQuasiDrivingTypeStr(),true));
+        rules.put("${maritalStatus}",new TextDTO(vo.getMaritalStatusStr(),true));
+        rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),true));
+        rules.put("${phone}",new TextDTO(vo.getPhone(),true));
+        rules.put("${permanentResidenceAddress}",new TextDTO(vo.getPermanentResidenceAddress(),false));
+        rules.put("${familyAddress}",new TextDTO(vo.getFamilyAddress(),false));
+        if(StringUtils.isNotEmpty(vo.getHeadPicUrl())) {
+            PicDTO picDTO = new PicDTO();
+            picDTO.setFile(new File(diskStaticUrl + "images/" + vo.getHeadPicCode() + ".png"));
+            picDTO.setWidth(150);
+            picDTO.setHeight(210);
+            picDTO.setFileName(vo.getHeadPicCode());
+            rules.put("${headPic}",picDTO);
+        }else {
+            rules.put("${headPic}",new PicDTO());
+        }
+        rules.put("${personalType}",new TextDTO(vo.getPersonnelTypeStr(),true));
+        rules.put("${organizationUnitCode}",new TextDTO(vo.getOrganizationUnitName(),true));
+        rules.put("${authorizedStrengthType}",new TextDTO(vo.getAuthorizedStrengthTypeStr(),true));
+        rules.put("${jobCategory}",new TextDTO(vo.getJobCategoryStr(),true));
+        rules.put("${placeOfwork}",new TextDTO(vo.getPlaceOfWorkStr(),true));
+        rules.put("${duty}",new TextDTO(vo.getDuty(),true));
+        rules.put("${jobGrade}",new TextDTO(vo.getJobGradeStr(),true));
+        rules.put("${enrollWay}",new TextDTO(vo.getEnrollWayStr(),true));
+        rules.put("${socialSecurityNumber}",new TextDTO(vo.getSocialSecurityNumber(),true));
+        rules.put("${beginWorkTime}",new TextDTO(vo.getBeginWorkTime(),true));
+        rules.put("${beginPoliceWorkTime}",new TextDTO(vo.getBeginPoliceWorkTime(),true));
+        rules.put("${effectiveDateOfContract}",new TextDTO(vo.getEffectiveDateOfTheContract(),true));
+        rules.put("${contractExpirationDate}",new TextDTO(vo.getContractExpirationDate(),true));
+        rules.put("${retirementDate}",new TextDTO(vo.getRetirementDate(),true));
+        rules.put("${dimssionDate}",new TextDTO(vo.getDimissionDate(),true));
+        rules.put("${dimissionReason}",new TextDTO(vo.getDimissionReason(),true));
+        // 履历
+        if(CollectionUtils.isEmpty(vo.getPersonalExperience())) {
+            rules.put("${lvliRow}",new RowDTO());
+        }else {
+            List<List<RowCellDTO>> list = Lists.newArrayList();
+            for(Experience experience : vo.getPersonalExperience()) {
+                List<RowCellDTO> row = Lists.newArrayList();
+                row.add(new RowCellDTO(experience.getTimeStart(),2500));
+                row.add(new RowCellDTO(experience.getTimeEnd(),2500));
+                row.add(new RowCellDTO(experience.getUnit(),2500));
+                row.add(new RowCellDTO(experience.getDepartment(),2500));
+                row.add(new RowCellDTO(experience.getDuty(),2500));
+                list.add(row);
+            }
+            rules.put("${lvliRow}",new RowDTO(list));
+        }
+        // 家庭成员
+        if(CollectionUtils.isEmpty(vo.getPersonalExperience())) {
+            rules.put("${familyRow}",new RowDTO());
+        }else {
+            List<List<RowCellDTO>> list = Lists.newArrayList();
+            for(FamilyMember familyMember : vo.getFamilyMember()) {
+                List<RowCellDTO> row = Lists.newArrayList();
+                row.add(new RowCellDTO(familyMember.getName(),800));
+                row.add(new RowCellDTO(familyMember.getRelation(),800));
+                row.add(new RowCellDTO(familyMember.getCompany(),800));
+                row.add(new RowCellDTO(familyMember.getPhone(),800));
+                row.add(new RowCellDTO(familyMember.getIdentityCard(),800));
+
+                list.add(row);
+            }
+            rules.put("${familyRow}",new RowDTO(list));
+        }
+
+
 
         String savePath = diskStaticUrl + "files/";
-        String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
-        String wordPath = savePath + wordName;
-        return new File(wordPath);
+        try {
+            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordPath = savePath + wordName;
+            return new File(wordPath);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public File exportIncomecertificate(String code, File file) throws Exception{
+        if(StringUtils.isEmpty(code)) {
+            throw new BaseException("code is null");
+        }
+        BizUserDetailVO vo = findByCode(code);
+        if(vo == null) {
+            throw new BaseException("找不到该人员，请重试");
+        }
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            throw new BaseException("diskStaticUrl is null");
+        }
+
+        Map<String,Object> rules = new HashMap<>();
+        rules.put("${name}",new TextDTO(vo.getName(),false));
+        rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),false));
+
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            rules.put("${beginWorkTime}",new TextDTO("",false));
+        } else {
+            Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
+            String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
+            rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
+        }
+
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            rules.put("${exportTime}",new TextDTO("",true));
+        } else {
+            Date time = new Date();
+            String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
+            rules.put("${exportTime}",new TextDTO(timeStr,false));
+        }
+        String savePath = diskStaticUrl + "files/";
+        try {
+            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordPath = savePath + wordName;
+            return new File(wordPath);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    public File exportonthejobcertificate(String code, File file) throws Exception{
+        if(StringUtils.isEmpty(code)) {
+            throw new BaseException("code is null");
+        }
+        BizUserDetailVO vo = findByCode(code);
+        if(vo == null) {
+            throw new BaseException("找不到该人员，请重试");
+        }
+        if(StringUtils.isEmpty(diskStaticUrl)) {
+            throw new BaseException("diskStaticUrl is null");
+        }
+
+        Map<String,Object> rules = new HashMap<>();
+        rules.put("${name}",new TextDTO(vo.getName(),false));
+        rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),false));
+
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            rules.put("${beginWorkTime}",new TextDTO("",false));
+        } else {
+            Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
+            String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
+            rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
+        }
+
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            rules.put("${exportTime}",new TextDTO("",true));
+        } else {
+            Date time = new Date();
+            String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
+            rules.put("${exportTime}",new TextDTO(timeStr,false));
+        }
+        rules.put("${sex}",new TextDTO(vo.getSexStr(),false));
+        if(vo.getAge() == null) {
+            rules.put("${age}",new TextDTO( "",false));
+        } else {
+            rules.put("${age}",new TextDTO(String.valueOf(vo.getAge()),false));
+        }
+
+        String savePath = diskStaticUrl + "files/";
+        try {
+            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordPath = savePath + wordName;
+            return new File(wordPath);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
     }
 }

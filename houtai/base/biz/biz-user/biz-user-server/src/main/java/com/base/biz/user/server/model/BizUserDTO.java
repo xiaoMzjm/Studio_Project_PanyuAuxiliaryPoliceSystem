@@ -478,6 +478,7 @@ public class BizUserDTO {
         this.qualification = qualification;
     }
 
+
     public String getPicCode() {
         return picCode;
     }

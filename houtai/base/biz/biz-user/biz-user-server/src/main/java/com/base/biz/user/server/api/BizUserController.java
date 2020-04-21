@@ -157,17 +157,17 @@ public class BizUserController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody DeleteParam param)throws Exception {
-        bizUserService.deleteByCode(param.code, true);
+        bizUserService.deleteByCode(param.userCode, true);
         return JSON.toJSONString(Result.success(""));
     }
     public static class DeleteParam{
-        @ApiParam(name="code",value="code")
-        public String code;
+        @ApiParam(name="userCode",value="userCode")
+        public String userCode;
     }
 
     @TokenFilter
     @ResultFilter
-    @ApiOperation(value = "删除人员" , notes = "删除人员")
+    @ApiOperation(value = "修改人员" , notes = "修改人员")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public String update(@RequestBody UpdateParam param) throws Exception {
@@ -309,15 +309,97 @@ public class BizUserController {
     @ApiOperation(value = "导出个人简历" , notes = "导出个人简历")
     @RequestMapping(value = "/exportuser", method = RequestMethod.GET)
     @ResponseBody
-    public String exportuser( String code, HttpServletResponse response) throws Exception{
+    public String exportuser( String userCode, HttpServletResponse response) throws Exception{
         String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
         File file = new File(path + "/" + "个人简历.docx");
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportUser(code, file);
+            wordFile = bizUserService.exportUser(userCode, file);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("个人简历.docx".getBytes("UTF-8"),"ISO8859-1"));
+                Long contentLength = wordFile.length();
+                response.setHeader("content-length", contentLength + "");
+
+                OutputStream os = response.getOutputStream();
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(wordFile));
+                byte[] buff = new byte[1024];
+                int i = bis.read(buff);
+                while (i != -1) {
+                    os.write(buff, 0, buff.length);
+                    os.flush();
+                    i = bis.read(buff);
+                }
+                if (bis != null) {
+                    bis.close();
+                }
+            }
+
+        }finally {
+            if (wordFile != null && wordFile.exists()) {
+                wordFile.delete();
+            }
+        }
+
+        return JSON.toJSONString(Result.success(""));
+
+    }
+
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导出收入证明" , notes = "导出收入证明")
+    @RequestMapping(value = "/exportincomecertificate", method = RequestMethod.GET)
+    @ResponseBody
+    public String exportIncomecertificate( String userCode, HttpServletResponse response) throws Exception{
+        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
+        File file = new File(path + "/" + "收入证明.docx");
+        File wordFile = null;
+        try {
+            wordFile = bizUserService.exportIncomecertificate(userCode, file);
+
+            if (wordFile != null && wordFile.exists()) {
+                response.setHeader("Content-Disposition", "attachment; filename=" + new String("收入证明.docx".getBytes("UTF-8"),"ISO8859-1"));
+                Long contentLength = wordFile.length();
+                response.setHeader("content-length", contentLength + "");
+
+                OutputStream os = response.getOutputStream();
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(wordFile));
+                byte[] buff = new byte[1024];
+                int i = bis.read(buff);
+                while (i != -1) {
+                    os.write(buff, 0, buff.length);
+                    os.flush();
+                    i = bis.read(buff);
+                }
+                if (bis != null) {
+                    bis.close();
+                }
+            }
+
+        }finally {
+            if (wordFile != null && wordFile.exists()) {
+                wordFile.delete();
+            }
+        }
+
+        return JSON.toJSONString(Result.success(""));
+
+    }
+
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导出在职证明" , notes = "导出在职证明")
+    @RequestMapping(value = "/exportonthejobcertificate", method = RequestMethod.GET)
+    @ResponseBody
+    public String exportonthejobcertificate( String userCode, HttpServletResponse response) throws Exception{
+        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
+        File file = new File(path + "/" + "在职证明.docx");
+        File wordFile = null;
+        try {
+            wordFile = bizUserService.exportonthejobcertificate(userCode, file);
+
+            if (wordFile != null && wordFile.exists()) {
+                response.setHeader("Content-Disposition", "attachment; filename=" + new String("在职证明.docx".getBytes("UTF-8"),"ISO8859-1"));
                 Long contentLength = wordFile.length();
                 response.setHeader("content-length", contentLength + "");
 

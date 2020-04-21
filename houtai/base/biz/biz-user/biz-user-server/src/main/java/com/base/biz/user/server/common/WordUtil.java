@@ -5,28 +5,147 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.Document;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.TableWidthType;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell.XWPFVertAlign;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
 /**
  * @author:小M
  * @date:2020/4/21 12:38 AM
  */
 public class WordUtil {
+
+    public static class TextDTO{
+        private String text;
+        private boolean center;
+
+        public TextDTO(String text, boolean center) {
+            this.text = text;
+            this.center = center;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public boolean isCenter() {
+            return center;
+        }
+
+        public void setCenter(boolean center) {
+            this.center = center;
+        }
+    }
+
+    public static class PicDTO {
+        private File file;
+        private Integer width;
+        private Integer height;
+        private String fileName;
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
+
+        public Integer getWidth() {
+            return width;
+        }
+
+        public void setWidth(Integer width) {
+            this.width = width;
+        }
+
+        public Integer getHeight() {
+            return height;
+        }
+
+        public void setHeight(Integer height) {
+            this.height = height;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+    }
+
+    public static class RowDTO {
+        private List<List<RowCellDTO>> values;
+
+        public RowDTO() {
+        }
+
+        public RowDTO(List<List<RowCellDTO>> values) {
+            this.values = values;
+        }
+
+        public List<List<RowCellDTO>> getValues() {
+            return values;
+        }
+
+        public void setValues(List<List<RowCellDTO>> values) {
+            this.values = values;
+        }
+    }
+
+    public static class RowCellDTO{
+        private String text;
+        private Integer width;
+
+        public RowCellDTO(String text, Integer width) {
+            this.text = text;
+            this.width = width;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public Integer getWidth() {
+            return width;
+        }
+
+        public void setWidth(Integer width) {
+            this.width = width;
+        }
+    }
 
     /**
      * 替换指定word文件，并保存在指定目录下，返回文件名称
@@ -36,7 +155,7 @@ public class WordUtil {
      * @return String 文件名称，拼上savePath得到完整路径
      * @throws Exception
      */
-    public static String replaceWordAndSave(File file, String savePath , Map<String, String> rules) throws Exception{
+    public static String replaceWordAndSave(File file, String savePath , Map<String, Object> rules) throws Exception{
         if (!file.getName().endsWith(".docx")) {
             throw new RuntimeException("word文件必须是.docx格式");
         }
@@ -56,8 +175,16 @@ public class WordUtil {
                     if (text != null) {
                         boolean isSetText = false;
                         if (text.indexOf(key) != -1) {
-                            isSetText = true;
-                            text = text.replace(key, rules.get(key));
+                            // 段落只支持字符串
+                            Object value = rules.get(key);
+                            if (value instanceof TextDTO) {
+                                TextDTO textDTO = (TextDTO)value;
+                                if(StringUtils.isEmpty(textDTO.getText())) {
+                                    textDTO.setText("");
+                                }
+                                isSetText = true;
+                                text = text.replace(key, textDTO.getText());
+                            }
                         }
                         if (isSetText) {
                             //参数0表示生成的文字是要从哪一个地方开始放置,设置文字从位置0开始,就可以把原来的文字全部替换掉了
@@ -87,20 +214,62 @@ public class WordUtil {
                         while (iterator.hasNext()) {
                             String key = iterator.next();
                             if(text.contains(key)) {
-                                if(StringUtils.isNotEmpty(rules.get(key)) && rules.get(key).endsWith("png")) {
+
+                                Object value = rules.get(key);
+                                if (value instanceof TextDTO) {
+                                    TextDTO textDTO = (TextDTO)value;
+                                    if(StringUtils.isEmpty(textDTO.getText())) {
+                                        textDTO.setText("");
+                                    }
+                                    String t = text.replace(key,textDTO.getText());
                                     cell.removeParagraph(0);
                                     XWPFParagraph p = cell.addParagraph();
-                                    File picFile = new File(rules.get(key));
-                                    String fileName = rules.get(key).substring(rules.get(key).lastIndexOf("/"));
-                                    FileInputStream fileInputStream = new FileInputStream(picFile);
-                                    p.createRun().addPicture(fileInputStream, Document.PICTURE_TYPE_PNG, fileName, Units.pixelToEMU(140), Units.pixelToEMU(200));
-                                }else {
-                                    String t = text.replace(key,rules.get(key));
-                                    cell.removeParagraph(0);
-                                    XWPFParagraph p = cell.addParagraph();
-                                    p.setAlignment(ParagraphAlignment.CENTER);
+                                    if(textDTO.center){
+                                        p.setAlignment(ParagraphAlignment.CENTER);
+                                    }
                                     XWPFRun fun = p.createRun();
                                     fun.setText(t);
+                                }
+                                if(value instanceof PicDTO) {
+                                    PicDTO picDTO = (PicDTO)value;
+                                    cell.removeParagraph(0);
+                                    if(picDTO.getFile() == null) {
+                                        continue;
+                                    }
+                                    XWPFParagraph p = cell.addParagraph();
+                                    String fileName = picDTO.getFileName();
+                                    FileInputStream fileInputStream = new FileInputStream(picDTO.getFile());
+                                    p.createRun().addPicture(fileInputStream, Document.PICTURE_TYPE_PNG, fileName, Units.pixelToEMU(picDTO.getWidth()), Units.pixelToEMU(picDTO.getHeight()));
+                                }
+                                if(value instanceof RowDTO) {
+                                    table.removeRow(i);
+                                    rowsSize--;
+                                    RowDTO rowDTO = (RowDTO)value;
+                                    if(CollectionUtils.isEmpty(rowDTO.getValues())) {
+                                        continue;
+                                    }
+                                    for(List<RowCellDTO> rs : rowDTO.getValues()) {
+                                        XWPFTableRow newRow = table.insertNewTableRow(i++);
+                                        rowsSize++;
+
+                                        for(int z = 0; z < rs.size(); z++) {
+                                            XWPFTableCell xwpfTableCell = newRow.createCell();//在新增的行上面创建cell
+
+                                            RowCellDTO rowCellDTO = rs.get(z);
+                                            if(rowCellDTO.getWidth() != null) {
+                                                //CTTc cttc = xwpfTableCell.getCTTc();
+                                                //CTTcPr cellPr = cttc.addNewTcPr();
+                                                //CTTblWidth tblWidth = cellPr.isSetTcW() ? cellPr.getTcW() : cellPr.addNewTcW();
+                                                //tblWidth.setW(new BigInteger(String.valueOf(rowCellDTO.getWidth())));
+                                                //tblWidth.setType(STTblWidth.DXA);
+
+                                                xwpfTableCell.setWidth(String.valueOf(rowCellDTO.getWidth()));
+                                                xwpfTableCell.setWidthType(TableWidthType.DXA);
+                                            }
+                                            xwpfTableCell.setText(rowCellDTO.getText());
+                                            xwpfTableCell.setVerticalAlignment(XWPFVertAlign.CENTER);
+                                        }
+                                    }
                                 }
                             }
                         }
