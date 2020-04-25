@@ -176,9 +176,6 @@ public class BizUserManager {
         if(CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
             sql += " and driving_type in " + inIntList(param.quasiDrivingTypeList);
         }
-        if(CollectionUtils.isNotEmpty(param.exservicemanList)) {
-            sql += " and exserviceman in " + inIntList(param.exservicemanList);
-        }
         if(CollectionUtils.isNotEmpty(param.specialPeople)) {
             sql += " and (";
             for(String specialPeople : param.specialPeople) {
@@ -199,10 +196,16 @@ public class BizUserManager {
             sql += " and sex in " + inIntList(param.sexList);
         }
         if(param.ageBegin != null) {
-            sql += " and age >= " + param.ageBegin;
+            Date now = new Date();
+            Date date = DateUtil.addYears(now, - param.ageBegin);
+            String dateStr = DateUtil.convert2String(date, BizUserConstant.DateFormat);
+            sql += " and birthdate <= '" + dateStr +"'";
         }
         if(param.ageEnd != null) {
-            sql += " and age <= " + param.ageEnd;
+            Date now = new Date();
+            Date date = DateUtil.addYears(now, - param.ageEnd);
+            String dateStr = DateUtil.convert2String(date, BizUserConstant.DateFormat);
+            sql += " and birthdate >= '" + dateStr +"'";
         }
         if(StringUtils.isNotEmpty(param.nativePlace)) {
             sql += " and native_place like '%%"+ param.nativePlace +"%%'";
@@ -255,9 +258,6 @@ public class BizUserManager {
         if(StringUtils.isNotEmpty(param.retirementDateEnd)) {
             sql += " and retirement_date <= '"+param.retirementDateEnd+"'";
         }
-        if(CollectionUtils.isNotEmpty(param.dimissionTypeList)) {
-            sql += " and dimssion_type in " + inIntList(param.dimissionTypeList);
-        }
         if(CollectionUtils.isNotEmpty(param.workUnitCodeList)) {
             sql += " and work_unit_code in " + inStrList(param.workUnitCodeList);
         }
@@ -293,6 +293,73 @@ public class BizUserManager {
         }
         if(StringUtils.isNotEmpty(param.dimissionReason)) {
             sql += " and dimssion_reason like '%%"+param.dimissionReason+"%%'";
+        }
+
+        if(StringUtils.isNotEmpty(param.firstGradeTimeBegin)) {
+            sql += " and first_grade_time >= '"+param.firstGradeTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.firstGradeTimeEnd)) {
+            sql += " and first_grade_time <= '"+param.firstGradeTimeEnd+"'";
+        }
+
+        if(StringUtils.isNotEmpty(param.workCardBeginTimeBegin)) {
+            sql += " and work_card_begin_time >= '"+param.workCardBeginTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.workCardBeginTimeEnd)) {
+            sql += " and work_card_begin_time <= '"+param.workCardBeginTimeEnd+"'";
+        }
+
+        if(StringUtils.isNotEmpty(param.firstContractBeginTimeBegin)) {
+            sql += " and first_contract_begin_time >= '"+param.firstContractBeginTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.firstContractBeginTimeEnd)) {
+            sql += " and first_contract_begin_time <= '"+param.firstContractBeginTimeEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.firstContractEngTimeBegin)) {
+            sql += " and first_contract_eng_time >= '"+param.firstContractEngTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.firstContractEngTimeEnd)) {
+            sql += " and first_contract_eng_time <= '"+param.firstContractEngTimeEnd+"'";
+        }
+
+        if(StringUtils.isNotEmpty(param.secondContractBeginTimeBegin)) {
+            sql += " and second_contract_begin_time >= '"+param.secondContractBeginTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.secondContractBeginTimeEnd)) {
+            sql += " and second_contract_begin_time <= '"+param.secondContractBeginTimeEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.secondContractEngTimeBegin)) {
+            sql += " and second_contract_eng_time >= '"+param.secondContractEngTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.secondContractEngTimeEnd)) {
+            sql += " and second_contract_eng_time <= '"+param.secondContractEngTimeEnd+"'";
+        }
+
+        if(StringUtils.isNotEmpty(param.thirdContractBeginTimeBegin)) {
+            sql += " and third_contract_begin_time >= '"+param.thirdContractBeginTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.thirdContractBeginTimeEnd)) {
+            sql += " and third_contract_begin_time <= '"+param.thirdContractBeginTimeEnd+"'";
+        }
+        if(StringUtils.isNotEmpty(param.thirdContractEngTimeBegin)) {
+            sql += " and third_contract_eng_time >= '"+param.thirdContractEngTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.thirdContractEngTimeEnd)) {
+            sql += " and third_contract_eng_time <= '"+param.thirdContractEngTimeEnd+"'";
+        }
+
+        if(CollectionUtils.isNotEmpty(param.dueContractList)) {
+            sql += " and due_contract in " + inIntList(param.dueContractList);
+        }
+        if(StringUtils.isNotEmpty(param.icbcCardAccount)) {
+            sql += " and icbc_card_account like '%%"+param.icbcCardAccount+"%%'";
+        }
+
+        if(StringUtils.isNotEmpty(param.ruZhiZuLinTimeBegin)) {
+            sql += " and ru_zhi_zu_lin_time >= '"+param.ruZhiZuLinTimeBegin+"'";
+        }
+        if(StringUtils.isNotEmpty(param.ruZhiZuLinTimeEnd)) {
+            sql += " and ru_zhi_zu_lin_time <= '"+param.ruZhiZuLinTimeEnd+"'";
         }
 
         System.out.println("==========");
@@ -438,7 +505,6 @@ public class BizUserManager {
         bizUserDO.setEnrollWay(param.enrollWay);
         bizUserDO.setBeginWorkTime(DateUtil.convert2Date(param.beginWorkTime,BizUserConstant.DateFormat));
         bizUserDO.setEffectiveDateOfTheContrace(DateUtil.convert2Date(param.effectiveDateOfTheContract,BizUserConstant.DateFormat));
-        bizUserDO.setRetirementDate(DateUtil.convert2Date(param.retirementDate,BizUserConstant.DateFormat));
         bizUserDO.setWorkUnitCode(param.workUnitCode);
         bizUserDO.setOrganizationUnitCode(param.organizationUnitCode);
         bizUserDO.setJobCategory(param.jobCategory);
@@ -449,6 +515,17 @@ public class BizUserManager {
         bizUserDO.setDimssionDate(DateUtil.convert2Date(param.dimissionDate,BizUserConstant.DateFormat));
         bizUserDO.setDimssionReason(param.dimissionReason);
         bizUserDO.setBeginPoliceWorkTime(DateUtil.convert2Date(param.beginPoliceWorkTime,BizUserConstant.DateFormat));
+        bizUserDO.setFirstGradeTime(DateUtil.convert2Date(param.firstGradeTime,BizUserConstant.DateFormat));
+        bizUserDO.setWorkCardBeginTime(DateUtil.convert2Date(param.workCardBeginTime,BizUserConstant.DateFormat));
+        bizUserDO.setFirstContractBeginTime(DateUtil.convert2Date(param.firstContractBeginTime,BizUserConstant.DateFormat));
+        bizUserDO.setFirstContractEngTime(DateUtil.convert2Date(param.firstContractEngTime,BizUserConstant.DateFormat));
+        bizUserDO.setSecondContractBeginTime(DateUtil.convert2Date(param.secondContractBeginTime,BizUserConstant.DateFormat));
+        bizUserDO.setSecondContractEngTime(DateUtil.convert2Date(param.secondContractEngTime,BizUserConstant.DateFormat));
+        bizUserDO.setThirdContractBeginTime(DateUtil.convert2Date(param.thirdContractBeginTime,BizUserConstant.DateFormat));
+        bizUserDO.setThirdContractEngTime(DateUtil.convert2Date(param.thirdContractEngTime,BizUserConstant.DateFormat));
+        bizUserDO.setDueContract(param.dueContract);
+        bizUserDO.setIcbcCardAccount(param.icbcCardAccount);
+        bizUserDO.setRuZhiZuLinTime(DateUtil.convert2Date(param.ruZhiZuLinTime,BizUserConstant.DateFormat));
     }
 
     private String inStrList(List<String> list){

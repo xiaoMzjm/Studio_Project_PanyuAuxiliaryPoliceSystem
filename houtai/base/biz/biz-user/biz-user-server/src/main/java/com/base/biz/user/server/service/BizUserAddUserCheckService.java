@@ -7,6 +7,7 @@ import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
+import com.base.biz.user.client.common.Enums.DueContractEnum;
 import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
 import com.base.biz.user.client.common.Enums.ExservicemanEnum;
@@ -343,13 +344,6 @@ public class BizUserAddUserCheckService {
                 throw new BaseException(String.format("合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
             }
         }
-        // 退休时间
-        if (StringUtils.isNotEmpty(param.retirementDate)) {
-            Date date = DateUtil.convert2Date(param.retirementDate, BizUserConstant.DateFormat);
-            if (date == null) {
-                throw new BaseException(String.format("退休时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
-            }
-        }
         // 工作单位
         String workUnitName = "";
         if (StringUtils.isNotEmpty(param.workUnitCode)) {
@@ -434,6 +428,16 @@ public class BizUserAddUserCheckService {
                 throw new BaseException(String.format("离职原因[%s]长度不能超过512个字符",param.dimissionReason));
             }
         }
+        // 到期合同
+        if(StringUtils.isNotEmpty(param.dueContractStr)) {
+            DueContractEnum e = DueContractEnum.get(param.dueContractStr);
+            if (e == null) {
+                throw new BaseException(String.format("到期合同[%s]格式错误，正确格式为[%s]",param.jobCategoryStr, DueContractEnum.getAllName()));
+            }
+            param.dueContract = e.getCode();
+        }
+
+
         // 工作经历
         if(CollectionUtils.isNotEmpty(param.personalExperience)) {
             for(BizUserAddParam.AddParamExperience addParamExperience : param.personalExperience) {

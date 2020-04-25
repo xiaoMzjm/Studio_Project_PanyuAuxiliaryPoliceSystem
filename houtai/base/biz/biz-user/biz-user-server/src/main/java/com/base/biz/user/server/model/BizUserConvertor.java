@@ -26,8 +26,24 @@ public class BizUserConvertor {
         if(birthday != null) {
             Date now = new Date();
             int nowYear = DateUtil.getYear(now);
+            int nowMonth = DateUtil.getMonth(now);
+            int nowDay = DateUtil.getDay(now);
+
             int birthdayYear = DateUtil.getYear(birthday);
-            bizUserDTO.setAge(nowYear - birthdayYear);
+            int birthdayMonth = DateUtil.getMonth(birthday);
+            int birthdayDay = DateUtil.getDay(birthday);
+
+            int age = nowYear - birthdayYear;
+            if(nowMonth <= birthdayMonth) {
+                if(nowMonth == birthdayMonth) {
+                    if(nowDay == birthdayDay) {
+                        age --;
+                    }
+                }else {
+                    age --;
+                }
+            }
+            bizUserDTO.setAge(age);
         }
 
         // 退休时间 男=出生日期+60，女=出生日期+50

@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * @author:小M
  * @date:2020/3/30 12:10 AM
@@ -119,9 +121,6 @@ public class BizUserDO {
     @Column
     private Date effectiveDateOfTheContrace; // 合同生效日期
 
-    @Column
-    private Date retirementDate; // 退休日期。男：出生日期+60，女：出生日期+50
-
     @Column(length = 128)
     private String workUnitCode; // 工作单位 == 编制单位 关联 单位管理
 
@@ -149,6 +148,28 @@ public class BizUserDO {
     @Column(length = 512)
     private String dimssionReason; // 离职原因
 
+    @Column
+    private Date firstGradeTime; // 任一级辅警起算时间
+    @Column
+    private Date workCardBeginTime; // 工作证起始日期
+    @Column
+    private Date firstContractBeginTime; // 第一次合同生效时间
+    @Column
+    private Date firstContractEngTime; // 第一次合同终止时间
+    @Column
+    private Date secondContractBeginTime; // 第二次合同生效时间
+    @Column
+    private Date secondContractEngTime; // 第二次合同终止时间
+    @Column
+    private Date thirdContractBeginTime; // 第三次合同生效时间
+    @Column
+    private Date thirdContractEngTime; // 第三次合同终止时间
+    @Column
+    private Integer dueContract; // 到期合同
+    @Column(length = 64)
+    private String icbcCardAccount; // 工商银行账号
+    @Column
+    private Date ruZhiZuLinTime; // 入职租赁日期
 
     public Long getId() {
         return id;
@@ -382,14 +403,6 @@ public class BizUserDO {
         this.effectiveDateOfTheContrace = effectiveDateOfTheContrace;
     }
 
-    public Date getRetirementDate() {
-        return retirementDate;
-    }
-
-    public void setRetirementDate(Date retirementDate) {
-        this.retirementDate = retirementDate;
-    }
-
     public String getPicUrl() {
         return picUrl;
     }
@@ -485,5 +498,93 @@ public class BizUserDO {
 
     public void setQualification(String qualification) {
         this.qualification = qualification;
+    }
+
+    public Date getFirstGradeTime() {
+        return firstGradeTime;
+    }
+
+    public void setFirstGradeTime(Date firstGradeTime) {
+        this.firstGradeTime = firstGradeTime;
+    }
+
+    public Date getWorkCardBeginTime() {
+        return workCardBeginTime;
+    }
+
+    public void setWorkCardBeginTime(Date workCardBeginTime) {
+        this.workCardBeginTime = workCardBeginTime;
+    }
+
+    public Date getFirstContractBeginTime() {
+        return firstContractBeginTime;
+    }
+
+    public void setFirstContractBeginTime(Date firstContractBeginTime) {
+        this.firstContractBeginTime = firstContractBeginTime;
+    }
+
+    public Date getFirstContractEngTime() {
+        return firstContractEngTime;
+    }
+
+    public void setFirstContractEngTime(Date firstContractEngTime) {
+        this.firstContractEngTime = firstContractEngTime;
+    }
+
+    public Date getSecondContractBeginTime() {
+        return secondContractBeginTime;
+    }
+
+    public void setSecondContractBeginTime(Date secondContractBeginTime) {
+        this.secondContractBeginTime = secondContractBeginTime;
+    }
+
+    public Date getSecondContractEngTime() {
+        return secondContractEngTime;
+    }
+
+    public void setSecondContractEngTime(Date secondContractEngTime) {
+        this.secondContractEngTime = secondContractEngTime;
+    }
+
+    public Date getThirdContractBeginTime() {
+        return thirdContractBeginTime;
+    }
+
+    public void setThirdContractBeginTime(Date thirdContractBeginTime) {
+        this.thirdContractBeginTime = thirdContractBeginTime;
+    }
+
+    public Date getThirdContractEngTime() {
+        return thirdContractEngTime;
+    }
+
+    public void setThirdContractEngTime(Date thirdContractEngTime) {
+        this.thirdContractEngTime = thirdContractEngTime;
+    }
+
+    public Integer getDueContract() {
+        return dueContract;
+    }
+
+    public void setDueContract(Integer dueContract) {
+        this.dueContract = dueContract;
+    }
+
+    public String getIcbcCardAccount() {
+        return icbcCardAccount;
+    }
+
+    public void setIcbcCardAccount(String icbcCardAccount) {
+        this.icbcCardAccount = icbcCardAccount;
+    }
+
+    public Date getRuZhiZuLinTime() {
+        return ruZhiZuLinTime;
+    }
+
+    public void setRuZhiZuLinTime(Date ruZhiZuLinTime) {
+        this.ruZhiZuLinTime = ruZhiZuLinTime;
     }
 }

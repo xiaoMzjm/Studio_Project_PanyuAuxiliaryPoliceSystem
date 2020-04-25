@@ -13,12 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.Document;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.TableWidthType;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -200,12 +200,17 @@ public class WordUtil {
         if(tableI.hasNext()) {
             XWPFTable table = tableI.next();
             List<XWPFTableRow> rows = table.getRows();
+
             if(rows != null && rows.size() > 0) {
                 Integer rowsSize = rows.size();
+
+                // 遍历行
                 for(int i = 0 ; i < rowsSize; i++) {
                     XWPFTableRow row = rows.get(i);
                     List<XWPFTableCell> tableCells = row.getTableCells();
                     Integer cellsSize = tableCells.size();
+
+                    // 遍历列
                     for(int j = 0 ; j < cellsSize; j++) {
                         XWPFTableCell cell = tableCells.get(j);
                         String text = cell.getText();
@@ -216,12 +221,15 @@ public class WordUtil {
                             if(text.contains(key)) {
 
                                 Object value = rules.get(key);
+
+                                // 文本
                                 if (value instanceof TextDTO) {
                                     TextDTO textDTO = (TextDTO)value;
                                     if(StringUtils.isEmpty(textDTO.getText())) {
                                         textDTO.setText("");
                                     }
                                     String t = text.replace(key,textDTO.getText());
+
                                     cell.removeParagraph(0);
                                     XWPFParagraph p = cell.addParagraph();
                                     if(textDTO.center){
@@ -230,17 +238,50 @@ public class WordUtil {
                                     XWPFRun fun = p.createRun();
                                     fun.setText(t);
                                 }
+
+                                // 图片
                                 if(value instanceof PicDTO) {
                                     PicDTO picDTO = (PicDTO)value;
                                     cell.removeParagraph(0);
                                     if(picDTO.getFile() == null) {
                                         continue;
                                     }
+
                                     XWPFParagraph p = cell.addParagraph();
                                     String fileName = picDTO.getFileName();
                                     FileInputStream fileInputStream = new FileInputStream(picDTO.getFile());
                                     p.createRun().addPicture(fileInputStream, Document.PICTURE_TYPE_PNG, fileName, Units.pixelToEMU(picDTO.getWidth()), Units.pixelToEMU(picDTO.getHeight()));
                                 }
+
+                                // 新增行
+                                //if(value instanceof RowDTO) {
+                                //
+                                //    table.removeRow(i);
+                                //    rowsSize--;
+                                //    RowDTO rowDTO = (RowDTO)value;
+                                //    if(CollectionUtils.isEmpty(rowDTO.getValues())) {
+                                //        continue;
+                                //    }
+                                //    for(List<RowCellDTO> rs : rowDTO.getValues()) {
+                                //        XWPFTableRow newRow = table.insertNewTableRow(i++);
+                                //        rowsSize++;
+                                //
+                                //        for(int z = 0; z < rs.size(); z++) {
+                                //            XWPFTableCell xwpfTableCell = newRow.createCell();//在新增的行上面创建cell
+                                //
+                                //            RowCellDTO rowCellDTO = rs.get(z);
+                                //            if(rowCellDTO.getWidth() != null) {
+                                //                CTTc cttc = xwpfTableCell.getCTTc();
+                                //                CTTcPr cellPr = cttc.addNewTcPr();
+                                //                CTTblWidth tblWidth = cellPr.isSetTcW() ? cellPr.getTcW() : cellPr.addNewTcW();
+                                //                tblWidth.setW(new BigInteger(String.valueOf(rowCellDTO.getWidth())));
+                                //                tblWidth.setType(STTblWidth.DXA);
+                                //            }
+                                //            xwpfTableCell.setText(rowCellDTO.getText());
+                                //            xwpfTableCell.setVerticalAlignment(XWPFVertAlign.CENTER);
+                                //        }
+                                //    }
+                                //}
                                 if(value instanceof RowDTO) {
                                     table.removeRow(i);
                                     rowsSize--;
@@ -248,26 +289,26 @@ public class WordUtil {
                                     if(CollectionUtils.isEmpty(rowDTO.getValues())) {
                                         continue;
                                     }
-                                    for(List<RowCellDTO> rs : rowDTO.getValues()) {
-                                        XWPFTableRow newRow = table.insertNewTableRow(i++);
-                                        rowsSize++;
-
-                                        for(int z = 0; z < rs.size(); z++) {
-                                            XWPFTableCell xwpfTableCell = newRow.createCell();//在新增的行上面创建cell
-
-                                            RowCellDTO rowCellDTO = rs.get(z);
-                                            if(rowCellDTO.getWidth() != null) {
-                                                //CTTc cttc = xwpfTableCell.getCTTc();
-                                                //CTTcPr cellPr = cttc.addNewTcPr();
-                                                //CTTblWidth tblWidth = cellPr.isSetTcW() ? cellPr.getTcW() : cellPr.addNewTcW();
-                                                //tblWidth.setW(new BigInteger(String.valueOf(rowCellDTO.getWidth())));
-                                                //tblWidth.setType(STTblWidth.DXA);
-
-                                                xwpfTableCell.setWidth(String.valueOf(rowCellDTO.getWidth()));
-                                                xwpfTableCell.setWidthType(TableWidthType.DXA);
-                                            }
-                                            xwpfTableCell.setText(rowCellDTO.getText());
-                                            xwpfTableCell.setVerticalAlignment(XWPFVertAlign.CENTER);
+                                    for(List<RowCellDTO> rowCellDTOList : rowDTO.getValues()) {
+                                        XWPFTableRow rowTemp = rows.get(i++);
+                                        List<XWPFTableCell> tableCellsTEmp = rowTemp.getTableCells();
+                                        for(int z = 0 ;z < rowCellDTOList.size(); z++) {
+                                            RowCellDTO rowCellDTO = rowCellDTOList.get(z);
+                                            XWPFTableCell cellTem = tableCellsTEmp.get(z);
+                                            cellTem.setText(rowCellDTO.getText());
+                                        }
+                                    }
+                                    i++;
+                                    while(true) {
+                                        XWPFTableRow rowTemp = rows.get(i);
+                                        String textTemp = rowTemp.getTableCells().get(0).getText();
+                                        if (!"${end}".equals(textTemp)) {
+                                            table.removeRow(i);
+                                            rowsSize--;
+                                        }else {
+                                            table.removeRow(i);
+                                            rowsSize--;
+                                            break;
                                         }
                                     }
                                 }

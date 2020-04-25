@@ -130,8 +130,6 @@ public class BizUserAddParam {
     public String beginWorkTime;
     @ApiParam(name="合同生效时间",value="effectiveDateOfTheContract")
     public String effectiveDateOfTheContract;
-    @ApiParam(name="退休时间",value="retirementDate")
-    public String retirementDate;
 
     @ApiParam(name="工作单位",value="workUnitCode")
     public String workUnitCode;
@@ -160,6 +158,35 @@ public class BizUserAddParam {
     public String dimissionDate;
     @ApiParam(name="离职原因",value="dimissionReason")
     public String dimissionReason;
+
+    @ApiParam(name="任一级辅警起算时间",value="firstGradeTime")
+    public String firstGradeTime;
+    @ApiParam(name="工作证起始日期",value="workCardBeginTime")
+    public String workCardBeginTime;
+    @ApiParam(name="第一次合同生效时间",value="firstContractBeginTime")
+    public String firstContractBeginTime;
+    @ApiParam(name="第一次合同终止时间",value="firstContractEngTime")
+    public String firstContractEngTime;
+    @ApiParam(name="第二次合同生效时间",value="secondContractBeginTime")
+    public String secondContractBeginTime;
+    @ApiParam(name="第二次合同终止时间",value="secondContractEngTime")
+    public String secondContractEngTime;
+    @ApiParam(name="第三次合同生效时间",value="thirdContractBeginTime")
+    public String thirdContractBeginTime;
+    @ApiParam(name="第三次合同终止时间",value="thirdContractEngTime")
+    public String thirdContractEngTime;
+
+    @ApiParam(name="到期合同",value="dueContract")
+    public Integer dueContract;
+    @ApiParam(name="到期合同",value="dueContractStr")
+    public String dueContractStr;
+
+    @ApiParam(name="工商银行账号",value="icbcCardAccount")
+    public String icbcCardAccount;
+    @ApiParam(name="入职租赁日期",value="ruZhiZuLinTime")
+    public String ruZhiZuLinTime;
+
+
 
 
     @ApiParam(name="个人经历",value="personalExperience")

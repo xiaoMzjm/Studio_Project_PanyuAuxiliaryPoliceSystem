@@ -108,6 +108,28 @@ public class BizUserDTO {
 
     private String dimssionReason; // 离职原因
 
+    private Date firstGradeTime; // 任一级辅警起算时间
+
+    private Date workCardBeginTime; // 工作证起始日期
+
+    private Date firstContractBeginTime; // 第一次合同生效时间
+
+    private Date firstContractEngTime; // 第一次合同终止时间
+
+    private Date secondContractBeginTime; // 第二次合同生效时间
+
+    private Date secondContractEngTime; // 第二次合同终止时间
+
+    private Date thirdContractBeginTime; // 第三次合同生效时间
+
+    private Date thirdContractEngTime; // 第三次合同终止时间
+
+    private Integer dueContract; // 到期合同
+
+    private String icbcCardAccount; // 工商银行账号
+
+    private Date ruZhiZuLinTime; // 入职租赁日期
+
     public Long getId() {
         return id;
     }
@@ -485,5 +507,93 @@ public class BizUserDTO {
 
     public void setPicCode(String picCode) {
         this.picCode = picCode;
+    }
+
+    public Date getFirstGradeTime() {
+        return firstGradeTime;
+    }
+
+    public void setFirstGradeTime(Date firstGradeTime) {
+        this.firstGradeTime = firstGradeTime;
+    }
+
+    public Date getWorkCardBeginTime() {
+        return workCardBeginTime;
+    }
+
+    public void setWorkCardBeginTime(Date workCardBeginTime) {
+        this.workCardBeginTime = workCardBeginTime;
+    }
+
+    public Date getFirstContractBeginTime() {
+        return firstContractBeginTime;
+    }
+
+    public void setFirstContractBeginTime(Date firstContractBeginTime) {
+        this.firstContractBeginTime = firstContractBeginTime;
+    }
+
+    public Date getFirstContractEngTime() {
+        return firstContractEngTime;
+    }
+
+    public void setFirstContractEngTime(Date firstContractEngTime) {
+        this.firstContractEngTime = firstContractEngTime;
+    }
+
+    public Date getSecondContractBeginTime() {
+        return secondContractBeginTime;
+    }
+
+    public void setSecondContractBeginTime(Date secondContractBeginTime) {
+        this.secondContractBeginTime = secondContractBeginTime;
+    }
+
+    public Date getSecondContractEngTime() {
+        return secondContractEngTime;
+    }
+
+    public void setSecondContractEngTime(Date secondContractEngTime) {
+        this.secondContractEngTime = secondContractEngTime;
+    }
+
+    public Date getThirdContractBeginTime() {
+        return thirdContractBeginTime;
+    }
+
+    public void setThirdContractBeginTime(Date thirdContractBeginTime) {
+        this.thirdContractBeginTime = thirdContractBeginTime;
+    }
+
+    public Date getThirdContractEngTime() {
+        return thirdContractEngTime;
+    }
+
+    public void setThirdContractEngTime(Date thirdContractEngTime) {
+        this.thirdContractEngTime = thirdContractEngTime;
+    }
+
+    public Integer getDueContract() {
+        return dueContract;
+    }
+
+    public void setDueContract(Integer dueContract) {
+        this.dueContract = dueContract;
+    }
+
+    public String getIcbcCardAccount() {
+        return icbcCardAccount;
+    }
+
+    public void setIcbcCardAccount(String icbcCardAccount) {
+        this.icbcCardAccount = icbcCardAccount;
+    }
+
+    public Date getRuZhiZuLinTime() {
+        return ruZhiZuLinTime;
+    }
+
+    public void setRuZhiZuLinTime(Date ruZhiZuLinTime) {
+        this.ruZhiZuLinTime = ruZhiZuLinTime;
     }
 }

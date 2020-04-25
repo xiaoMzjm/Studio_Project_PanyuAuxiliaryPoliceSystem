@@ -53,7 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(description = "用户接口")
 @Controller
 @RequestMapping(value = "user", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.1.5:8080")
+@CrossOrigin(origins = "http://192.168.1.7:8080")
 public class BizUserController {
 
     @Value("${ResourceStaticUrl}")
@@ -185,6 +185,9 @@ public class BizUserController {
         return JSON.toJSONString(Result.success(bizUserPageListVOList));
     }
 
+
+    // http://localhost/user/downloadimportdemo?token=71f0b676392d440096c5696848b3257c
+
     @TokenFilter
     @ResultFilter
     @ApiOperation(value = "下载导入模板" , notes = "下载导入模板")
@@ -304,6 +307,8 @@ public class BizUserController {
         }
     }
 
+    // http://localhost/user/exportuser?token=71f0b676392d440096c5696848b3257c&userCode=4408831993101134555
+
     @TokenFilter
     @ResultFilter
     @ApiOperation(value = "导出个人简历" , notes = "导出个人简历")
@@ -345,6 +350,8 @@ public class BizUserController {
 
     }
 
+    // http://localhost/user/exportincomecertificate?token=71f0b676392d440096c5696848b3257c&userCode=4408831993101134555
+
     @TokenFilter
     @ResultFilter
     @ApiOperation(value = "导出收入证明" , notes = "导出收入证明")
@@ -385,6 +392,8 @@ public class BizUserController {
         return JSON.toJSONString(Result.success(""));
 
     }
+
+    // http://localhost/user/exportonthejobcertificate?token=71f0b676392d440096c5696848b3257c&userCode=4408831993101134555
 
     @TokenFilter
     @ResultFilter

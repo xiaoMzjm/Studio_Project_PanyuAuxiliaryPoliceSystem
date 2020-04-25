@@ -20,7 +20,7 @@ public class WebAspect {
 
     // 声明切点
     @Pointcut("@annotation(com.base.common.annotation.ResultFilter)")
-    public void annotationPointCut(){};
+    public void annotationPointCut(){}
 
     @Around("annotationPointCut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) {
@@ -33,7 +33,7 @@ public class WebAspect {
             return JSON.toJSONString(Result.error(be.getErrorCode(), be.getMessage()));
         }
         catch (Throwable e) {
-            System.out.println(e);
+            e.printStackTrace();
             return JSON.toJSONString(Result.error("System Error" , "系统异常"));
         }
     }

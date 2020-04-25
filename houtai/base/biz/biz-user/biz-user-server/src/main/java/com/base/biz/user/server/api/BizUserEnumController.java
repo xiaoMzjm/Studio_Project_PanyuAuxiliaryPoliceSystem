@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
+import com.base.biz.user.client.common.Enums.DueContractEnum;
 import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
 import com.base.biz.user.client.common.Enums.ExservicemanEnum;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/user/enum/" , produces = "application/json;charset=UTF-8")
-@CrossOrigin(origins = "http://192.168.1.5:8080")
+@CrossOrigin(origins = "http://192.168.1.7:8080")
 public class BizUserEnumController {
 
     @ResultFilter
@@ -149,4 +150,12 @@ public class BizUserEnumController {
     public String specialpeople(){
         return JSON.toJSONString(Result.success(SpecialPeopleEnum.getAll()));
     }
+
+    @ResultFilter
+    @TokenFilter
+    @RequestMapping("duecontract")
+    public String duecontract(){
+        return JSON.toJSONString(Result.success(DueContractEnum.getAll()));
+    }
+
 }

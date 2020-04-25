@@ -303,6 +303,72 @@ public class BizUserAddExcelReader {
             String value = cell.getStringCellValue();
             bizUserAddParam.dimissionReason = value;
         }
+        // 任一级辅警起算时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.firstGradeTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 工作证起始日期
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.workCardBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第一次合同生效时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.firstContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第一次合同终止时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.firstContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第二次合同生效时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.secondContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第二次合同终止时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.secondContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第三次合同生效时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.thirdContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 第三次合同终止时间
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.thirdContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
+        // 到期合同
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            String value = cell.getStringCellValue();
+            bizUserAddParam.dueContractStr = value;
+        }
+        // 工商银行账号
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            String value = cell.getStringCellValue();
+            bizUserAddParam.icbcCardAccount = value;
+        }
+        // 入职租赁日期
+        cell = row.getCell(cellNum++);
+        if(cell != null) {
+            Date value = cell.getDateCellValue();
+            bizUserAddParam.ruZhiZuLinTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+        }
         return bizUserAddParam;
     }
 

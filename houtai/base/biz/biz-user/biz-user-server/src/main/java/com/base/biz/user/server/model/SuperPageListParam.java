@@ -23,7 +23,6 @@ public class SuperPageListParam {
 
     @ApiParam(name="birthdateEnd",value="birthdateEnd")
     public String birthdateEnd;
-    public Date birthdateEndDate;
 
     @ApiParam(name="nationList",value="nationList")
     public List<Integer> nationList;
@@ -99,30 +98,21 @@ public class SuperPageListParam {
 
     @ApiParam(name="beginWorkTimeBegin",value="beginWorkTimeBegin")
     public String beginWorkTimeBegin;
-    public Date beginWorkTimeBeginDate;
 
     @ApiParam(name="beginWorkTimeEnd",value="beginWorkTimeEnd")
     public String beginWorkTimeEnd;
-    public Date beginWorkTimeEndDate;
 
     @ApiParam(name="effectiveDateOfTheContractBegin",value="effectiveDateOfTheContractBegin")
     public String effectiveDateOfTheContractBegin;
-    public Date effectiveDateOfTheContractBeginDate;
 
     @ApiParam(name="effectiveDateOfTheContractEnd",value="effectiveDateOfTheContractEnd")
     public String effectiveDateOfTheContractEnd;
-    public Date effectiveDateOfTheContractEndDate;
 
     @ApiParam(name="retirementDateBegin",value="retirementDateBegin")
     public String retirementDateBegin;
-    public Date retirementDateBeginDate;
 
     @ApiParam(name="retirementDateEnd",value="retirementDateEnd")
     public String retirementDateEnd;
-    public Date retirementDateEndDate;
-
-    @ApiParam(name="dimissionTypeList",value="dimissionTypeList")
-    public List<Integer> dimissionTypeList;
 
     @ApiParam(name="workUnitCodeList",value="workUnitCodeList")
     public List<String> workUnitCodeList;
@@ -141,29 +131,83 @@ public class SuperPageListParam {
 
     @ApiParam(name="beginPoliceWorkTimeBegin",value="beginPoliceWorkTimeBegin")
     public String beginPoliceWorkTimeBegin;
-    public Date beginPoliceWorkTimeBeginDate;
 
     @ApiParam(name="beginPoliceWorkTimeEnd",value="beginPoliceWorkTimeEnd")
     public String beginPoliceWorkTimeEnd;
-    public Date beginPoliceWorkTimeEndDate;
 
     @ApiParam(name="contractExpirationDateBegin",value="contractExpirationDateBegin")
     public String contractExpirationDateBegin;
-    public Date contractExpirationDateBeginDate;
 
     @ApiParam(name="contractExpirationDateEnd",value="contractExpirationDateEnd")
     public String contractExpirationDateEnd;
-    public Date contractExpirationDateEndDate;
 
     @ApiParam(name="dimissionDateBegin",value="dimissionDateBegin")
     public String dimissionDateBegin;
-    public Date dimissionDateBeginDate;
 
     @ApiParam(name="dimissionDateEnd",value="dimissionDateEnd")
     public String dimissionDateEnd;
-    public Date dimissionDateEndDate;
 
     @ApiParam(name="dimissionReason",value="dimissionReason")
     public String dimissionReason;
+
+    @ApiParam(name="firstGradeTimeBegin",value="firstGradeTimeBegin")
+    public String firstGradeTimeBegin;
+
+    @ApiParam(name="firstGradeTimeEnd",value="firstGradeTimeEnd")
+    public String firstGradeTimeEnd;
+
+    @ApiParam(name="workCardBeginTimeBegin",value="workCardBeginTimeBegin")
+    public String workCardBeginTimeBegin;
+
+    @ApiParam(name="workCardBeginTimeEnd",value="workCardBeginTimeEnd")
+    public String workCardBeginTimeEnd;
+
+    @ApiParam(name="firstContractBeginTimeBegin",value="firstContractBeginTimeBegin")
+    public String firstContractBeginTimeBegin;
+
+    @ApiParam(name="firstContractBeginTimeEnd",value="firstContractBeginTimeEnd")
+    public String firstContractBeginTimeEnd;
+
+    @ApiParam(name="firstContractEngTimeBegin",value="firstContractEngTimeBegin")
+    public String firstContractEngTimeBegin;
+
+    @ApiParam(name="firstContractEngTimeEnd",value="firstContractEngTimeEnd")
+    public String firstContractEngTimeEnd;
+
+    @ApiParam(name="secondContractBeginTimeBegin",value="secondContractBeginTimeBegin")
+    public String secondContractBeginTimeBegin;
+
+    @ApiParam(name="secondContractBeginTimeEnd",value="secondContractBeginTimeEnd")
+    public String secondContractBeginTimeEnd;
+
+    @ApiParam(name="secondContractEngTimeBegin",value="secondContractEngTimeBegin")
+    public String secondContractEngTimeBegin;
+
+    @ApiParam(name="secondContractEngTimeEnd",value="secondContractEngTimeEnd")
+    public String secondContractEngTimeEnd;
+
+    @ApiParam(name="thirdContractBeginTimeBegin",value="thirdContractBeginTimeBegin")
+    public String thirdContractBeginTimeBegin;
+
+    @ApiParam(name="thirdContractBeginTimeEnd",value="thirdContractBeginTimeEnd")
+    public String thirdContractBeginTimeEnd;
+
+    @ApiParam(name="thirdContractEngTimeBegin",value="thirdContractEngTimeBegin")
+    public String thirdContractEngTimeBegin;
+
+    @ApiParam(name="thirdContractEngTimeEnd",value="thirdContractEngTimeEnd")
+    public String thirdContractEngTimeEnd;
+
+    @ApiParam(name="dueContractList",value="dueContractList")
+    public List<Integer> dueContractList;
+
+    @ApiParam(name="icbcCardAccount",value="icbcCardAccount")
+    public String icbcCardAccount;
+
+    @ApiParam(name="ruZhiZuLinTimeBegin",value="ruZhiZuLinTimeBegin")
+    public String ruZhiZuLinTimeBegin;
+
+    @ApiParam(name="ruZhiZuLinTimeEnd",value="ruZhiZuLinTimeEnd")
+    public String ruZhiZuLinTimeEnd;
 
 }

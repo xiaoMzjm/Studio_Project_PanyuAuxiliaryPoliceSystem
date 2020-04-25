@@ -13,6 +13,7 @@ import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
+import com.base.biz.user.client.common.Enums.DueContractEnum;
 import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
 import com.base.biz.user.client.common.Enums.ExservicemanEnum;
@@ -174,8 +175,6 @@ public class BizUserInnerSerivce {
         }
         vo.setBeginWorkTime(DateUtil.convert2String(dto.getBeginWorkTime(), BizUserConstant.DateFormat));
         vo.setCode(dto.getCode());
-        //vo.setHeadPicUrl(dto.getPicUrl());
-        //vo.setHeadPicCode(dto.getPicCode());
         vo.setBirthdate(DateUtil.convert2String(dto.getBirthdate(), BizUserConstant.DateFormat));
         vo.setNation(dto.getNation());
         vo.setNationStr(NationEnum.getName(dto.getNation()));
@@ -221,13 +220,29 @@ public class BizUserInnerSerivce {
         vo.setRetirementDate(DateUtil.convert2String(dto.getRetirementDate(), BizUserConstant.DateFormat));
         vo.setDimissionType(dto.getDimssionType());
         vo.setDimissionTypeStr(DimssionTypeEnum.getName(dto.getDimssionType()));
-        vo.setWorkUnitCode(dto.getWorkUnitCode());
+        vo.setWorkUnit(dto.getWorkUnitCode());
+        vo.setFirstGradeTime(DateUtil.convert2String(dto.getFirstGradeTime(), BizUserConstant.DateFormat));
+        vo.setWorkCardBeginTime(DateUtil.convert2String(dto.getWorkCardBeginTime(), BizUserConstant.DateFormat));
+        vo.setFirstContractBeginTime(DateUtil.convert2String(dto.getFirstContractBeginTime(), BizUserConstant.DateFormat));
+        vo.setFirstContractEngTime(DateUtil.convert2String(dto.getFirstContractEngTime(), BizUserConstant.DateFormat));
+        vo.setSecondContractBeginTime(DateUtil.convert2String(dto.getSecondContractBeginTime(), BizUserConstant.DateFormat));
+        vo.setSecondContractEngTime(DateUtil.convert2String(dto.getSecondContractEngTime(), BizUserConstant.DateFormat));
+        vo.setThirdContractBeginTime(DateUtil.convert2String(dto.getThirdContractBeginTime(), BizUserConstant.DateFormat));
+        vo.setThirdContractEngTime(DateUtil.convert2String(dto.getThirdContractEngTime(), BizUserConstant.DateFormat));
+        vo.setDueContract(dto.getDueContract());
+        vo.setDueContractStr(DueContractEnum.getName(dto.getDueContract()));
+        vo.setIcbcCardAccount(dto.getIcbcCardAccount());
+        vo.setRuZhiZuLinTime(DateUtil.convert2String(dto.getRuZhiZuLinTime(), BizUserConstant.DateFormat));
+
+
+
+
         List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getWorkUnitCode()));
         if (CollectionUtils.isNotEmpty(companyVOList)) {
             CompanyVO companyVO = companyVOList.get(0);
             vo.setWorkUnitName(companyVO.getName());
         }
-        vo.setOrganizationUnitCode(dto.getOrganizationUnitCode());
+        vo.setOrganizationUnit(dto.getOrganizationUnitCode());
         companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getOrganizationUnitCode()));
         if (CollectionUtils.isNotEmpty(companyVOList)) {
             CompanyVO companyVO = companyVOList.get(0);
@@ -270,7 +285,7 @@ public class BizUserInnerSerivce {
                 familyMember.setDuty(familyMemberDTO.getDuty());
                 familyMember.setIdentityCard(familyMemberDTO.getIdentityCard());
                 familyMember.setPhone(familyMemberDTO.getPhone());
-                familyMember.setPoliticalLandscapeCode(familyMemberDTO.getPoliticalLandscapeCode());
+                familyMember.setPoliticalLandscape(familyMemberDTO.getPoliticalLandscapeCode());
                 familyMembers.add(familyMember);
             }
             vo.setFamilyMember(familyMembers);
@@ -514,6 +529,8 @@ public class BizUserInnerSerivce {
         return successIdentityCardList;
     }
 
+    //
+
     /**
      * 导出人员
      * @param code
@@ -552,8 +569,8 @@ public class BizUserInnerSerivce {
         rules.put("${maritalStatus}",new TextDTO(vo.getMaritalStatusStr(),true));
         rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),true));
         rules.put("${phone}",new TextDTO(vo.getPhone(),true));
-        rules.put("${permanentResidenceAddress}",new TextDTO(vo.getPermanentResidenceAddress(),false));
-        rules.put("${familyAddress}",new TextDTO(vo.getFamilyAddress(),false));
+        rules.put("${permanentResidenceAddress}",new TextDTO(vo.getPermanentResidenceAddress(),true));
+        rules.put("${familyAddress}",new TextDTO(vo.getFamilyAddress(),true));
         if(StringUtils.isNotEmpty(vo.getHeadPicUrl())) {
             PicDTO picDTO = new PicDTO();
             picDTO.setFile(new File(diskStaticUrl + "images/" + vo.getHeadPicCode() + ".png"));
@@ -614,8 +631,6 @@ public class BizUserInnerSerivce {
             rules.put("${familyRow}",new RowDTO(list));
         }
 
-
-
         String savePath = diskStaticUrl + "files/";
         try {
             String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
@@ -627,6 +642,13 @@ public class BizUserInnerSerivce {
         }
     }
 
+    /**
+     * 导出收入证明
+     * @param code
+     * @param file
+     * @return
+     * @throws Exception
+     */
     public File exportIncomecertificate(String code, File file) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
@@ -638,26 +660,28 @@ public class BizUserInnerSerivce {
         if(StringUtils.isEmpty(diskStaticUrl)) {
             throw new BaseException("diskStaticUrl is null");
         }
+        if(StringUtils.isEmpty(vo.getName())) {
+            throw new BaseException("该人员缺少[姓名]字段，请补充完整个人信息。");
+        }
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            throw new BaseException("该人员缺少[入职公安时间]字段，请补充完整个人信息。");
+        }
+        if(vo.getJobGrade() != JobGradeEnum.FIRST.getCode()) {
+            throw new BaseException("只有[一级辅警]才可以导出收入证明");
+        }
 
         Map<String,Object> rules = new HashMap<>();
         rules.put("${name}",new TextDTO(vo.getName(),false));
         rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),false));
 
-        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
-            rules.put("${beginWorkTime}",new TextDTO("",false));
-        } else {
-            Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
-            String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
-            rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
-        }
+        Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
+        String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
+        rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
 
-        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
-            rules.put("${exportTime}",new TextDTO("",true));
-        } else {
-            Date time = new Date();
-            String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
-            rules.put("${exportTime}",new TextDTO(timeStr,false));
-        }
+        Date time = new Date();
+        String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
+        rules.put("${exportTime}",new TextDTO(timeStr,false));
+
         String savePath = diskStaticUrl + "files/";
         try {
             String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
@@ -670,6 +694,13 @@ public class BizUserInnerSerivce {
 
     }
 
+    /**
+     * 导出在职证明
+     * @param code
+     * @param file
+     * @return
+     * @throws Exception
+     */
     public File exportonthejobcertificate(String code, File file) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
@@ -681,32 +712,35 @@ public class BizUserInnerSerivce {
         if(StringUtils.isEmpty(diskStaticUrl)) {
             throw new BaseException("diskStaticUrl is null");
         }
+        if(StringUtils.isEmpty(vo.getName())) {
+            throw new BaseException("该人员缺少[姓名]字段，请补充完整个人信息。");
+        }
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            throw new BaseException("该人员缺少[入职公安时间]字段，请补充完整个人信息。");
+        }
+        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
+            throw new BaseException("该人员缺少[入职公安时间]字段，请补充完整个人信息。");
+        }
+        if(StringUtils.isEmpty(vo.getSexStr())) {
+            throw new BaseException("该人员缺少[性别]字段，请补充完整个人信息。");
+        }
 
         Map<String,Object> rules = new HashMap<>();
+
         rules.put("${name}",new TextDTO(vo.getName(),false));
+
         rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),false));
 
-        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
-            rules.put("${beginWorkTime}",new TextDTO("",false));
-        } else {
-            Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
-            String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
-            rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
-        }
+        Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
+        String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
+        rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
 
-        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
-            rules.put("${exportTime}",new TextDTO("",true));
-        } else {
-            Date time = new Date();
-            String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
-            rules.put("${exportTime}",new TextDTO(timeStr,false));
-        }
+        Date time = new Date();
+        String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
+        rules.put("${exportTime}",new TextDTO(timeStr,false));
+
         rules.put("${sex}",new TextDTO(vo.getSexStr(),false));
-        if(vo.getAge() == null) {
-            rules.put("${age}",new TextDTO( "",false));
-        } else {
-            rules.put("${age}",new TextDTO(String.valueOf(vo.getAge()),false));
-        }
+        rules.put("${age}",new TextDTO(String.valueOf(vo.getAge()),false));
 
         String savePath = diskStaticUrl + "files/";
         try {

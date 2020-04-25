@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.base.biz.user.client.model.EnumVO;
 import com.google.common.collect.Lists;
-import com.sun.deploy.util.StringUtils;
 
 /**
  * @author:小M
@@ -1656,6 +1655,100 @@ public class Enums {
         public static List<EnumVO> getAll(){
             List<EnumVO> list = Lists.newArrayList();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
+                list.add(new EnumVO(e.getCode(), e.getName()));
+            }
+            return list;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+
+    /**
+     * 岗位类别
+     */
+    public enum DueContractEnum {
+        FIRST(1, "第一次"),
+        SECOND(2, "第二次"),
+        THIRD(3, "第三次")
+        ;
+
+        private Integer code;
+        private String name;
+
+        DueContractEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getAllCode(){
+            StringBuilder sb = new StringBuilder();
+            for (DueContractEnum e : DueContractEnum.values()) {
+                sb.append(e.getCode()).append(",");
+            }
+            return sb.toString().substring(0,sb.toString().length()-1);
+        }
+
+        public static List<Integer> getAllCodeList(){
+            List<Integer> list = Lists.newArrayList();
+            for (DueContractEnum e : DueContractEnum.values()) {
+                list.add(e.getCode());
+            }
+            return list;
+        }
+
+        public static String getAllName(){
+            StringBuilder sb = new StringBuilder();
+            for (DueContractEnum e : DueContractEnum.values()) {
+                sb.append(e.getName()).append(",");
+            }
+            return sb.toString().substring(0,sb.toString().length()-1);
+        }
+
+        public static DueContractEnum get(Integer code) {
+            for (DueContractEnum e : DueContractEnum.values()) {
+                if (e.getCode().equals(code)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static String getName(Integer code) {
+            for (DueContractEnum e : DueContractEnum.values()) {
+                if (e.getCode().equals(code)) {
+                    return e.getName();
+                }
+            }
+            return null;
+        }
+
+        public static DueContractEnum get(String name) {
+            for (DueContractEnum e : DueContractEnum.values()) {
+                if (e.getName().equals(name)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static List<EnumVO> getAll(){
+            List<EnumVO> list = Lists.newArrayList();
+            for (DueContractEnum e : DueContractEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
             }
             return list;

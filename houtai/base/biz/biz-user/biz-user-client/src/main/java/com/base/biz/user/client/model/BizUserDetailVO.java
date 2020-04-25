@@ -1,5 +1,6 @@
 package com.base.biz.user.client.model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,10 +80,10 @@ public class BizUserDetailVO {
     private String dimissionTypeStr;
 
 
-    private String workUnitCode;
+    private String workUnit;
     private String workUnitName;
 
-    private String organizationUnitCode;
+    private String organizationUnit;
     private String organizationUnitName;
 
     private Integer jobCategory;
@@ -94,6 +95,29 @@ public class BizUserDetailVO {
     private String contractExpirationDate;
     private String dimissionDate;
     private String dimissionReason;
+
+    private String firstGradeTime; // 任一级辅警起算时间
+
+    private String workCardBeginTime; // 工作证起始日期
+
+    private String firstContractBeginTime; // 第一次合同生效时间
+
+    private String firstContractEngTime; // 第一次合同终止时间
+
+    private String secondContractBeginTime; // 第二次合同生效时间
+
+    private String secondContractEngTime; // 第二次合同终止时间
+
+    private String thirdContractBeginTime; // 第三次合同生效时间
+
+    private String thirdContractEngTime; // 第三次合同终止时间
+
+    private Integer dueContract; // 到期合同
+    private String dueContractStr; // 到期合同
+
+    private String icbcCardAccount; // 工商银行账号
+
+    private String ruZhiZuLinTime; // 入职租赁日期
 
 
     private List<Experience> personalExperience;
@@ -453,13 +477,6 @@ public class BizUserDetailVO {
         this.dimissionTypeStr = dimissionTypeStr;
     }
 
-    public String getWorkUnitCode() {
-        return workUnitCode;
-    }
-
-    public void setWorkUnitCode(String workUnitCode) {
-        this.workUnitCode = workUnitCode;
-    }
 
     public String getWorkUnitName() {
         return workUnitName;
@@ -469,12 +486,20 @@ public class BizUserDetailVO {
         this.workUnitName = workUnitName;
     }
 
-    public String getOrganizationUnitCode() {
-        return organizationUnitCode;
+    public String getWorkUnit() {
+        return workUnit;
     }
 
-    public void setOrganizationUnitCode(String organizationUnitCode) {
-        this.organizationUnitCode = organizationUnitCode;
+    public void setWorkUnit(String workUnit) {
+        this.workUnit = workUnit;
+    }
+
+    public String getOrganizationUnit() {
+        return organizationUnit;
+    }
+
+    public void setOrganizationUnit(String organizationUnit) {
+        this.organizationUnit = organizationUnit;
     }
 
     public String getOrganizationUnitName() {
@@ -622,6 +647,102 @@ public class BizUserDetailVO {
         this.qualification = qualification;
     }
 
+    public String getFirstGradeTime() {
+        return firstGradeTime;
+    }
+
+    public void setFirstGradeTime(String firstGradeTime) {
+        this.firstGradeTime = firstGradeTime;
+    }
+
+    public String getWorkCardBeginTime() {
+        return workCardBeginTime;
+    }
+
+    public void setWorkCardBeginTime(String workCardBeginTime) {
+        this.workCardBeginTime = workCardBeginTime;
+    }
+
+    public String getFirstContractBeginTime() {
+        return firstContractBeginTime;
+    }
+
+    public void setFirstContractBeginTime(String firstContractBeginTime) {
+        this.firstContractBeginTime = firstContractBeginTime;
+    }
+
+    public String getFirstContractEngTime() {
+        return firstContractEngTime;
+    }
+
+    public void setFirstContractEngTime(String firstContractEngTime) {
+        this.firstContractEngTime = firstContractEngTime;
+    }
+
+    public String getSecondContractBeginTime() {
+        return secondContractBeginTime;
+    }
+
+    public void setSecondContractBeginTime(String secondContractBeginTime) {
+        this.secondContractBeginTime = secondContractBeginTime;
+    }
+
+    public String getSecondContractEngTime() {
+        return secondContractEngTime;
+    }
+
+    public void setSecondContractEngTime(String secondContractEngTime) {
+        this.secondContractEngTime = secondContractEngTime;
+    }
+
+    public String getThirdContractBeginTime() {
+        return thirdContractBeginTime;
+    }
+
+    public void setThirdContractBeginTime(String thirdContractBeginTime) {
+        this.thirdContractBeginTime = thirdContractBeginTime;
+    }
+
+    public String getThirdContractEngTime() {
+        return thirdContractEngTime;
+    }
+
+    public void setThirdContractEngTime(String thirdContractEngTime) {
+        this.thirdContractEngTime = thirdContractEngTime;
+    }
+
+    public Integer getDueContract() {
+        return dueContract;
+    }
+
+    public void setDueContract(Integer dueContract) {
+        this.dueContract = dueContract;
+    }
+
+    public String getDueContractStr() {
+        return dueContractStr;
+    }
+
+    public void setDueContractStr(String dueContractStr) {
+        this.dueContractStr = dueContractStr;
+    }
+
+    public String getIcbcCardAccount() {
+        return icbcCardAccount;
+    }
+
+    public void setIcbcCardAccount(String icbcCardAccount) {
+        this.icbcCardAccount = icbcCardAccount;
+    }
+
+    public String getRuZhiZuLinTime() {
+        return ruZhiZuLinTime;
+    }
+
+    public void setRuZhiZuLinTime(String ruZhiZuLinTime) {
+        this.ruZhiZuLinTime = ruZhiZuLinTime;
+    }
+
     public static class Experience {
         private String timeStart;
         private String timeEnd;
@@ -677,7 +798,7 @@ public class BizUserDetailVO {
         private String duty;
         private String identityCard;
         private String phone;
-        private Integer politicalLandscapeCode;
+        private Integer politicalLandscape;
 
         public String getName() {
             return name;
@@ -727,12 +848,12 @@ public class BizUserDetailVO {
             this.phone = phone;
         }
 
-        public Integer getPoliticalLandscapeCode() {
-            return politicalLandscapeCode;
+        public Integer getPoliticalLandscape() {
+            return politicalLandscape;
         }
 
-        public void setPoliticalLandscapeCode(Integer politicalLandscapeCode) {
-            this.politicalLandscapeCode = politicalLandscapeCode;
+        public void setPoliticalLandscape(Integer politicalLandscape) {
+            this.politicalLandscape = politicalLandscape;
         }
     }
 
