@@ -44,6 +44,9 @@ public class CompanyConvertor {
 
     public static List<CompanyVO> dto2voList(List<CompanyDTO> companyDTOList) {
         List<CompanyVO> result = Lists.newArrayList();
+        if(CollectionUtils.isEmpty(companyDTOList)) {
+            return result;
+        }
         for (CompanyDTO companyDTO : companyDTOList) {
             result.add(dto2vo(companyDTO));
         }

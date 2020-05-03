@@ -19,6 +19,7 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MD5Util;
+import com.google.common.base.Joiner;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class BizUserManager {
      * @throws Exception
      */
     public BizUserDTO findByCode(String code) throws Exception{
+
+        if(StringUtils.isBlank(code)) {
+            return null;
+        }
 
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setCode(code);
@@ -74,7 +79,30 @@ public class BizUserManager {
         Example<BizUserDO> example = Example.of(bizUserDO);
         Optional<BizUserDO> optional = bizUserDao.findOne(example);
         if (!optional.isPresent()) {
-            throw new BaseException("账号或密码错误");
+            return null;
+        }
+
+        bizUserDO = optional.get();
+        return BizUserConvertor.do2dto(bizUserDO);
+    }
+
+    /**
+     * 根据警号密码查找用户
+     * @param code
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public BizUserDTO findByPoliceCodeAndPassword(String code, String password) throws Exception{
+
+        BizUserDO bizUserDO = new BizUserDO();
+        bizUserDO.setPoliceCode(code);
+        bizUserDO.setPassword(password);
+
+        Example<BizUserDO> example = Example.of(bizUserDO);
+        Optional<BizUserDO> optional = bizUserDao.findOne(example);
+        if (!optional.isPresent()) {
+            return null;
         }
 
         bizUserDO = optional.get();
@@ -170,16 +198,26 @@ public class BizUserManager {
         if(CollectionUtils.isNotEmpty(param.politicalLandscapeList)) {
             sql += " and political_landscape in " + inIntList(param.politicalLandscapeList);
         }
+        if(StringUtils.isNotEmpty(param.graduateInstitutions)) {
+            sql += " and graduate_school like '%%" + param.graduateInstitutions + "%%' ";
+        }
         if(StringUtils.isNotEmpty(param.policeCode)) {
             sql += " and police_code like '%" + param.policeCode + "%' ";
         }
         if(CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
-            sql += " and driving_type in " + inIntList(param.quasiDrivingTypeList);
-        }
-        if(CollectionUtils.isNotEmpty(param.specialPeople)) {
             sql += " and (";
-            for(String specialPeople : param.specialPeople) {
-                sql += " special_people like '%" + Integer.valueOf(specialPeople) + "%' or";
+            for(Integer quasiDrivingType : param.quasiDrivingTypeList) {
+                sql += " driving_type like '%" + quasiDrivingType + "%' or";
+            }
+            if(sql.endsWith("or")) {
+                sql = sql.substring(0, sql.length() - 2) ;
+            }
+            sql += ") ";
+        }
+        if(CollectionUtils.isNotEmpty(param.specialPeopleList)) {
+            sql += " and (";
+            for(Integer specialPeople : param.specialPeopleList) {
+                sql += " special_people like '%" + specialPeople + "%' or";
             }
             if(sql.endsWith("or")) {
                 sql = sql.substring(0, sql.length() - 2) ;
@@ -188,6 +226,9 @@ public class BizUserManager {
         }
         if(StringUtils.isNotEmpty(param.qualification)) {
             sql += " and qualification like '%%"+param.qualification+"%%'";
+        }
+        if(StringUtils.isNotEmpty(param.familyAddress)) {
+            sql += " and family_address like '%%"+param.familyAddress+"%%'";
         }
         if(StringUtils.isNotEmpty(param.permanentResidenceAddress)) {
             sql += " and permanent_residence_address like '%%"+param.permanentResidenceAddress+"%%'";
@@ -258,14 +299,17 @@ public class BizUserManager {
         if(StringUtils.isNotEmpty(param.retirementDateEnd)) {
             sql += " and retirement_date <= '"+param.retirementDateEnd+"'";
         }
-        if(CollectionUtils.isNotEmpty(param.workUnitCodeList)) {
-            sql += " and work_unit_code in " + inStrList(param.workUnitCodeList);
+        if(CollectionUtils.isNotEmpty(param.workUnitList)) {
+            sql += " and work_unit_code in " + inStrList(param.workUnitList);
         }
-        if(CollectionUtils.isNotEmpty(param.organizationUnitCodeList)) {
-            sql += " and organization_unit_code in " + inStrList(param.organizationUnitCodeList);
+        if(CollectionUtils.isNotEmpty(param.organizationUnitList)) {
+            sql += " and organization_unit_code in " + inStrList(param.organizationUnitList);
         }
         if(CollectionUtils.isNotEmpty(param.jobCategoryList)) {
             sql += " and job_category in " + inIntList(param.jobCategoryList);
+        }
+        if(CollectionUtils.isNotEmpty(param.jobGradeList)) {
+            sql += " and job_grade in " + inIntList(param.jobGradeList);
         }
         if(StringUtils.isNotEmpty(param.duty)) {
             sql += " and duty like '%%"+param.duty+"%%'";
@@ -273,8 +317,8 @@ public class BizUserManager {
         if(StringUtils.isNotEmpty(param.socialSecurityNumber)) {
             sql += " and social_security_number like '%%"+param.socialSecurityNumber+"%%'";
         }
-        if(StringUtils.isNotEmpty(param.retirementDateBegin)) {
-            sql += " and begin_police_work_time >= '"+param.retirementDateBegin+"'";
+        if(StringUtils.isNotEmpty(param.beginPoliceWorkTimeBegin)) {
+            sql += " and begin_police_work_time >= '"+param.beginPoliceWorkTimeBegin+"'";
         }
         if(StringUtils.isNotEmpty(param.beginPoliceWorkTimeEnd)) {
             sql += " and begin_police_work_time <= '"+param.beginPoliceWorkTimeEnd+"'";
@@ -394,7 +438,7 @@ public class BizUserManager {
      * @return
      * @throws Exception
      */
-    public BizUserDTO addSimple(String code, String password) {
+    public BizUserDTO addSimple(String code, String password, String name) {
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setCode(code);
         bizUserDO.setPassword(password);
@@ -402,6 +446,7 @@ public class BizUserManager {
         bizUserDO.setGmtCreate(now);
         bizUserDO.setGmtModified(now);
         bizUserDO.setIdentityCard(code);
+        bizUserDO.setName(name);
         bizUserDO = bizUserDao.save(bizUserDO);
         return BizUserConvertor.do2dto(bizUserDO);
     }
@@ -479,15 +524,22 @@ public class BizUserManager {
 
     private void fillWithByAddParam(BizUserAddParam param,BizUserDO bizUserDO){
         bizUserDO.setName(param.name);
-        bizUserDO.setPassword(MD5Util.MD5("admin"));
+        //bizUserDO.setPassword(MD5Util.MD5("admin"));
+        bizUserDO.setPassword("123456");
         bizUserDO.setPicUrl(param.headPicCode);
         bizUserDO.setBirthdate(DateUtil.convert2Date(param.birthdate,BizUserConstant.DateFormat));
         bizUserDO.setNation(param.nation);
         bizUserDO.setPoliticalLandscape(param.politicalLandscape);
         bizUserDO.setGraduateSchool(param.graduateInstitutions);
         bizUserDO.setPoliceCode(param.policeCode);
-        bizUserDO.setDrivingType(param.quasiDrivingType);
-        bizUserDO.setSpecialPeople(param.specialPeople);
+        if(CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
+            String quasiDrivingType = Joiner.on(",").join(param.quasiDrivingTypeList);
+            bizUserDO.setDrivingType(quasiDrivingType);
+        }
+        if(CollectionUtils.isNotEmpty(param.specialPeopleList)) {
+            String specialPeople = Joiner.on(",").join(param.specialPeopleList);
+            bizUserDO.setSpecialPeople(specialPeople);
+        }
         bizUserDO.setQualification(param.qualification);
         bizUserDO.setPermanentResidenceAddress(param.permanentResidenceAddress);
         bizUserDO.setFamilyAddress(param.familyAddress);
@@ -505,8 +557,8 @@ public class BizUserManager {
         bizUserDO.setEnrollWay(param.enrollWay);
         bizUserDO.setBeginWorkTime(DateUtil.convert2Date(param.beginWorkTime,BizUserConstant.DateFormat));
         bizUserDO.setEffectiveDateOfTheContrace(DateUtil.convert2Date(param.effectiveDateOfTheContract,BizUserConstant.DateFormat));
-        bizUserDO.setWorkUnitCode(param.workUnitCode);
-        bizUserDO.setOrganizationUnitCode(param.organizationUnitCode);
+        bizUserDO.setWorkUnitCode(param.workUnit);
+        bizUserDO.setOrganizationUnitCode(param.organizationUnit);
         bizUserDO.setJobCategory(param.jobCategory);
         bizUserDO.setDuty(param.duty);
         bizUserDO.setSocialSecurityNumber(param.socialSecurityNumber);

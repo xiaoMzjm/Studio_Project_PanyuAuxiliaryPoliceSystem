@@ -3,16 +3,11 @@ package com.base.biz.user.server.manager;
 import java.util.Date;
 import java.util.List;
 
-import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.server.dao.FamilyMemberDao;
 import com.base.biz.user.server.model.BizUserAddParam.AddParamFamilyMember;
 import com.base.biz.user.server.model.FamilyMemberConvertor;
 import com.base.biz.user.server.model.FamilyMemberDO;
 import com.base.biz.user.server.model.FamilyMemberDTO;
-import com.base.biz.user.server.model.PersonalExperienceConvertor;
-import com.base.biz.user.server.model.PersonalExperienceDO;
-import com.base.biz.user.server.model.PersonalExperienceDTO;
-import com.base.common.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -44,7 +39,7 @@ public class FamilyMemberManager {
             familyMemberDO.setDuty(addParamFamilyMember.duty);
             familyMemberDO.setIdentityCard(addParamFamilyMember.identityCard);
             familyMemberDO.setPhone(addParamFamilyMember.phone);
-            familyMemberDO.setPoliticalLandscapeCode(addParamFamilyMember.politicalLandscapeCode);
+            familyMemberDO.setPoliticalLandscapeCode(addParamFamilyMember.politicalLandscape);
             familyMemberDao.save(familyMemberDO);
         }
     }

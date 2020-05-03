@@ -3,6 +3,7 @@ package com.base.biz.user.server.api;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -33,8 +34,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.xmlbeans.ResourceLoader;
+import org.apache.xmlbeans.impl.common.DefaultClassLoaderResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,13 +51,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author:小M
+ * @author:小MAQ                                                                                                                         12
  * @date:2020/3/30 12:49 AM
  */
 @Api(description = "用户接口")
 @Controller
 @RequestMapping(value = "user", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.1.7:8080")
+@CrossOrigin(origins = "http://192.168.1.5:8080")
 public class BizUserController {
 
     @Value("${ResourceStaticUrl}")
@@ -91,6 +95,19 @@ public class BizUserController {
         public String account;
         @ApiParam(name="密码",value="password",required=true)
         public String password;
+    }
+
+    @ResultFilter
+    @ApiOperation(value = "登出" ,  notes="登出")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @ResponseBody
+    public String logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("token","");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        return JSON.toJSONString(Result.success(""));
     }
 
 
@@ -186,7 +203,7 @@ public class BizUserController {
     }
 
 
-    // http://localhost/user/downloadimportdemo?token=71f0b676392d440096c5696848b3257c
+    // http://localhost/user/downloadimportdemo?token=e316d1bbee694663b1053b509a7fc1d9
 
     @TokenFilter
     @ResultFilter
@@ -195,17 +212,17 @@ public class BizUserController {
     @ResponseBody
     public void downloadImportDemo(HttpServletResponse response) throws Exception {
 
+        ClassPathResource classPathResource = new ClassPathResource("static/file/导入模板.xlsx");
+        InputStream inputStream = classPathResource.getInputStream();
 
-        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
-        File file = new File(path + "/" + "导入模板.xlsx");
+        // 名称
         String fileName = new String("导入模板.xlsx".getBytes("UTF-8"),"ISO-8859-1");
-
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        Long contentLength = file.length();
-        response.setHeader("content-length", contentLength + "");
+        //Long contentLength = file.length();
+        //response.setHeader("content-length", contentLength + "");
 
         OutputStream os = response.getOutputStream();
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
         byte[] buff = new byte[1024];
         int i = bis.read(buff);
         while (i != -1) {
@@ -215,6 +232,9 @@ public class BizUserController {
         }
         if (bis != null) {
             bis.close();
+        }
+        if(inputStream != null) {
+            inputStream.close();
         }
     }
 
@@ -315,11 +335,13 @@ public class BizUserController {
     @RequestMapping(value = "/exportuser", method = RequestMethod.GET)
     @ResponseBody
     public String exportuser( String userCode, HttpServletResponse response) throws Exception{
-        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
-        File file = new File(path + "/" + "个人简历.docx");
+
+        ClassPathResource classPathResource = new ClassPathResource("static/file/个人简历.docx");
+        InputStream inputStream = classPathResource.getInputStream();
+
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportUser(userCode, file);
+            wordFile = bizUserService.exportUser(userCode, inputStream);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("个人简历.docx".getBytes("UTF-8"),"ISO8859-1"));
@@ -358,11 +380,12 @@ public class BizUserController {
     @RequestMapping(value = "/exportincomecertificate", method = RequestMethod.GET)
     @ResponseBody
     public String exportIncomecertificate( String userCode, HttpServletResponse response) throws Exception{
-        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
-        File file = new File(path + "/" + "收入证明.docx");
+
+        ClassPathResource classPathResource = new ClassPathResource("static/file/收入证明.docx");
+        InputStream inputStream = classPathResource.getInputStream();
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportIncomecertificate(userCode, file);
+            wordFile = bizUserService.exportIncomecertificate(userCode, inputStream);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("收入证明.docx".getBytes("UTF-8"),"ISO8859-1"));
@@ -401,11 +424,12 @@ public class BizUserController {
     @RequestMapping(value = "/exportonthejobcertificate", method = RequestMethod.GET)
     @ResponseBody
     public String exportonthejobcertificate( String userCode, HttpServletResponse response) throws Exception{
-        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/file";
-        File file = new File(path + "/" + "在职证明.docx");
+
+        ClassPathResource classPathResource = new ClassPathResource("static/file/在职证明.docx");
+        InputStream inputStream = classPathResource.getInputStream();
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportonthejobcertificate(userCode, file);
+            wordFile = bizUserService.exportonthejobcertificate(userCode, inputStream);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("在职证明.docx".getBytes("UTF-8"),"ISO8859-1"));
@@ -435,4 +459,8 @@ public class BizUserController {
         return JSON.toJSONString(Result.success(""));
 
     }
+
+
+
+
 }

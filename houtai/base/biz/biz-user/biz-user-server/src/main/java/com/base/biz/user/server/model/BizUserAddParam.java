@@ -52,13 +52,13 @@ public class BizUserAddParam {
     @ApiParam(name="警号",value="policeCode")
     public String policeCode;
 
-    @ApiParam(name="准驾车型",value="quasiDrivingType")
-    public String quasiDrivingType;
+    @ApiParam(name="准驾车型",value="quasiDrivingTypeList")
+    public List<Integer> quasiDrivingTypeList;
     @ApiParam(name="准驾车型",value="quasiDrivingTypeStr")
     public String quasiDrivingTypeStr;
 
-    @ApiParam(name="特殊人员",value="specialPeople")
-    public String specialPeople;
+    @ApiParam(name="特殊人员",value="specialPeopleList")
+    public List<Integer> specialPeopleList;
     @ApiParam(name="特殊人员",value="specialPeopleStr")
     public String specialPeopleStr;
 
@@ -131,13 +131,13 @@ public class BizUserAddParam {
     @ApiParam(name="合同生效时间",value="effectiveDateOfTheContract")
     public String effectiveDateOfTheContract;
 
-    @ApiParam(name="工作单位",value="workUnitCode")
-    public String workUnitCode;
+    @ApiParam(name="工作单位",value="workUnit")
+    public String workUnit;
     @ApiParam(name="工作单位",value="workUnitName")
     public String workUnitName;
 
-    @ApiParam(name="编制单位",value="organizationUnitCode")
-    public String organizationUnitCode;
+    @ApiParam(name="编制单位",value="organizationUnit")
+    public String organizationUnit;
     @ApiParam(name="编制单位",value="organizationUnitName")
     public String organizationUnitName;
 
@@ -224,8 +224,8 @@ public class BizUserAddParam {
         public String identityCard;
         @ApiParam(name="手机",value="phone")
         public String phone;
-        @ApiParam(name="政治面貌",value="politicalLandscapeCode")
-        public Integer politicalLandscapeCode;
+        @ApiParam(name="政治面貌",value="politicalLandscape")
+        public Integer politicalLandscape;
     }
 
     public static class AddParamAward {

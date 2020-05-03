@@ -64,6 +64,7 @@ import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
+import io.swagger.models.auth.In;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -161,6 +162,9 @@ public class BizUserInnerSerivce {
      * @return
      */
     public BizUserDetailVO findByCode(String code) throws Exception{
+        if(StringUtils.isBlank(code)) {
+            throw new BaseException("Code为空");
+        }
         BizUserDTO dto = bizUserManager.findByCode(code);
         BizUserDetailVO vo = new BizUserDetailVO();
         vo.setName(dto.getName());
@@ -182,9 +186,23 @@ public class BizUserInnerSerivce {
         vo.setPoliticalLandscapeStr(PoliticalLandscapeEnum.getName(dto.getPoliticalLandscape()));
         vo.setGraduateInstitutions(dto.getGraduateSchool());
         vo.setPoliceCode(dto.getPoliceCode());
-        vo.setQuasiDrivingType(dto.getDrivingType());
+        if(StringUtils.isNotEmpty(dto.getDrivingType())) {
+            String[] drivingTypeStrArray = dto.getDrivingType().split(",");
+            List<Integer> list = Lists.newArrayList();
+            for(String drivingTypeStr : drivingTypeStrArray) {
+                list.add(Integer.valueOf(drivingTypeStr));
+            }
+            vo.setQuasiDrivingTypeList(list);
+        }
         vo.setQuasiDrivingTypeStr(DrivingTypeEnum.getName(dto.getDrivingType()));
-        vo.setSpecialPeople(dto.getSpecialPeople());
+        if(StringUtils.isNotEmpty(dto.getSpecialPeople())) {
+            String[] array = dto.getSpecialPeople().split(",");
+            List<Integer> list = Lists.newArrayList();
+            for(String a : array) {
+                list.add(Integer.valueOf(a));
+            }
+            vo.setSpecialPeopleList(list);
+        }
         vo.setSpecialPeopleStr(SpecialPeopleEnum.getName(dto.getSpecialPeople()));
         vo.setQualification(dto.getQualification());
         vo.setSpeciality(dto.getSpeciality());
@@ -379,6 +397,12 @@ public class BizUserInnerSerivce {
         VerifyUtil.isNotNull(account, "", "密码为空");
 
         BizUserDTO bizUserDTO = bizUserManager.findByCodeAndPassword(account, password);
+        if(bizUserDTO == null) {
+            bizUserDTO = bizUserManager.findByPoliceCodeAndPassword(account, password);
+        }
+        if(bizUserDTO == null) {
+            throw new BaseException("账号或密码错误");
+        }
 
         UserVO userVO = userService.updateToken(bizUserDTO.getCode());
 
@@ -404,7 +428,7 @@ public class BizUserInnerSerivce {
         if(StringUtils.isNotEmpty(param.policeCode)) {
             bizUserDTO = bizUserManager.findByPoliceCode(param.policeCode);
             if (bizUserDTO != null) {
-                throw new BaseException(String.format("该身份证[%s]已存在",param.identityCard));
+                throw new BaseException(String.format("该警号[%s]已存在",param.policeCode));
             }
         }
 
@@ -479,6 +503,7 @@ public class BizUserInnerSerivce {
                     }
                 }
                 bizUserAddUserCheckService.check(bizUserAddParam);
+                userService.add(bizUserAddParam.identityCard);
                 bizUserManager.add(bizUserAddParam);
             }
         }
@@ -534,11 +559,11 @@ public class BizUserInnerSerivce {
     /**
      * 导出人员
      * @param code
-     * @param file
+     * @param inputStream
      * @return
      * @throws Exception
      */
-    public File exportUser(String code, File file) throws Exception{
+    public File exportUser(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
         }
@@ -633,7 +658,7 @@ public class BizUserInnerSerivce {
 
         String savePath = diskStaticUrl + "files/";
         try {
-            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordName = WordUtil.replaceWordAndSave(inputStream, savePath, rules);
             String wordPath = savePath + wordName;
             return new File(wordPath);
         }catch (Exception e) {
@@ -645,11 +670,11 @@ public class BizUserInnerSerivce {
     /**
      * 导出收入证明
      * @param code
-     * @param file
+     * @param inputStream
      * @return
      * @throws Exception
      */
-    public File exportIncomecertificate(String code, File file) throws Exception{
+    public File exportIncomecertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
         }
@@ -684,7 +709,7 @@ public class BizUserInnerSerivce {
 
         String savePath = diskStaticUrl + "files/";
         try {
-            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordName = WordUtil.replaceWordAndSave(inputStream, savePath, rules);
             String wordPath = savePath + wordName;
             return new File(wordPath);
         }catch (Exception e) {
@@ -697,11 +722,11 @@ public class BizUserInnerSerivce {
     /**
      * 导出在职证明
      * @param code
-     * @param file
+     * @param inputStream
      * @return
      * @throws Exception
      */
-    public File exportonthejobcertificate(String code, File file) throws Exception{
+    public File exportonthejobcertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
         }
@@ -715,8 +740,8 @@ public class BizUserInnerSerivce {
         if(StringUtils.isEmpty(vo.getName())) {
             throw new BaseException("该人员缺少[姓名]字段，请补充完整个人信息。");
         }
-        if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
-            throw new BaseException("该人员缺少[入职公安时间]字段，请补充完整个人信息。");
+        if(StringUtils.isEmpty(vo.getFirstGradeTime())) {
+            throw new BaseException("该人员缺少[任一级辅警起算时间]字段，请补充完整个人信息。");
         }
         if(StringUtils.isEmpty(vo.getBeginPoliceWorkTime())) {
             throw new BaseException("该人员缺少[入职公安时间]字段，请补充完整个人信息。");
@@ -731,9 +756,9 @@ public class BizUserInnerSerivce {
 
         rules.put("${identityCard}",new TextDTO(vo.getIdentityCard(),false));
 
-        Date beginWorkTime = DateUtil.convert2Date(vo.getBeginPoliceWorkTime(), BizUserConstant.DateFormat);
-        String beginWorkTimeStr = DateUtil.convert2String(beginWorkTime, BizUserConstant.DateYYYYNianMMyueFormat);
-        rules.put("${beginWorkTime}",new TextDTO(beginWorkTimeStr,false));
+        Date firstGradeTime = DateUtil.convert2Date(vo.getFirstGradeTime(), BizUserConstant.DateFormat);
+        String firstGradeTimeStr = DateUtil.convert2String(firstGradeTime, BizUserConstant.DateYYYYNianMMyueFormat);
+        rules.put("${beginWorkTime}",new TextDTO(firstGradeTimeStr,false));
 
         Date time = new Date();
         String timeStr = DateUtil.convert2String(time, BizUserConstant.DateYYYYNianMMyueddriFormat);
@@ -744,7 +769,7 @@ public class BizUserInnerSerivce {
 
         String savePath = diskStaticUrl + "files/";
         try {
-            String wordName = WordUtil.replaceWordAndSave(file, savePath, rules);
+            String wordName = WordUtil.replaceWordAndSave(inputStream, savePath, rules);
             String wordPath = savePath + wordName;
             return new File(wordPath);
         }catch (Exception e) {

@@ -45,11 +45,11 @@ public class SuperPageListParam {
     @ApiParam(name="exservicemanList",value="exservicemanList")
     public List<Integer> exservicemanList;
 
-    @ApiParam(name="specialPeople",value="specialPeople")
-    public List<String> specialPeople;
-
     @ApiParam(name="qualification",value="qualification")
     public String qualification;
+
+    @ApiParam(name="familyAddress",value="familyAddress")
+    public String familyAddress;
 
     @ApiParam(name="permanentResidenceAddress",value="permanentResidenceAddress")
     public String permanentResidenceAddress;
@@ -114,14 +114,17 @@ public class SuperPageListParam {
     @ApiParam(name="retirementDateEnd",value="retirementDateEnd")
     public String retirementDateEnd;
 
-    @ApiParam(name="workUnitCodeList",value="workUnitCodeList")
-    public List<String> workUnitCodeList;
+    @ApiParam(name="workUnitList",value="workUnitList")
+    public List<String> workUnitList;
 
-    @ApiParam(name="organizationUnitCodeList",value="organizationUnitCodeList")
-    public List<String> organizationUnitCodeList;
+    @ApiParam(name="organizationUnitList",value="organizationUnitList")
+    public List<String> organizationUnitList;
 
     @ApiParam(name="jobCategoryList",value="jobCategoryList")
     public List<Integer> jobCategoryList;
+
+    @ApiParam(name="jobGradeList",value="jobGradeList")
+    public List<Integer> jobGradeList;
 
     @ApiParam(name="duty",value="duty")
     public String duty;

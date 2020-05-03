@@ -155,11 +155,9 @@ public class WordUtil {
      * @return String 文件名称，拼上savePath得到完整路径
      * @throws Exception
      */
-    public static String replaceWordAndSave(File file, String savePath , Map<String, Object> rules) throws Exception{
-        if (!file.getName().endsWith(".docx")) {
-            throw new RuntimeException("word文件必须是.docx格式");
-        }
-        InputStream is = new FileInputStream(file);
+    public static String replaceWordAndSave(InputStream inputStream, String savePath , Map<String, Object> rules) throws Exception{
+
+        InputStream is = inputStream;
         XWPFDocument doc = new XWPFDocument(is);
 
         // 获取所有段落
@@ -286,16 +284,15 @@ public class WordUtil {
                                     table.removeRow(i);
                                     rowsSize--;
                                     RowDTO rowDTO = (RowDTO)value;
-                                    if(CollectionUtils.isEmpty(rowDTO.getValues())) {
-                                        continue;
-                                    }
-                                    for(List<RowCellDTO> rowCellDTOList : rowDTO.getValues()) {
-                                        XWPFTableRow rowTemp = rows.get(i++);
-                                        List<XWPFTableCell> tableCellsTEmp = rowTemp.getTableCells();
-                                        for(int z = 0 ;z < rowCellDTOList.size(); z++) {
-                                            RowCellDTO rowCellDTO = rowCellDTOList.get(z);
-                                            XWPFTableCell cellTem = tableCellsTEmp.get(z);
-                                            cellTem.setText(rowCellDTO.getText());
+                                    if(CollectionUtils.isNotEmpty(rowDTO.getValues())) {
+                                        for(List<RowCellDTO> rowCellDTOList : rowDTO.getValues()) {
+                                            XWPFTableRow rowTemp = rows.get(i++);
+                                            List<XWPFTableCell> tableCellsTEmp = rowTemp.getTableCells();
+                                            for(int z = 0 ;z < rowCellDTOList.size(); z++) {
+                                                RowCellDTO rowCellDTO = rowCellDTOList.get(z);
+                                                XWPFTableCell cellTem = tableCellsTEmp.get(z);
+                                                cellTem.setText(rowCellDTO.getText());
+                                            }
                                         }
                                     }
                                     i++;

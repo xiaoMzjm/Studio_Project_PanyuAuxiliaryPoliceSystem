@@ -44,7 +44,7 @@ public class InitService {
             return;
         }
         userService.add("admin");
-        bizUserManager.addSimple("admin","admin");
+        bizUserManager.addSimple("admin","admin", "admin");
     }
 
     /**

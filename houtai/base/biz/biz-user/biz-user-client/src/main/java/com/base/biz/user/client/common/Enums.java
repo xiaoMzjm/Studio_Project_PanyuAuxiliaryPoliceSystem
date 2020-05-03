@@ -330,6 +330,9 @@ public class Enums {
             String[] codeArray = codeStr.split(",");
             StringBuilder sb = new StringBuilder();
             for(String code : codeArray) {
+                if(code == null || "".equals(code)) {
+                    continue;
+                }
                 for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                     if (e.getCode().equals(Integer.valueOf(code))) {
                         sb.append(e.getName()).append(",");
@@ -446,6 +449,9 @@ public class Enums {
             String[] codeArray = codeStr.split(",");
             StringBuilder sb = new StringBuilder();
             for(String code : codeArray) {
+                if(code == null || "".equals(code)) {
+                    continue;
+                }
                 for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                     if (e.getCode().equals(Integer.valueOf(code))) {
                         sb.append(e.getName()).append(",");

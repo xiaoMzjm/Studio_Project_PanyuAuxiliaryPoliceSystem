@@ -23,12 +23,12 @@ public class BizUserDetailVO {
     private String graduateInstitutions;
     private String policeCode;
 
-    private String quasiDrivingType;
+    private List<Integer> quasiDrivingTypeList;
     private String quasiDrivingTypeStr;
 
     private String speciality;
 
-    private String specialPeople;
+    private List<Integer> specialPeopleList;
     private String specialPeopleStr;
 
     private String qualification;
@@ -197,13 +197,6 @@ public class BizUserDetailVO {
         this.policeCode = policeCode;
     }
 
-    public String getQuasiDrivingType() {
-        return quasiDrivingType;
-    }
-
-    public void setQuasiDrivingType(String quasiDrivingType) {
-        this.quasiDrivingType = quasiDrivingType;
-    }
 
     public String getQuasiDrivingTypeStr() {
         return quasiDrivingTypeStr;
@@ -623,12 +616,20 @@ public class BizUserDetailVO {
         this.headPicCode = headPicCode;
     }
 
-    public String getSpecialPeople() {
-        return specialPeople;
+    public List<Integer> getQuasiDrivingTypeList() {
+        return quasiDrivingTypeList;
     }
 
-    public void setSpecialPeople(String specialPeople) {
-        this.specialPeople = specialPeople;
+    public void setQuasiDrivingTypeList(List<Integer> quasiDrivingTypeList) {
+        this.quasiDrivingTypeList = quasiDrivingTypeList;
+    }
+
+    public List<Integer> getSpecialPeopleList() {
+        return specialPeopleList;
+    }
+
+    public void setSpecialPeopleList(List<Integer> specialPeopleList) {
+        this.specialPeopleList = specialPeopleList;
     }
 
     public String getSpecialPeopleStr() {

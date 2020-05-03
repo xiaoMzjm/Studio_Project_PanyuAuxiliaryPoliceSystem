@@ -3,14 +3,11 @@ package com.base.biz.user.server.service;
 import java.util.*;
 
 import com.base.biz.user.client.common.BizUserConstant;
-import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
-import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
 import com.base.biz.user.client.common.Enums.DueContractEnum;
 import com.base.biz.user.client.common.Enums.EducationEnum;
 import com.base.biz.user.client.common.Enums.EnrollWayEnum;
-import com.base.biz.user.client.common.Enums.ExservicemanEnum;
 import com.base.biz.user.client.common.Enums.JobCategoryEnum;
 import com.base.biz.user.client.common.Enums.JobGradeEnum;
 import com.base.biz.user.client.common.Enums.MaritalStatusEnum;
@@ -31,6 +28,7 @@ import com.base.resource.client.service.ResourceService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,13 +45,15 @@ public class BizUserAddUserCheckService {
     @Autowired
     private ResourceService resourceService;
 
-
     public void check(BizUserAddParam param) throws BaseException {
         if (StringUtils.isEmpty(param.identityCard)) {
             throw new BaseException(String.format("身份证信息不能为空"));
         }
         if (StringUtils.isEmpty(param.name)) {
             throw new BaseException(String.format("姓名不能为空"));
+        }
+        if (StringUtils.isEmpty(param.workUnit) && StringUtils.isEmpty(param.workUnitName)) {
+            throw new BaseException(String.format("工作单位不能为空"));
         }
         // 姓名
         if (StringUtils.isNotEmpty(param.name)) {
@@ -115,11 +115,23 @@ public class BizUserAddUserCheckService {
             if (param.policeCode.length() > 64) {
                 throw new BaseException(String.format("警号[%s]长度不能超过64个字符",param.policeCode));
             }
+            if(param.policeCode.length() != 8) {
+                throw new BaseException(String.format("警号[%s]必须PY开头，后跟6位数字",param.policeCode));
+            }
+            if(!param.policeCode.startsWith("PY")){
+                throw new BaseException(String.format("警号[%s]必须PY开头，后跟6位数字",param.policeCode));
+            }
+            String numStr = param.policeCode.substring(2,param.policeCode.length());
+            if(!NumberUtils.isDigits(numStr)) {
+                throw new BaseException(String.format("警号[%s]必须PY开头，后跟6位数字",param.policeCode));
+            }
         }
         // 准驾车型
-        if (param.quasiDrivingType != null) {
-            String[] quasiDrivingTypeArray = param.quasiDrivingType.split(",");
-            for(String quasiDrivingType : quasiDrivingTypeArray) {
+        if (CollectionUtils.isNotEmpty(param.quasiDrivingTypeList)) {
+            for(Integer quasiDrivingType : param.quasiDrivingTypeList) {
+                if (quasiDrivingType == null) {
+                    continue;
+                }
                 DrivingTypeEnum e = DrivingTypeEnum.get(Integer.valueOf(quasiDrivingType));
                 if (e == null) {
                     throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",Integer.valueOf(quasiDrivingType), DrivingTypeEnum.getAllCode()));
@@ -127,26 +139,21 @@ public class BizUserAddUserCheckService {
             }
         }
         if (StringUtils.isNotEmpty(param.quasiDrivingTypeStr)) {
-            StringBuilder sb = new StringBuilder();
+            List<Integer> list = Lists.newArrayList();
             String[] quasiDrivingTypeStrArray = param.quasiDrivingTypeStr.split(",");
             for(String quasiDrivingTypeStr : quasiDrivingTypeStrArray) {
                 DrivingTypeEnum e = DrivingTypeEnum.get(quasiDrivingTypeStr);
                 if (e == null) {
                     throw new BaseException(String.format("准驾车型[%s]格式错误，正确格式范围为[%s]",quasiDrivingTypeStr, DrivingTypeEnum.getAllName()));
                 }
-                sb.append(e.getCode()).append(",");
+                list.add(e.getCode());
             }
-            String s = sb.toString();
-            if(s.endsWith(",")) {
-                s = s.substring(0, s.length()-1);
-            }
-            param.quasiDrivingType = s;
+            param.quasiDrivingTypeList = list;
         }
         // 特殊人员
-        if (StringUtils.isNotEmpty(param.specialPeople)) {
-            String[] specialPeopleArray = param.specialPeople.split(",");
-            for(String specialPeople : specialPeopleArray) {
-                SpecialPeopleEnum e = SpecialPeopleEnum.get(Integer.valueOf(specialPeople));
+        if (CollectionUtils.isNotEmpty(param.specialPeopleList)) {
+            for(Integer specialPeople : param.specialPeopleList) {
+                SpecialPeopleEnum e = SpecialPeopleEnum.get(specialPeople);
                 if (e == null) {
                     throw new BaseException(String.format("特殊人员[%s]格式错误，正确格式范围为[%s]",Integer.valueOf(specialPeople), SpecialPeopleEnum.getAllCode()));
                 }
@@ -154,19 +161,15 @@ public class BizUserAddUserCheckService {
         }
         if (StringUtils.isNotEmpty(param.specialPeopleStr)) {
             String[] specialPeopleStrArray = param.specialPeopleStr.split(",");
-            StringBuilder sb = new StringBuilder();
+            List<Integer> list = Lists.newArrayList();
             for(String specialPeopleStr : specialPeopleStrArray){
                 SpecialPeopleEnum e = SpecialPeopleEnum.get(specialPeopleStr);
                 if (e == null) {
                     throw new BaseException(String.format("特殊人员[%s]格式错误，正确格式范围为[%s]",specialPeopleStr, SpecialPeopleEnum.getAllName()));
                 }
-                sb.append(e.getCode()).append(",");
+                list.add(e.getCode());
             }
-            String s = sb.toString();
-            if(s.endsWith(",")) {
-                s = s.substring(0, s.length()-1);
-            }
-            param.specialPeople = s;
+            param.specialPeopleList = list;
         }
         // 户籍地址
         if (StringUtils.isNotEmpty(param.permanentResidenceAddress)) {
@@ -346,10 +349,10 @@ public class BizUserAddUserCheckService {
         }
         // 工作单位
         String workUnitName = "";
-        if (StringUtils.isNotEmpty(param.workUnitCode)) {
-            CompanyVO companyVO = companyService.findByCode(param.workUnitCode);
+        if (StringUtils.isNotEmpty(param.workUnit)) {
+            CompanyVO companyVO = companyService.findByCode(param.workUnit);
             if (companyVO == null) {
-                throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitCode));
+                throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnit));
             }
             workUnitName = companyVO.getName();
         }
@@ -359,13 +362,13 @@ public class BizUserAddUserCheckService {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitName));
             }
             workUnitName = companyVO.getName();
-            param.workUnitCode = companyVO.getCode();
+            param.workUnit = companyVO.getCode();
         }
         // 编制单位
-        if (StringUtils.isNotEmpty(param.organizationUnitCode)) {
-            CompanyVO companyVO = companyService.findByCode(param.organizationUnitCode);
+        if (StringUtils.isNotEmpty(param.organizationUnit)) {
+            CompanyVO companyVO = companyService.findByCode(param.organizationUnit);
             if (companyVO == null) {
-                throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitCode));
+                throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnit));
             }
         }
         if (StringUtils.isNotEmpty(param.organizationUnitName)) {
@@ -373,7 +376,7 @@ public class BizUserAddUserCheckService {
             if (companyVO == null) {
                 throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitName));
             }
-            param.organizationUnitCode = companyVO.getCode();
+            param.organizationUnit = companyVO.getCode();
         }
         // 岗位类别
         if (param.jobCategory != null) {
@@ -524,10 +527,10 @@ public class BizUserAddUserCheckService {
                     }
                 }
                 // 政治身份
-                if (addParamFamilyMember.politicalLandscapeCode != null) {
-                    PoliticalLandscapeEnum e = PoliticalLandscapeEnum.get(addParamFamilyMember.politicalLandscapeCode);
+                if (addParamFamilyMember.politicalLandscape != null) {
+                    PoliticalLandscapeEnum e = PoliticalLandscapeEnum.get(addParamFamilyMember.politicalLandscape);
                     if (e == null) {
-                        throw new BaseException(String.format("家庭成员-政治身份[%s]格式错误，正确格式范围为[%s]",addParamFamilyMember.politicalLandscapeCode, PoliticalLandscapeEnum.getAllCode()));
+                        throw new BaseException(String.format("家庭成员-政治身份[%s]格式错误，正确格式范围为[%s]",addParamFamilyMember.politicalLandscape, PoliticalLandscapeEnum.getAllCode()));
                     }
                 }
             }
