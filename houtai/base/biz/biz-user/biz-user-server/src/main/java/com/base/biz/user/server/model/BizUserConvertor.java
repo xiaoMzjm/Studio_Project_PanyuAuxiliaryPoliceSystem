@@ -7,6 +7,7 @@ import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.common.util.DateUtil;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -75,4 +76,5 @@ public class BizUserConvertor {
         BeanUtils.copyProperties(bizUserDTO, bizUserVO);
         return bizUserVO;
     }
+
 }

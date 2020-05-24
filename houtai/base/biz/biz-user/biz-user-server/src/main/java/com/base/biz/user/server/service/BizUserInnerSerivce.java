@@ -33,11 +33,6 @@ import com.base.biz.user.client.model.BizUserDetailVO.FamilyMember;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
 import com.base.biz.user.server.common.BizUserAddExcelReader;
-import com.base.biz.user.server.common.WordUtil;
-import com.base.biz.user.server.common.WordUtil.PicDTO;
-import com.base.biz.user.server.common.WordUtil.RowCellDTO;
-import com.base.biz.user.server.common.WordUtil.RowDTO;
-import com.base.biz.user.server.common.WordUtil.TextDTO;
 import com.base.biz.user.server.common.ZipUtil;
 import com.base.biz.user.server.manager.AssessmentManager;
 import com.base.biz.user.server.manager.AwardManager;
@@ -56,6 +51,8 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.VerifyUtil;
+import com.base.common.util.WordUtil;
+import com.base.common.util.WordUtil.*;
 import com.base.department.client.model.CompanyVO;
 import com.base.department.client.service.CompanyService;
 import com.base.resource.client.model.ResourceVO;
@@ -166,6 +163,10 @@ public class BizUserInnerSerivce {
             throw new BaseException("Code为空");
         }
         BizUserDTO dto = bizUserManager.findByCode(code);
+        return dto2vo(dto);
+    }
+
+    public BizUserDetailVO dto2vo(BizUserDTO dto){
         BizUserDetailVO vo = new BizUserDetailVO();
         vo.setName(dto.getName());
         String picName = dto.getPicUrl();

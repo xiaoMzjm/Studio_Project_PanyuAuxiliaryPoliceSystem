@@ -23,4 +23,8 @@ public interface BizUserDao extends JpaRepository<BizUserDO,Long> {
 
     void deleteByCode(String code);
 
+
+    @Query(nativeQuery = true, value="select * from biz_user where work_card_begin_time >= :start and work_card_begin_time < :end")
+    List<BizUserDO> findByWorkCardBeginTime(@Param("start") Date start, @Param("end") Date end);
+
 }

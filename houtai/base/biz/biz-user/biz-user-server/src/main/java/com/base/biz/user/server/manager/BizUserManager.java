@@ -20,6 +20,7 @@ import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MD5Util;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -519,6 +520,21 @@ public class BizUserManager {
      */
     public void deleteByCode(String code) {
         bizUserDao.deleteByCode(code);
+    }
+
+    /**
+     * 根据工作证时间查询
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<BizUserDTO> getByWorkCardBeginTime(Date start, Date end) {
+        List<BizUserDTO> result = Lists.newArrayList();
+        List<BizUserDO> bizUserDOList = bizUserDao.findByWorkCardBeginTime(start, end);
+        if (CollectionUtils.isNotEmpty(bizUserDOList)) {
+            result.addAll(BizUserConvertor.do2dtoList(bizUserDOList));
+        }
+        return result;
     }
 
 

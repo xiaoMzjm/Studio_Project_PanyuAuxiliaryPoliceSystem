@@ -14,6 +14,7 @@
 		<module>biz/department</module>
 
 		<module>biz/biz-user</module>
+		<module>biz/biz-expire</module>
 
 	</modules>
 	<packaging>pom</packaging>
@@ -129,6 +130,23 @@
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>biz-user-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- 到期提醒 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-expire</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-expire-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-expire-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
