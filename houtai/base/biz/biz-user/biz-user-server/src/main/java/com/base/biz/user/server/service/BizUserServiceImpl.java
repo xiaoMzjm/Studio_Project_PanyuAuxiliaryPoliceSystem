@@ -41,4 +41,29 @@ public class BizUserServiceImpl implements BizUserService {
         }
         return result;
     }
+
+    @Override
+    public List<BizUserDetailVO> getByContractEngTime(Date start, Date end) {
+        List<BizUserDetailVO> result = Lists.newArrayList();
+        List<BizUserDTO> bizUserDTOList = bizUserManager.getByContractEngTime(start, end);
+        if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
+            for (BizUserDTO dto : bizUserDTOList) {
+                result.add(bizUserInnerSerivce.dto2vo(dto));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<BizUserDetailVO> getByBirthDayAndSex(Date start, Date end, Integer sex) {
+        List<BizUserDetailVO> result = Lists.newArrayList();
+        List<BizUserDTO> bizUserDTOList = bizUserManager.getByBirthDayAndSex(start, end, sex);
+        if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
+            for (BizUserDTO dto : bizUserDTOList) {
+                result.add(bizUserInnerSerivce.dto2vo(dto));
+            }
+        }
+        return result;
+    }
+
 }

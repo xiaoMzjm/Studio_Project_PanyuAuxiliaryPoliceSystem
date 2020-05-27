@@ -29,6 +29,12 @@ public class PageController {
         return "index";
     }
 
+    @ApiOperation(value = "到期提醒" ,  notes="到期提醒")
+    @GetMapping("/ExpireManager/*")
+    public String expireView(){
+        return "index";
+    }
+
     @ApiOperation(value = "登录" ,  notes="登录")
     @GetMapping("/login")
     public String login(){

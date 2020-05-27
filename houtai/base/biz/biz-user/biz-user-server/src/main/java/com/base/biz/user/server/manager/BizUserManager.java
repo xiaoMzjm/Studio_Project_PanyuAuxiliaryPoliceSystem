@@ -537,6 +537,30 @@ public class BizUserManager {
         return result;
     }
 
+    public List<BizUserDTO> getByContractEngTime(Date start, Date end) {
+        List<BizUserDTO> result = Lists.newArrayList();
+        List<BizUserDO> first = bizUserDao.findByFirstContractEngTime(start, end);
+        if (CollectionUtils.isNotEmpty(first)) {
+            result.addAll(BizUserConvertor.do2dtoList(first));
+        }
+        List<BizUserDO> second = bizUserDao.findBySecondContractEngTime(start, end);
+        if (CollectionUtils.isNotEmpty(second)) {
+            result.addAll(BizUserConvertor.do2dtoList(second));
+        }
+        List<BizUserDO> third = bizUserDao.findByThirdContractEngTime(start, end);
+        if (CollectionUtils.isNotEmpty(third)) {
+            result.addAll(BizUserConvertor.do2dtoList(third));
+        }
+        return result;
+    }
+
+    public List<BizUserDTO> getByBirthDayAndSex(Date start, Date end, Integer sex){
+        List<BizUserDTO> result = Lists.newArrayList();
+        List<BizUserDO> bizUserDOList = bizUserDao.findByBirthDayAndSex(start, end, sex);
+        result.addAll(BizUserConvertor.do2dtoList(bizUserDOList));
+        return result;
+    }
+
 
     private void fillWithByAddParam(BizUserAddParam param,BizUserDO bizUserDO){
         bizUserDO.setName(param.name);

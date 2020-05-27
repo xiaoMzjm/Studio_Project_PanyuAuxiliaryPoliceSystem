@@ -45,19 +45,19 @@ public class ExpireController {
     private ExpireManager expireManager;
 
     /**
-     * 创建合同到期提醒
+     * 创建工作证到期提醒
      * @return
      */
     @TokenFilter
     @ResultFilter
-    @ApiOperation(value = "补生成工作证到期提醒" ,  notes="补生成工作证到期提醒")
+    @ApiOperation(value = "创建工作证到期提醒" ,  notes="创建工作证到期提醒")
     @RequestMapping(value = "/createemployeecard", method = RequestMethod.POST)
     @ResponseBody
     public String createEmployeeCard(@RequestBody CreateParam param) throws Exception{
         ClassPathResource classPathResource = new ClassPathResource("static/file/工作证到期提醒表.xlsx");
         InputStream inputStream = classPathResource.getInputStream();
-        expireService.createEmployeeCard(param.year,param.month, ExpireEnums.ExpireType.EmployeeCard, inputStream);
-        return JSON.toJSONString(Result.success(""));
+        String message = expireService.createEmployeeCard(param.year,param.month, inputStream, true);
+        return JSON.toJSONString(Result.success(message));
     }
     public static class CreateParam {
         public Integer year;
@@ -71,21 +71,31 @@ public class ExpireController {
      */
     @TokenFilter
     @ResultFilter
-    @ApiOperation(value = "补生成工作证到期提醒" ,  notes="补生成工作证到期提醒")
+    @ApiOperation(value = "创建合同到期提醒" ,  notes="创建合同到期提醒")
     @RequestMapping(value = "/createcontract", method = RequestMethod.POST)
     @ResponseBody
     public String createContract(@RequestBody CreateParam param) throws Exception{
-        ClassPathResource classPathResource = new ClassPathResource("static/file/工作证到期提醒表.xlsx");
+        ClassPathResource classPathResource = new ClassPathResource("static/file/合同到期提醒表.xlsx");
         InputStream inputStream = classPathResource.getInputStream();
-        expireService.createEmployeeCard(param.year,param.month, ExpireEnums.ExpireType.EmployeeCard, inputStream);
-        return JSON.toJSONString(Result.success(""));
+        String message = expireService.createContract(param.year,param.month, inputStream, true);
+        return JSON.toJSONString(Result.success(message));
     }
 
-
-
-
-
-
+    /**
+     * 创建合同到期提醒
+     * @return
+     */
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "创建退休提醒" ,  notes="创建退休提醒")
+    @RequestMapping(value = "/createretire", method = RequestMethod.POST)
+    @ResponseBody
+    public String createretire(@RequestBody CreateParam param) throws Exception{
+        ClassPathResource classPathResource = new ClassPathResource("static/file/退休提醒表.xlsx");
+        InputStream inputStream = classPathResource.getInputStream();
+        String message = expireService.createRetire(param.year,param.month, inputStream, true);
+        return JSON.toJSONString(Result.success(message));
+    }
 
 
 
@@ -104,7 +114,17 @@ public class ExpireController {
 
         // 名称
         String fileName = new String((expireDO.getFileName()+".xlsx").getBytes("UTF-8"),"ISO-8859-1");
-        response.setHeader("Content-Disposition", "attachment; filename=" + (expireDO.getFileName()+".xlsx"));
+        if(expireDO.getType() == ExpireType.EmployeeCard.getCode()) {
+            fileName = "工作证到期提醒-" + fileName;
+        }
+        if (expireDO.getType() == ExpireType.Contract.getCode()) {
+            fileName = "合同到期提醒-" + fileName;
+        }
+        if (expireDO.getType() == ExpireType.Retire.getCode()) {
+            fileName = "退休到期提醒-" + fileName;
+        }
+        fileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         File file = new File(expireDO.getFileUrl());
         if(!file.exists()) {

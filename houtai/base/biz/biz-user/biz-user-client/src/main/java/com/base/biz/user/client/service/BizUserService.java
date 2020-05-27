@@ -14,4 +14,9 @@ public interface BizUserService {
     Long countByCompanyCode(String companyCode);
 
     List<BizUserDetailVO> getByWorkCardBeginTime(Date start, Date end);
+
+    List<BizUserDetailVO> getByContractEngTime(Date start, Date end);
+
+    List<BizUserDetailVO> getByBirthDayAndSex(Date start, Date end, Integer sex);
+
 }

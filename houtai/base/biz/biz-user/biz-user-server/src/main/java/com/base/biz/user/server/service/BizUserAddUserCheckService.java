@@ -3,6 +3,7 @@ package com.base.biz.user.server.service;
 import java.util.*;
 
 import com.base.biz.user.client.common.BizUserConstant;
+import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
 import com.base.biz.user.client.common.Enums.DueContractEnum;
@@ -30,6 +31,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 
 /**
@@ -440,6 +442,58 @@ public class BizUserAddUserCheckService {
             param.dueContract = e.getCode();
         }
 
+        // 第一次合同生效时间
+        if(StringUtils.isNotEmpty(param.firstContractBeginTime)) {
+            Date date = DateUtil.convert2Date(param.firstContractBeginTime,BizUserConstant.DateFormat);
+            if (date == null) {
+                throw new BaseException(String.format("第一次合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.firstContractBeginTime));
+            }else {
+                Date firstContractEndTimeTemp = DateUtil.addYears(date, 3);
+                String firstContractEndTimeStr = DateUtil.convert2String(firstContractEndTimeTemp, BizUserConstant.DateFormat);
+
+                Date secondContractBeginTimeTemp = DateUtil.addDays(firstContractEndTimeTemp, 1);
+                String secondContractBeginTimeStr = DateUtil.convert2String(secondContractBeginTimeTemp, BizUserConstant.DateFormat);
+
+                Date secondContractEndTimeTemp = DateUtil.addYears(secondContractBeginTimeTemp, 3);
+                String secondContractEndTimeStr = DateUtil.convert2String(secondContractEndTimeTemp, BizUserConstant.DateFormat);
+
+                Date thirdContractBeginTimeTemp = DateUtil.addDays(secondContractEndTimeTemp, 1);
+                String thirdContractBeginTimeStr = DateUtil.convert2String(thirdContractBeginTimeTemp, BizUserConstant.DateFormat);
+
+                Date thirdContractEndTimeTemp = null;
+                String thirdContractEndTimeStr = "";
+                if(StringUtils.isNotEmpty(param.birthdate)){
+                    Date birthDay = DateUtil.convert2Date(param.birthdate, BizUserConstant.DateFormat);
+                    if(SexEnum.MAN.getCode().equals(param.sex)) {
+                        thirdContractEndTimeTemp = DateUtil.addYears(birthDay, 60);
+                        thirdContractEndTimeTemp = DateUtil.addDays(thirdContractEndTimeTemp, -1);
+                    }
+                    if(SexEnum.MALE.getCode().equals(param.sex)) {
+                        thirdContractEndTimeTemp = DateUtil.addYears(birthDay, 50);
+                        thirdContractEndTimeTemp = DateUtil.addDays(thirdContractEndTimeTemp, -1);
+                    }
+                }
+                if(thirdContractEndTimeTemp != null) {
+                    thirdContractEndTimeStr = DateUtil.convert2String(thirdContractEndTimeTemp, BizUserConstant.DateFormat);
+                }
+
+                if(StringUtils.isBlank(param.firstContractEngTime)) {
+                    param.firstContractEngTime = firstContractEndTimeStr;
+                }
+                if(StringUtils.isBlank(param.secondContractBeginTime)) {
+                    param.secondContractBeginTime = secondContractBeginTimeStr;
+                }
+                if(StringUtils.isBlank(param.secondContractEngTime)) {
+                    param.secondContractEngTime = secondContractEndTimeStr;
+                }
+                if(StringUtils.isBlank(param.thirdContractBeginTime)) {
+                    param.thirdContractBeginTime = thirdContractBeginTimeStr;
+                }
+                if(StringUtils.isBlank(param.thirdContractEngTime)) {
+                    param.thirdContractEngTime = thirdContractEndTimeStr;
+                }
+            }
+        }
 
         // 工作经历
         if(CollectionUtils.isNotEmpty(param.personalExperience)) {
@@ -581,12 +635,20 @@ public class BizUserAddUserCheckService {
                     if (addParamAssessment.grade.length() > 64) {
                         throw new BaseException(String.format("考核情况-等级[%s]长度不能超过64个字符",addParamAssessment.grade));
                     }
+                    if(!("优秀".equals(addParamAssessment.grade)||
+                        "称职".equals(addParamAssessment.grade)||
+                        "基本称职".equals(addParamAssessment.grade)||
+                        "不称职".equals(addParamAssessment.grade)||
+                        "不确定等次".equals(addParamAssessment.grade))) {
+                        throw new BaseException(String.format("等级只能为[优秀、称职、基本称职、不称职、不确定等次]",addParamAssessment.grade));
+                    }
                 }
                 // 备注
                 if (StringUtils.isNotEmpty(addParamAssessment.remark)) {
                     if (addParamAssessment.remark.length() > 64) {
                         throw new BaseException(String.format("考核情况-备注[%s]长度不能超过512个字符",addParamAssessment.remark));
                     }
+
                 }
             }
         }

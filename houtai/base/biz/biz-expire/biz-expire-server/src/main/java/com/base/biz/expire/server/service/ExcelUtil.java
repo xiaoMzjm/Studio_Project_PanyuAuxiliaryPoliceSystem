@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -21,16 +27,50 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelUtil {
 
-    public static String insertExcelAndSave(InputStream inputStream, Integer beginRowNum, String savePath, List<List<String>> rules) throws Exception{
+    public static class CellDTO{
+        public String text;
+        public Integer color;
+
+        public CellDTO(String text, Integer color) {
+            this.text = text;
+            this.color = color;
+        }
+        public CellDTO(String text) {
+            this.text = text;
+        }
+    }
+
+    public static String insertExcelAndSave(InputStream inputStream, Integer beginRowNum, String savePath, List<List<CellDTO>> rules) throws Exception{
         XSSFWorkbook wb = new XSSFWorkbook(inputStream);
         XSSFSheet sheet = wb.getSheetAt(0);
 
+
         int i = beginRowNum;
-        for(List<String> cells : rules) {
+        for(List<CellDTO> cells : rules) {
             XSSFRow row = createRow(sheet, i);
             int j = 0;
-            for(String cell : cells) {
-                row.createCell(j++).setCellValue(cell);
+            for(CellDTO cell : cells) {
+                XSSFCell c = row.createCell(j++);
+
+                CellStyle style = wb.createCellStyle();
+                style.setBorderBottom(BorderStyle.THIN);
+                style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+                style.setBorderTop(BorderStyle.THIN);
+                style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+                style.setBorderLeft(BorderStyle.THIN);
+                style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+                style.setBorderRight(BorderStyle.THIN);
+                style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+                style.setAlignment(HorizontalAlignment.CENTER);
+
+                c.setCellValue(cell.text);
+                if(cell.color != null){
+                    Font font  = wb.createFont();
+                    font.setColor(cell.color.shortValue());
+                    style.setFont(font);
+                }
+                c.setCellStyle(style);
+
             }
             i++;
         }

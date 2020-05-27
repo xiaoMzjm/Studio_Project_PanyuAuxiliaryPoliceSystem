@@ -1,5 +1,6 @@
 package com.base.biz.user.server.api;
 
+import java.util.*;
 import com.alibaba.fastjson.JSON;
 
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
@@ -38,6 +39,33 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/user/enum/" , produces = "application/json;charset=UTF-8")
 @CrossOrigin(origins = "http://192.168.1.5:8080")
 public class BizUserEnumController {
+
+    @ResultFilter
+    @TokenFilter
+    @RequestMapping("all")
+    public String enums(){
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("nation", NationEnum.getAll());
+        map.put("politicallandscape", PoliticalLandscapeEnum.getAll());
+        map.put("drivingtype", DrivingTypeEnum.getAll());
+        map.put("exserviceman", ExservicemanEnum.getAll());
+        map.put("sex", SexEnum.getAll());
+        map.put("education", EducationEnum.getAll());
+        map.put("maritalstatus", MaritalStatusEnum.getAll());
+        map.put("personneltype", PersonnelTypeEnum.getAll());
+        map.put("authorizedstrengthype", AuthorizedStrengthTypeEnum.getAll());
+        map.put("placeofwork", PlaceOfWorkEnum.getAll());
+        map.put("jobgrade", JobGradeEnum.getAll());
+        map.put("treatmentgrade", TreatmentGradeEnum.getAll());
+        map.put("enrollway", EnrollWayEnum.getAll());
+        map.put("dimssiontype", DimssionTypeEnum.getAll());
+        map.put("jobcategory", JobCategoryEnum.getAll());
+        map.put("specialpeople", SpecialPeopleEnum.getAll());
+        map.put("duecontract", DueContractEnum.getAll());
+
+        return JSON.toJSONString(Result.success(map));
+    }
 
     @ResultFilter
     @TokenFilter

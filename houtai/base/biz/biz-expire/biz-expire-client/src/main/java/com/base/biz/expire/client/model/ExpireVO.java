@@ -8,8 +8,13 @@ public class ExpireVO {
 
     private String name = "";
     private String code = "";
+    private String message = "";
 
     public ExpireVO() {
+    }
+
+    public ExpireVO(String message) {
+        this.message = message;
     }
 
     public ExpireVO(String name, String code) {
@@ -31,5 +36,13 @@ public class ExpireVO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 /**
@@ -14,7 +15,10 @@ import javax.persistence.Table;
  * @date:2020/5/24 12:26 PM
  */
 @Entity
-@Table(name = "expire")
+@Table(name = "expire" ,
+    indexes = {
+    @Index(name = "idx_code",  columnList="code", unique = true),
+})
 public class ExpireDO {
 
     @Id
