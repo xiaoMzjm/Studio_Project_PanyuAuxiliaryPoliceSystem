@@ -21,6 +21,7 @@ import com.base.common.util.DateUtil;
 import com.base.common.util.MD5Util;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.sun.javaws.security.JavaWebStartSecurity;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -547,6 +548,7 @@ public class BizUserManager {
         if (CollectionUtils.isNotEmpty(second)) {
             result.addAll(BizUserConvertor.do2dtoList(second));
         }
+
         List<BizUserDO> third = bizUserDao.findByThirdContractEngTime(start, end);
         if (CollectionUtils.isNotEmpty(third)) {
             result.addAll(BizUserConvertor.do2dtoList(third));

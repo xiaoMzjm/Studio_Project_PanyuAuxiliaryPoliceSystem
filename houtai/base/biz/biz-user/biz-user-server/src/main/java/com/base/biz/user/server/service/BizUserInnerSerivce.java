@@ -1,6 +1,9 @@
 package com.base.biz.user.server.service;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
@@ -61,6 +66,9 @@ import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import io.swagger.models.auth.In;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -599,11 +607,14 @@ public class BizUserInnerSerivce {
         rules.put("${familyAddress}",new TextDTO(vo.getFamilyAddress(),true));
         if(StringUtils.isNotEmpty(vo.getHeadPicUrl())) {
             PicDTO picDTO = new PicDTO();
-            picDTO.setFile(new File(diskStaticUrl + "images/" + vo.getHeadPicCode() + ".png"));
-            picDTO.setWidth(150);
-            picDTO.setHeight(210);
-            picDTO.setFileName(vo.getHeadPicCode());
-            rules.put("${headPic}",picDTO);
+            File file = new File(diskStaticUrl + "images/" + vo.getHeadPicCode() + ".png");
+            if(file.exists()) {
+                picDTO.setFile(file);
+                picDTO.setWidth(133);
+                picDTO.setHeight(177);
+                picDTO.setFileName(vo.getHeadPicCode());
+                rules.put("${headPic}",picDTO);
+            }
         }else {
             rules.put("${headPic}",new PicDTO());
         }
@@ -667,6 +678,25 @@ public class BizUserInnerSerivce {
             throw e;
         }
     }
+
+    //public static File resizePng(File fromFile, int outputWidth, int outputHeight) {
+    //    try {
+    //        BufferedImage bi2 = ImageIO.read(fromFile);
+    //
+    //        BufferedImage to = new BufferedImage(outputWidth, outputHeight, BufferedImage.TYPE_INT_RGB);
+    //        Graphics2D g2d = to.createGraphics();
+    //        to = g2d.getDeviceConfiguration().createCompatibleImage(outputWidth, outputHeight, Transparency.TRANSLUCENT);
+    //        g2d.dispose();
+    //        g2d = to.createGraphics();
+    //        @SuppressWarnings("static-access")
+    //        Image from = bi2.getScaledInstance(outputWidth, outputHeight, bi2.SCALE_AREA_AVERAGING);
+    //        g2d.drawImage(from, 0, 0, null);
+    //        g2d.dispose();
+    //        ImageIO.write(to, "png", fromFile);
+    //    } catch (Exception e) {
+    //        e.printStackTrace();
+    //    }
+    //}
 
     /**
      * 导出收入证明

@@ -319,7 +319,7 @@ public class ExpireService {
 
                 row.add(new CellDTO(String.valueOf(vo.getAge())));
 
-                Date birthdayAdd1Month = DateUtil.addMonths(DateUtil.convert2Date(vo.getBirthdate(), "yyyy/MM/dd"),1);
+                Date birthdayAdd1Month = DateUtil.convert2Date(vo.getBirthdate(), "yyyy/MM/dd");
                 if(vo.getSex() == SexEnum.MAN.getCode()) {
                     Date expire = DateUtil.addYears(birthdayAdd1Month, 60);
                     row.add(new CellDTO(DateUtil.convert2String(expire, "yyyy/MM/dd")));
