@@ -64,12 +64,7 @@ import com.base.resource.client.model.ResourceVO;
 import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import io.swagger.models.auth.In;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -114,16 +109,8 @@ public class BizUserInnerSerivce {
      * @return
      */
     public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) {
-        List<String> companyCodes = null;
-        if(org.springframework.util.CollectionUtils.isEmpty(companyList)) {
-            if(CollectionUtils.isEmpty(companyCodes)) {
-                List<CompanyVO> companyVOList = companyService.findAll();
-                companyCodes = Lists.newArrayList();
-                for(CompanyVO companyVO : companyVOList) {
-                    companyCodes.add(companyVO.getCode());
-                }
-            }
-            companyList = companyCodes;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         if(org.springframework.util.CollectionUtils.isEmpty(companyList)) {
+            return Lists.newArrayList();
         }
         List<BizUserDTO> bizUserDTOList = bizUserManager.findByNameAndCompany(name, companyList);
         if(CollectionUtils.isEmpty(bizUserDTOList)) {
