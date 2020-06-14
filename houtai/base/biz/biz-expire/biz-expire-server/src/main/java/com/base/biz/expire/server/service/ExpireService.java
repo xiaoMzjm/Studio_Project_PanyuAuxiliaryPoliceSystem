@@ -13,12 +13,13 @@ import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.server.dao.ExpireDAO;
 import com.base.biz.expire.server.manager.ExpireManager;
 import com.base.biz.expire.server.model.ExpireDO;
-import com.base.biz.expire.server.service.ExcelUtil.CellDTO;
+import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.service.BizUserService;
 import com.base.common.util.DateUtil;
+import com.base.common.util.ExcelUtil;
 import com.base.common.util.WordUtil.RowCellDTO;
 import com.base.common.util.WordUtil.RowDTO;
 import com.google.common.collect.Lists;
@@ -163,7 +164,7 @@ public class ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.EmployeeCard.getCode());
@@ -246,7 +247,7 @@ public class ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Contract.getCode());
@@ -334,7 +335,7 @@ public class ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Retire.getCode());

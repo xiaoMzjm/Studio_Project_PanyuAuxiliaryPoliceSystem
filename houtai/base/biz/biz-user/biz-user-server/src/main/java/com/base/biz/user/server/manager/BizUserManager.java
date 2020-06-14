@@ -63,6 +63,21 @@ public class BizUserManager {
         return BizUserConvertor.do2dto(bizUserDO);
     }
 
+    public List<BizUserDTO> findByCodes(List<String> codes) throws Exception {
+
+        if(CollectionUtils.isEmpty(codes)) {
+            return null;
+        }
+
+        String sql = "select * from biz_user where code in " + inStrList(codes) + " order by name asc";
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
+        List<BizUserDO> bizUserDOList = query.getResultList();
+        return BizUserConvertor.do2dtoList(bizUserDOList);
+
+    }
+
     /**
      * 根据账号密码查找用户
      * @param code
@@ -405,6 +420,8 @@ public class BizUserManager {
         if(StringUtils.isNotEmpty(param.ruZhiZuLinTimeEnd)) {
             sql += " and ru_zhi_zu_lin_time <= '"+param.ruZhiZuLinTimeEnd+"'";
         }
+
+        sql += " order by name asc";
 
         System.out.println("==========");
         System.out.println(sql);

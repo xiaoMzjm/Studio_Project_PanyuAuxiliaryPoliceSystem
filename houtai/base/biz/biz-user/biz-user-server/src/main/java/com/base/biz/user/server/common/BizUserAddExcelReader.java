@@ -72,7 +72,7 @@ public class BizUserAddExcelReader {
         if (null == firstRow) {
             throw new BaseException("表格没有数据，请检查excel格式。");
         }
-        int rowStart = firstRowNum + 2;
+        int rowStart = firstRowNum + 1;
         int rowEnd = sheet.getPhysicalNumberOfRows();
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row row = sheet.getRow(rowNum);
@@ -102,8 +102,14 @@ public class BizUserAddExcelReader {
         // 出生日期
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.birthdate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.birthdate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.birthdate = value;
+            }
+
         }
         // 民族
         cell = row.getCell(cellNum++);
@@ -240,14 +246,26 @@ public class BizUserAddExcelReader {
         // 参加工作时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.beginWorkTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.beginWorkTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.beginWorkTime = value;
+            }
+
         }
         // 合同生效时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.effectiveDateOfTheContract = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.effectiveDateOfTheContract = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.effectiveDateOfTheContract = value;
+            }
+
         }
         // 工作单位
         cell = row.getCell(cellNum++);
@@ -282,20 +300,35 @@ public class BizUserAddExcelReader {
         // 入职公安时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.beginPoliceWorkTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.beginPoliceWorkTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.beginPoliceWorkTime = value;
+            }
         }
         // 合同失效时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.contractExpirationDate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.contractExpirationDate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.contractExpirationDate = value;
+            }
         }
         // 离职时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.dimissionDate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.dimissionDate = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.dimissionDate = value;
+            }
         }
         // 离职原因
         cell = row.getCell(cellNum++);
@@ -306,50 +339,96 @@ public class BizUserAddExcelReader {
         // 任一级辅警起算时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.firstGradeTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.firstGradeTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.firstGradeTime = value;
+            }
         }
         // 工作证起始日期
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.workCardBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.workCardBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.workCardBeginTime = value;
+            }
+
         }
         // 第一次合同生效时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.firstContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.firstContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.firstContractBeginTime = value;
+            }
         }
         // 第一次合同终止时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.firstContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.firstContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.firstContractEngTime = value;
+            }
+
         }
         // 第二次合同生效时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.secondContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.secondContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.secondContractBeginTime = value;
+            }
+
         }
         // 第二次合同终止时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.secondContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.secondContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.secondContractEngTime = value;
+            }
+
         }
         // 第三次合同生效时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.thirdContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.thirdContractBeginTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.thirdContractBeginTime = value;
+            }
+
         }
         // 第三次合同终止时间
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.thirdContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.thirdContractEngTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.thirdContractEngTime = value;
+            }
+
         }
         // 到期合同
         cell = row.getCell(cellNum++);
@@ -366,8 +445,14 @@ public class BizUserAddExcelReader {
         // 入职租赁日期
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            Date value = cell.getDateCellValue();
-            bizUserAddParam.ruZhiZuLinTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            try {
+                Date value = cell.getDateCellValue();
+                bizUserAddParam.ruZhiZuLinTime = DateUtil.convert2String(value, BizUserConstant.DateFormat);
+            }catch (Exception e) {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.ruZhiZuLinTime = value;
+            }
+
         }
         return bizUserAddParam;
     }

@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
@@ -55,6 +56,8 @@ import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.model.UpdateParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
+import com.base.common.util.ExcelUtil;
+import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.common.util.VerifyUtil;
 import com.base.common.util.WordUtil;
 import com.base.common.util.WordUtil.*;
@@ -68,6 +71,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -484,18 +488,24 @@ public class BizUserInnerSerivce {
      * 导入人员
      * @param inputStream
      */
+    @Transactional(rollbackFor = Throwable.class)
     public void importUser(InputStream inputStream)throws Exception {
         List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(inputStream);
         if(CollectionUtils.isNotEmpty(bizUserAddParamList)) {
             for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
                 BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(bizUserAddParam.identityCard);
+                // 如果已存在则更新
                 if (bizUserDTO != null) {
-                    throw new BaseException(String.format("该身份证[%s]已存在",bizUserAddParam.identityCard));
+                    UpdateParam updateParam = new UpdateParam();
+                    BeanUtils.copyProperties(bizUserAddParam, updateParam);
+                    updateParam.setCode(bizUserDTO.getCode());
+                    update(updateParam);
+                    continue ;
                 }
                 if(StringUtils.isNotEmpty(bizUserAddParam.policeCode)) {
                     bizUserDTO = bizUserManager.findByPoliceCode(bizUserAddParam.policeCode);
-                    if (bizUserDTO != null) {
-                        throw new BaseException(String.format("该身份证[%s]已存在",bizUserAddParam.identityCard));
+                    if (bizUserDTO != null && !bizUserDTO.getIdentityCard().equals(bizUserDTO.getIdentityCard())) {
+                        throw new BaseException(String.format("该警号[%s]已存在",bizUserAddParam.identityCard));
                     }
                 }
                 bizUserAddUserCheckService.check(bizUserAddParam);
@@ -795,5 +805,77 @@ public class BizUserInnerSerivce {
             throw e;
         }
 
+    }
+
+    public String exportSelectUser(InputStream fromFileInputStream, List<String> userCodes) throws Exception {
+
+        if(CollectionUtils.isEmpty(userCodes)) {
+            throw new RuntimeException("请先查询出人员，再导出");
+        }
+
+        List<BizUserDTO> bizUserDTOList = bizUserManager.findByCodes(userCodes);
+        if(CollectionUtils.isEmpty(bizUserDTOList)) {
+            throw new RuntimeException("查询不到人员，请重试");
+        }
+
+        List<List<CellDTO>> list = Lists.newArrayList();
+        for(BizUserDTO bizUserDTO : bizUserDTOList) {
+            BizUserDetailVO vo = dto2vo(bizUserDTO);
+            List<CellDTO> row = Lists.newArrayList();
+            row.add(new CellDTO(vo.getName()));
+            CellDTO birthdayCell = new CellDTO(vo.getBirthdate());
+            birthdayCell.isDate = true;
+            birthdayCell.dateFormat = BizUserConstant.DateFormat;
+            row.add(birthdayCell);
+            row.add(new CellDTO(vo.getNationStr()));
+            row.add(new CellDTO(vo.getPoliticalLandscapeStr()));
+            row.add(new CellDTO(vo.getGraduateInstitutions()));
+            row.add(new CellDTO(vo.getPoliceCode()));
+            row.add(new CellDTO(vo.getQuasiDrivingTypeStr()));
+            row.add(new CellDTO(vo.getSpecialPeopleStr()));
+            row.add(new CellDTO(vo.getQualification()));
+            row.add(new CellDTO(vo.getPermanentResidenceAddress()));
+            row.add(new CellDTO(vo.getFamilyAddress()));
+            row.add(new CellDTO(vo.getSexStr()));
+            row.add(new CellDTO(vo.getNativePlace()));
+            row.add(new CellDTO(vo.getEducationStr()));
+            row.add(new CellDTO(vo.getMajor()));
+            row.add(new CellDTO(vo.getMaritalStatusStr()));
+            row.add(new CellDTO(vo.getIdentityCard()));
+            row.add(new CellDTO(vo.getPhone()));
+            row.add(new CellDTO(vo.getPersonnelTypeStr()));
+            row.add(new CellDTO(vo.getAuthorizedStrengthTypeStr()));
+            row.add(new CellDTO(vo.getPlaceOfWorkStr()));
+            row.add(new CellDTO(vo.getJobGradeStr()));
+            row.add(new CellDTO(vo.getTreatmentGradeStr()));
+            row.add(new CellDTO(vo.getEnrollWayStr()));
+            row.add(new CellDTO(vo.getBeginWorkTime()));
+            row.add(new CellDTO(vo.getEffectiveDateOfTheContract()));
+            row.add(new CellDTO(vo.getWorkUnitName()));
+            row.add(new CellDTO(vo.getOrganizationUnitName()));
+            row.add(new CellDTO(vo.getJobCategoryStr()));
+            row.add(new CellDTO(vo.getDuty()));
+            row.add(new CellDTO(vo.getSocialSecurityNumber()));
+            row.add(new CellDTO(vo.getBeginPoliceWorkTime()));
+            row.add(new CellDTO(vo.getContractExpirationDate()));
+            row.add(new CellDTO(vo.getDimissionDate()));
+            row.add(new CellDTO(vo.getDimissionReason()));
+            row.add(new CellDTO(vo.getWorkCardBeginTime()));
+            row.add(new CellDTO(vo.getFirstGradeTime()));
+            row.add(new CellDTO(vo.getFirstContractBeginTime()));
+            row.add(new CellDTO(vo.getFirstContractEngTime()));
+            row.add(new CellDTO(vo.getSecondContractBeginTime()));
+            row.add(new CellDTO(vo.getSecondContractEngTime()));
+            row.add(new CellDTO(vo.getThirdContractBeginTime()));
+            row.add(new CellDTO(vo.getThirdContractEngTime()));
+            row.add(new CellDTO(vo.getDueContractStr()));
+            row.add(new CellDTO(vo.getIcbcCardAccount()));
+            row.add(new CellDTO(vo.getRuZhiZuLinTime()));
+            list.add(row);
+        }
+
+        String savePath = diskStaticUrl + "files/";
+        String fileName = ExcelUtil.insertExcelAndSave(fromFileInputStream,1, 1, savePath, list);
+        return savePath + fileName;
     }
 }

@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(description = "系统接口")
 @Controller
 @RequestMapping(value = "/system", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.1.5:8080")
+@CrossOrigin(origins = "http://192.168.1.4:8080")
 public class SystemController {
 
     @TokenFilter

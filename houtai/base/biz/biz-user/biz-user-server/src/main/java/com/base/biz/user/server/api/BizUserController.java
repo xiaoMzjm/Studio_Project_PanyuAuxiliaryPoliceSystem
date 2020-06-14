@@ -57,7 +57,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(description = "用户接口")
 @Controller
 @RequestMapping(value = "user", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.1.5:8080")
+@CrossOrigin(origins = "http://192.168.1.4:8080")
 public class BizUserController {
 
     @Value("${ResourceStaticUrl}")
@@ -460,7 +460,49 @@ public class BizUserController {
 
     }
 
+    @TokenFilter
+    @ResultFilter
+    @ApiOperation(value = "导出所选人员" , notes = "导出所选人员")
+    @RequestMapping(value = "/exportselectuser", method = RequestMethod.POST)
+    @ResponseBody
+    public void exportSelectUser( @RequestBody ExportSelectUserParam param, HttpServletResponse response) throws Exception{
 
+        ClassPathResource classPathResource = new ClassPathResource("static/file/导出模板.xlsx");
+        InputStream is = classPathResource.getInputStream();
+        String fileUrl = bizUserService.exportSelectUser(is, param.userCodes);
 
+        // 名称
+        String fileName = "人员导出.xlsx";
+        fileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        File file = new File(fileUrl);
+        if(!file.exists()) {
+            throw new RuntimeException("文件不存在");
+        }
+        InputStream inputStream = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+
+        OutputStream os = response.getOutputStream();
+
+        byte[] buff = new byte[1024];
+        int i = bis.read(buff);
+        while (i != -1) {
+            os.write(buff, 0, buff.length);
+            os.flush();
+            i = bis.read(buff);
+        }
+        if (bis != null) {
+            bis.close();
+        }
+        if(inputStream != null) {
+            inputStream.close();
+        }
+
+    }
+    static class ExportSelectUserParam {
+        @ApiParam(name="人员codes",value="userCodes")
+        public List<String> userCodes;
+    }
 
 }
