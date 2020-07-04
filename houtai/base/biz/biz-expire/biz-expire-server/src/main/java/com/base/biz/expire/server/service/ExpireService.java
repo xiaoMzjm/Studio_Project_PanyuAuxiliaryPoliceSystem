@@ -3,25 +3,18 @@ package com.base.biz.expire.server.service;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.base.biz.expire.client.common.ExpireEnums;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
-import com.base.biz.expire.server.dao.ExpireDAO;
 import com.base.biz.expire.server.manager.ExpireManager;
 import com.base.biz.expire.server.model.ExpireDO;
 import com.base.common.util.ExcelUtil.CellDTO;
-import com.base.biz.user.client.common.Enums;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserService;
+import com.base.biz.user.client.service.BizUserClientService;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
-import com.base.common.util.WordUtil.RowCellDTO;
-import com.base.common.util.WordUtil.RowDTO;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Font;
@@ -42,7 +35,7 @@ public class ExpireService {
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
     @Autowired
-    private BizUserService bizUserService;
+    private BizUserClientService bizUserService;
 
     /**
      * 获取各种到期提醒列表

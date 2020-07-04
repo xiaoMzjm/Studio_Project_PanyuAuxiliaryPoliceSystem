@@ -1,11 +1,11 @@
-package com.base.biz.user.server.service;
+package com.base.biz.user.server.service.impl;
 
 import javax.annotation.PostConstruct;
 
 import com.base.authority.client.common.Enums.AuthorityTypeEnum;
 import com.base.authority.client.model.AuthorityVO;
 import com.base.authority.client.service.AuthorityService;
-import com.base.biz.user.server.manager.BizUserManager;
+import com.base.biz.user.server.manager.impl.BizUserManagerImpl;
 import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class InitService {
     @Autowired
     private UserService userService;
     @Autowired
-    private BizUserManager bizUserManager;
+    private BizUserManagerImpl bizUserManager;
     @Autowired
     private AuthorityService authorityService;
 

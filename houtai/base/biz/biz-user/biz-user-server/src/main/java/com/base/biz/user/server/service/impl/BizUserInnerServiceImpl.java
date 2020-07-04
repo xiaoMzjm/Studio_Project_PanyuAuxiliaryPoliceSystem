@@ -1,9 +1,6 @@
-package com.base.biz.user.server.service;
+package com.base.biz.user.server.service.impl;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
@@ -54,6 +48,8 @@ import com.base.biz.user.server.model.FamilyMemberDTO;
 import com.base.biz.user.server.model.PersonalExperienceDTO;
 import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.model.UpdateParam;
+import com.base.biz.user.server.service.BizUserAddUserCheckService;
+import com.base.biz.user.server.service.BizUserInnerService;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
@@ -62,7 +58,7 @@ import com.base.common.util.VerifyUtil;
 import com.base.common.util.WordUtil;
 import com.base.common.util.WordUtil.*;
 import com.base.department.client.model.CompanyVO;
-import com.base.department.client.service.CompanyService;
+import com.base.department.client.service.CompanyClientService;
 import com.base.resource.client.model.ResourceVO;
 import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.UserVO;
@@ -82,7 +78,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date:2020/3/30 12:03 AM
  */
 @Service
-public class BizUserInnerSerivce {
+public class BizUserInnerServiceImpl implements BizUserInnerService {
 
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
@@ -102,7 +98,7 @@ public class BizUserInnerSerivce {
     @Autowired
     private AssessmentManager assessmentManager;
     @Autowired
-    private CompanyService companyService;
+    private CompanyClientService companyService;
     @Autowired
     private ResourceService resourceService;
 
@@ -676,25 +672,6 @@ public class BizUserInnerSerivce {
         }
     }
 
-    //public static File resizePng(File fromFile, int outputWidth, int outputHeight) {
-    //    try {
-    //        BufferedImage bi2 = ImageIO.read(fromFile);
-    //
-    //        BufferedImage to = new BufferedImage(outputWidth, outputHeight, BufferedImage.TYPE_INT_RGB);
-    //        Graphics2D g2d = to.createGraphics();
-    //        to = g2d.getDeviceConfiguration().createCompatibleImage(outputWidth, outputHeight, Transparency.TRANSLUCENT);
-    //        g2d.dispose();
-    //        g2d = to.createGraphics();
-    //        @SuppressWarnings("static-access")
-    //        Image from = bi2.getScaledInstance(outputWidth, outputHeight, bi2.SCALE_AREA_AVERAGING);
-    //        g2d.drawImage(from, 0, 0, null);
-    //        g2d.dispose();
-    //        ImageIO.write(to, "png", fromFile);
-    //    } catch (Exception e) {
-    //        e.printStackTrace();
-    //    }
-    //}
-
     /**
      * 导出收入证明
      * @param code
@@ -702,7 +679,7 @@ public class BizUserInnerSerivce {
      * @return
      * @throws Exception
      */
-    public File exportIncomecertificate(String code, InputStream inputStream) throws Exception{
+    public File exportIncomeCertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
         }
@@ -754,7 +731,7 @@ public class BizUserInnerSerivce {
      * @return
      * @throws Exception
      */
-    public File exportonthejobcertificate(String code, InputStream inputStream) throws Exception{
+    public File exportOnTheJobCertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
         }

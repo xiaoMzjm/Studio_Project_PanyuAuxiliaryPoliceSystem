@@ -1,15 +1,10 @@
 package com.base.biz.user.server.common;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
-
 import com.base.biz.user.client.common.BizUserConstant;
-import com.base.biz.user.server.manager.BizUserManager;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
@@ -198,8 +193,13 @@ public class BizUserAddExcelReader {
         // 身份证
         cell = row.getCell(cellNum++);
         if(cell != null) {
-            String value = cell.getStringCellValue();
-            bizUserAddParam.identityCard = value;
+            try {
+                String value = cell.getStringCellValue();
+                bizUserAddParam.identityCard = value;
+            }catch (Exception e){
+                double value = cell.getNumericCellValue();
+                bizUserAddParam.identityCard = String.valueOf(value);
+            }
         }
         // 手机
         cell = row.getCell(cellNum++);

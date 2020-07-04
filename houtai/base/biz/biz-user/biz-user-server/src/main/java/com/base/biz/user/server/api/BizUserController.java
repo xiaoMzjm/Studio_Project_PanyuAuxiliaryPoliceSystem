@@ -21,11 +21,10 @@ import com.base.biz.user.client.model.BizUserPageListVO;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.model.UpdateParam;
-import com.base.biz.user.server.service.BizUserInnerSerivce;
+import com.base.biz.user.server.service.BizUserInnerService;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.common.util.UUIDUtil;
-import com.base.resource.client.common.Constant;
 import com.base.user.client.common.UserConstant;
 import com.base.user.client.model.TokenFilter;
 import com.base.user.client.model.UserVO;
@@ -33,9 +32,8 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.xmlbeans.ResourceLoader;
-import org.apache.xmlbeans.impl.common.DefaultClassLoaderResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -64,12 +62,22 @@ public class BizUserController {
     private String diskStaticUrl;
 
     @Autowired
-    private BizUserInnerSerivce bizUserService;
+    private BizUserInnerService bizUserService;
 
     @ApiOperation(value = "人员列表页面" ,  notes="人员列表页面")
     @GetMapping("")
     public String userListView(){
         return "userlist";
+    }
+
+    @ResultFilter
+    @ApiOperation(value = "测试" ,  notes="测试")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public String test() throws Exception{
+
+        String md5Str = DigestUtils.md5Hex("123456");
+        return JSON.toJSONString(Result.success(md5Str));
     }
 
     @ResultFilter
@@ -385,7 +393,7 @@ public class BizUserController {
         InputStream inputStream = classPathResource.getInputStream();
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportIncomecertificate(userCode, inputStream);
+            wordFile = bizUserService.exportIncomeCertificate(userCode, inputStream);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("收入证明.docx".getBytes("UTF-8"),"ISO8859-1"));
@@ -423,13 +431,13 @@ public class BizUserController {
     @ApiOperation(value = "导出在职证明" , notes = "导出在职证明")
     @RequestMapping(value = "/exportonthejobcertificate", method = RequestMethod.GET)
     @ResponseBody
-    public String exportonthejobcertificate( String userCode, HttpServletResponse response) throws Exception{
+    public String exportOnTheJobCertificate( String userCode, HttpServletResponse response) throws Exception{
 
         ClassPathResource classPathResource = new ClassPathResource("static/file/在职证明.docx");
         InputStream inputStream = classPathResource.getInputStream();
         File wordFile = null;
         try {
-            wordFile = bizUserService.exportonthejobcertificate(userCode, inputStream);
+            wordFile = bizUserService.exportOnTheJobCertificate(userCode, inputStream);
 
             if (wordFile != null && wordFile.exists()) {
                 response.setHeader("Content-Disposition", "attachment; filename=" + new String("在职证明.docx".getBytes("UTF-8"),"ISO8859-1"));

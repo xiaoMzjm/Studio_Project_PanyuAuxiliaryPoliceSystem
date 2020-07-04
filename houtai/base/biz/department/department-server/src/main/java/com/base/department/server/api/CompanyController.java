@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 
 import com.base.common.util.LogUtil;
 import com.base.department.server.service.CompanyInnerService;
+import com.base.department.server.service.impl.CompanyInnerServiceImpl;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.department.client.model.CompanyVO;
@@ -20,7 +21,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

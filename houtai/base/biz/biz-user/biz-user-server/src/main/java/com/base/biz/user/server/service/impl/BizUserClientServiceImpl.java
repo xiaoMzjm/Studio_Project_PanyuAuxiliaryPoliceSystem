@@ -1,13 +1,14 @@
-package com.base.biz.user.server.service;
+package com.base.biz.user.server.service.impl;
 
 import java.util.Date;
 import java.util.List;
 
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserService;
+import com.base.biz.user.client.service.BizUserClientService;
 import com.base.biz.user.server.manager.BizUserManager;
-import com.base.biz.user.server.model.BizUserConvertor;
+import com.base.biz.user.server.manager.impl.BizUserManagerImpl;
 import com.base.biz.user.server.model.BizUserDTO;
+import com.base.biz.user.server.service.BizUserInnerService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import org.springframework.stereotype.Service;
  * @date:2020/4/11 8:02 PM
  */
 @Service
-public class BizUserServiceImpl implements BizUserService {
+public class BizUserClientServiceImpl implements BizUserClientService {
 
     @Autowired
     private BizUserManager bizUserManager;
     @Autowired
-    private BizUserInnerSerivce bizUserInnerSerivce;
+    private BizUserInnerService bizUserInnerSerivce;
 
     @Override
     public Long countByCompanyCode(String companyCode) {
