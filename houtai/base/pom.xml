@@ -15,6 +15,7 @@
 
 		<module>biz/biz-user</module>
 		<module>biz/biz-expire</module>
+		<module>biz/biz-authority</module>
 
 	</modules>
 	<packaging>pom</packaging>
