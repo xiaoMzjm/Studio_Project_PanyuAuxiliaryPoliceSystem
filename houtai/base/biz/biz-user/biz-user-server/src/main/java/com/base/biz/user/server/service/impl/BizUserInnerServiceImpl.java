@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.base.authority.client.model.AuthorityVO;
+import com.base.authority.client.service.AuthorityService;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
@@ -101,6 +104,8 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
     private CompanyClientService companyService;
     @Autowired
     private ResourceService resourceService;
+    @Autowired
+    private AuthorityService authorityService;
 
     /**
      *
@@ -854,5 +859,13 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         String savePath = diskStaticUrl + "files/";
         String fileName = ExcelUtil.insertExcelAndSave(fromFileInputStream,1, 1, savePath, list);
         return savePath + fileName;
+    }
+
+    @Override
+    public List<AuthorityVO> getAuthority(String userCode) throws Exception {
+        if(Objects.equals("admin",userCode)) {
+            return authorityService.listAll();
+        }
+        return authorityService.listByUserCode(userCode);
     }
 }

@@ -64,6 +64,7 @@ public class BizUserController {
     @Autowired
     private BizUserInnerService bizUserService;
 
+
     @ApiOperation(value = "人员列表页面" ,  notes="人员列表页面")
     @GetMapping("")
     public String userListView(){
@@ -120,17 +121,16 @@ public class BizUserController {
 
 
 
-    @Autowired
-    private AuthorityService authorityService;
+
     @TokenFilter
     @ResultFilter
     @ApiOperation(value = "获取权限列表" ,  notes="获取权限列表")
     @RequestMapping(value = "/getauthority", method = RequestMethod.POST)
     @ResponseBody
-    public String getAuthority(HttpServletRequest request){
+    public String getAuthority(HttpServletRequest request) throws Exception{
 
         UserVO userVO = (UserVO)request.getAttribute(UserConstant.REQUEST_USER);
-        List<AuthorityVO> authorityVOList = authorityService.listAll();
+        List<AuthorityVO> authorityVOList = bizUserService.getAuthority(userVO.getCode());
 
         return JSON.toJSONString(Result.success(authorityVOList));
     }

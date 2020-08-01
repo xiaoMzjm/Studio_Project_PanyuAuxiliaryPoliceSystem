@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+import com.base.authority.client.model.AuthorityVO;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
@@ -45,4 +46,6 @@ public interface BizUserInnerService {
     File exportOnTheJobCertificate(String code, InputStream inputStream) throws Exception;
 
     String exportSelectUser(InputStream fromFileInputStream, List<String> userCodes) throws Exception;
+
+    List<AuthorityVO> getAuthority(String userCode) throws Exception;
 }
