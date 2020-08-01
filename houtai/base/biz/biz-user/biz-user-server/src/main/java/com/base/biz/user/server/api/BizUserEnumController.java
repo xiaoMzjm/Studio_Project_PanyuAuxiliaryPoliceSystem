@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/user/enum/" , produces = "application/json;charset=UTF-8")
-@CrossOrigin(origins = "http://192.168.1.4:8080")
+@CrossOrigin(origins = "http://192.168.50.196:8080")
 public class BizUserEnumController {
 
     @ResultFilter

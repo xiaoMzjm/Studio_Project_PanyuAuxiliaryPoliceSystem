@@ -157,6 +157,11 @@ public class InitService {
             vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
+            vo = authorityService.add("权限管理", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
         }catch (Exception e) {}
         try {

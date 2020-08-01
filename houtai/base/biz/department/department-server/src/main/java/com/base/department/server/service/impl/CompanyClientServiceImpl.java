@@ -34,6 +34,12 @@ public class CompanyClientServiceImpl implements CompanyClientService {
     }
 
     @Override
+    public List<CompanyVO> findByMultiName(String name) {
+
+        return null;
+    }
+
+    @Override
     public List<CompanyVO> findByCodeList(List<String> codeList) {
         List<CompanyDTO> companyDTOList = companyManager.findByCodeList(codeList);
         return CompanyConvertor.dto2voList(companyDTOList);
