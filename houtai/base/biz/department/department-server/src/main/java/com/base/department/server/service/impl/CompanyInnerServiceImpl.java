@@ -66,10 +66,10 @@ public class CompanyInnerServiceImpl implements CompanyInnerService {
      */
     public void add(String name, String desc, String fatherCode) throws Exception{
 
-        List<CompanyDO> brotherCompanyList = companyManager.findByFatherCode(fatherCode);
+        List<CompanyDTO> brotherCompanyList = companyManager.findByFatherCode(fatherCode);
         if(CollectionUtils.isNotEmpty(brotherCompanyList)) {
-            for(CompanyDO companyDO : brotherCompanyList) {
-                if(Objects.equals(companyDO.getName(), name)) {
+            for(CompanyDTO companyDTO : brotherCompanyList) {
+                if(Objects.equals(companyDTO.getName(), name)) {
                     throw new BaseException(String.format("同父单位下，已有名称为[%s]的单位，请重命名",name));
                 }
             }
@@ -88,7 +88,7 @@ public class CompanyInnerServiceImpl implements CompanyInnerService {
      * @return
      */
     public void delete(String code) throws Exception{
-        List<CompanyDO> companyDOList = companyManager.findByFatherCode(code);
+        List<CompanyDTO> companyDOList = companyManager.findByFatherCode(code);
         if (CollectionUtils.isNotEmpty(companyDOList)) {
             throw new BaseException("请先删除该单位下的子单位");
         }

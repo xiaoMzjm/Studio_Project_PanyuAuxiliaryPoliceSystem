@@ -18,6 +18,7 @@ import com.base.biz.user.client.common.Enums.PoliticalLandscapeEnum;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.common.Enums.SpecialPeopleEnum;
 import com.base.biz.user.client.common.Enums.TreatmentGradeEnum;
+import com.base.biz.user.client.common.Enums.UserTypeEnum;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.biz.user.server.service.BizUserAddUserCheckService;
 import com.base.common.exception.BaseException;
@@ -130,15 +131,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             if (param.policeCode.length() > 64) {
                 throw new BaseException(String.format("警号[%s]长度不能超过64个字符",param.policeCode));
             }
-            if(param.policeCode.length() != 7) {
-                throw new BaseException(String.format("警号[%s]必须PY开头，后跟5位数字",param.policeCode));
-            }
-            if(!param.policeCode.startsWith("PY")){
-                throw new BaseException(String.format("警号[%s]必须PY开头，后跟5位数字",param.policeCode));
-            }
-            String numStr = param.policeCode.substring(2,param.policeCode.length());
-            if(!NumberUtils.isDigits(numStr)) {
-                throw new BaseException(String.format("警号[%s]必须PY开头，后跟5位数字",param.policeCode));
+            if(param.policeCode.startsWith("PY")) {
+                param.userType = UserTypeEnum.FuJing.getCode();
+            }else {
+                param.userType = UserTypeEnum.MinJing.getCode();
             }
         }
         // 准驾车型
@@ -393,12 +389,12 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         }
         if (StringUtils.isNotEmpty(param.workUnitName)) {
             param.workUnitName = param.workUnitName.trim();
-            List<CompanyVO> companyVOList = companyService.findByName(param.workUnitName);
-            if (CollectionUtils.isEmpty(companyVOList)) {
+            CompanyVO companyVO = companyService.findByMultiName(param.workUnitName);
+            if (companyVO == null) {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitName));
             }
-            workUnitName = companyVOList.get(0).getName();
-            param.workUnit = companyVOList.get(0).getCode();
+            workUnitName = companyVO.getName();
+            param.workUnit = companyVO.getCode();
         }
         // 编制单位
         if (StringUtils.isNotEmpty(param.organizationUnit)) {
@@ -410,11 +406,11 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         }
         if (StringUtils.isNotEmpty(param.organizationUnitName)) {
             param.organizationUnitName = param.organizationUnitName.trim();
-            List<CompanyVO> companyVOList = companyService.findByName(param.organizationUnitName);
-            if (CollectionUtils.isEmpty(companyVOList)) {
+            CompanyVO companyVO = companyService.findByMultiName(param.workUnitName);
+            if (companyVO == null) {
                 throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitName));
             }
-            param.organizationUnit = companyVOList.get(0).getCode();
+            param.organizationUnit = companyVO.getCode();
         }
         // 岗位类别
         if (param.jobCategory != null) {

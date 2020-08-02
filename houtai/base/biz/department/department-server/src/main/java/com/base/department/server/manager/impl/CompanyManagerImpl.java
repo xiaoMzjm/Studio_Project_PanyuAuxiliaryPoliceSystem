@@ -43,12 +43,12 @@ public class CompanyManagerImpl implements CompanyManager {
      * @param fatherCode
      * @return
      */
-    public List<CompanyDO> findByFatherCode(String fatherCode) {
+    public List<CompanyDTO> findByFatherCode(String fatherCode) {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setFatherCode(fatherCode);
         Example<CompanyDO> example = Example.of(companyDO);
         List<CompanyDO> list = companyDORepository.findAll(example);
-        return list;
+        return CompanyConvertor.do2dtoList(list);
     }
 
     /**

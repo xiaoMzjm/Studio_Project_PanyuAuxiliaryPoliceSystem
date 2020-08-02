@@ -1,5 +1,7 @@
 package com.base.biz.expire.client.model;
 
+import java.util.Date;
+
 /**
  * @author:小M
  * @date:2020/5/25 12:51 AM
@@ -9,6 +11,11 @@ public class ExpireVO {
     private String name = "";
     private String code = "";
     private String message = "";
+
+
+    // 防疫新增
+    private Date time;
+    private String fileUrl;
 
     public ExpireVO() {
     }
@@ -44,5 +51,21 @@ public class ExpireVO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

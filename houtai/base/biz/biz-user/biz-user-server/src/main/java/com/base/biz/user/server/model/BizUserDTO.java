@@ -23,7 +23,6 @@ public class BizUserDTO {
 
     private String password;
 
-
     private String picCode;
 
     private String picUrl;
@@ -129,6 +128,16 @@ public class BizUserDTO {
     private String icbcCardAccount; // 工商银行账号
 
     private Date ruZhiZuLinTime; // 入职租赁日期
+
+    private Integer userType; // 人员类型，0辅警，1民警
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
 
     public Long getId() {
         return id;

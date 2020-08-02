@@ -8,6 +8,7 @@ import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.common.util.DateUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.math3.analysis.function.Add;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -75,6 +76,18 @@ public class BizUserConvertor {
         BizUserLoginVO bizUserVO = new BizUserLoginVO();
         BeanUtils.copyProperties(bizUserDTO, bizUserVO);
         return bizUserVO;
+    }
+
+    public static List<BizUserLoginVO> dto2voList(List<BizUserDTO> bizUserDTOList) {
+        if (CollectionUtils.isEmpty(bizUserDTOList)) {
+            return null;
+        }
+        List<BizUserLoginVO> result = Lists.newArrayList();
+        for(BizUserDTO bizUserDTO : bizUserDTOList) {
+            result.add(dto2vo(bizUserDTO));
+        }
+
+        return result;
     }
 
 }

@@ -119,6 +119,8 @@ public class BizUserDetailVO {
 
     private String ruZhiZuLinTime; // 入职租赁日期
 
+    private Integer userType; // 人员类型，0辅警，1民警
+
 
     private List<Experience> personalExperience;
     private List<FamilyMember> familyMember;
@@ -742,6 +744,14 @@ public class BizUserDetailVO {
 
     public void setRuZhiZuLinTime(String ruZhiZuLinTime) {
         this.ruZhiZuLinTime = ruZhiZuLinTime;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
     public static class Experience {

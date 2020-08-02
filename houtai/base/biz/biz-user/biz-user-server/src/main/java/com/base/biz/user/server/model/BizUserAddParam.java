@@ -186,6 +186,8 @@ public class BizUserAddParam {
     @ApiParam(name="入职租赁日期",value="ruZhiZuLinTime")
     public String ruZhiZuLinTime;
 
+    public Integer userType;
+
 
 
 
@@ -246,6 +248,14 @@ public class BizUserAddParam {
         public String grade;
         @ApiParam(name="备注",value="remark")
         public String remark;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
     public String getName() {

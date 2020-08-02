@@ -14,9 +14,9 @@ public interface CompanyClientService {
 
     List<CompanyVO> findByName(String name);
 
-    List<CompanyVO> findByMultiName(String name);
+    CompanyVO findByMultiName(String name) ;
 
-    List<CompanyVO> findByCodeList(List<String> codeList);
+    List<CompanyVO> findByCodeList(List<String> codeList) ;
 
     List<CompanyVO> findAll();
 }

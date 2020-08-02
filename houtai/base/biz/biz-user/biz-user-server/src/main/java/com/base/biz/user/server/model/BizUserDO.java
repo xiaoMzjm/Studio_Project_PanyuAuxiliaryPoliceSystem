@@ -170,6 +170,8 @@ public class BizUserDO {
     private String icbcCardAccount; // 工商银行账号
     @Column
     private Date ruZhiZuLinTime; // 入职租赁日期
+    @Column
+    private Integer userType; // 人员类型，0辅警，1民警
 
     public Long getId() {
         return id;
@@ -586,5 +588,13 @@ public class BizUserDO {
 
     public void setRuZhiZuLinTime(Date ruZhiZuLinTime) {
         this.ruZhiZuLinTime = ruZhiZuLinTime;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

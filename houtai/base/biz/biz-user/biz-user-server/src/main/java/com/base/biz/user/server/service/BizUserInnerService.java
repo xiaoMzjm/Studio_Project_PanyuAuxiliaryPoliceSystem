@@ -19,7 +19,7 @@ import com.base.biz.user.server.model.UpdateParam;
  */
 public interface BizUserInnerService {
 
-    List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList);
+    List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList)  throws Exception;
 
     BizUserDetailVO findByCode(String code) throws Exception;
 

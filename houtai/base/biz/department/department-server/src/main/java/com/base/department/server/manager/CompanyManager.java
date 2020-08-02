@@ -13,7 +13,7 @@ public interface CompanyManager {
 
     List<CompanyDTO> listAll();
 
-    List<CompanyDO> findByFatherCode(String fatherCode);
+    List<CompanyDTO> findByFatherCode(String fatherCode);
 
     List<CompanyDTO> findByName(String name);
 

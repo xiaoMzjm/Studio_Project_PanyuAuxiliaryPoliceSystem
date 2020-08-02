@@ -11,7 +11,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.base.authority.client.model.AuthorityVO;
+import com.base.authority.client.model.UserRoleDTO;
 import com.base.authority.client.service.AuthorityService;
+import com.base.authority.client.service.UserRoleService;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
@@ -106,6 +108,8 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
     private ResourceService resourceService;
     @Autowired
     private AuthorityService authorityService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     /**
      *
@@ -113,7 +117,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param companyList
      * @return
      */
-    public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) {
+    public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) throws Exception{
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          if(org.springframework.util.CollectionUtils.isEmpty(companyList)) {
             return Lists.newArrayList();
         }
@@ -123,6 +127,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         }
         List<BizUserPageListVO> result = Lists.newArrayList();
         List<String> companyCodeList = Lists.newArrayList();
+        List<String> userCodeList = Lists.newArrayList();
         for(BizUserDTO bizUserDTO : bizUserDTOList) {
             if (bizUserDTO.getCode().equals("admin")) {
                 continue;
@@ -131,8 +136,10 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
             bizUserPageListVO.setCode(bizUserDTO.getCode());
             bizUserPageListVO.setName(bizUserDTO.getName());
             bizUserPageListVO.setCompanyCode(bizUserDTO.getWorkUnitCode());
+            bizUserPageListVO.setPoliceCode(bizUserDTO.getPoliceCode());
             result.add(bizUserPageListVO);
             companyCodeList.add(bizUserDTO.getWorkUnitCode());
+            userCodeList.add(bizUserDTO.getCode());
         }
         Map<String,CompanyVO> companyVOMap = new HashMap<>();
         if(CollectionUtils.isNotEmpty(companyCodeList)) {
@@ -143,10 +150,21 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
                 }
             }
         }
+        Map<String, List<UserRoleDTO>> userRoleMap = null;
+        if(CollectionUtils.isNotEmpty(userCodeList)) {
+            userRoleMap = userRoleService.selectByUserCodes(userCodeList);
+        }
         for(BizUserPageListVO bizUserPageListVO : result) {
             CompanyVO companyVO = companyVOMap.get(bizUserPageListVO.getCompanyCode());
             if(companyVO != null) {
                 bizUserPageListVO.setCompanyName(companyVO.getName());
+            }
+            if(userRoleMap != null) {
+                List<UserRoleDTO> userRoleDTOList = userRoleMap.get(bizUserPageListVO.getCode());
+                if(CollectionUtils.isNotEmpty(userRoleDTOList)) {
+                    List<String> roles = userRoleDTOList.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toList());
+                    bizUserPageListVO.setRoleCodeList(roles);
+                }
             }
         }
 

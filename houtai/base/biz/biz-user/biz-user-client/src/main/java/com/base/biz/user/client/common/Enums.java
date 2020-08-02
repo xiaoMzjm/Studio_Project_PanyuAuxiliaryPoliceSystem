@@ -70,8 +70,7 @@ public class Enums {
         HE_ZHE_ZU(53, "赫哲族"),
         GAO_SHAN_ZU(54, "高山族"),
         LUO_BA_ZU(55, "珞巴族"),
-        TA_TA_E_ZU(56, "塔塔尔族")
-        ;
+        TA_TA_E_ZU(56, "塔塔尔族");
 
         private Integer code;
         private String name;
@@ -81,7 +80,7 @@ public class Enums {
             this.name = name;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (NationEnum e : NationEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -89,15 +88,15 @@ public class Enums {
             return list;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (NationEnum e : NationEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (NationEnum e : NationEnum.values()) {
                 list.add(e.getCode());
@@ -105,14 +104,13 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (NationEnum e : NationEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
-
 
         public static NationEnum get(Integer code) {
             for (NationEnum e : NationEnum.values()) {
@@ -165,8 +163,7 @@ public class Enums {
         ZHONG_GONG_DANG_YUAN(1, "中共党员"),
         ZHONG_GONG_YU_BEI_DANG_YUAN(2, "中共预备党员"),
         QUN_ZHONG(3, "群众"),
-        OTHER(4, "其他")
-        ;
+        OTHER(4, "其他");
 
         private Integer code;
         private String name;
@@ -176,15 +173,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
                 list.add(e.getCode());
@@ -192,12 +189,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static PoliticalLandscapeEnum get(Integer code) {
@@ -227,7 +224,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (PoliticalLandscapeEnum e : PoliticalLandscapeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -256,23 +253,22 @@ public class Enums {
      * 准驾车型
      */
     public enum DrivingTypeEnum {
-        A1(1,"A1"),
-        A2(2,"A2"),
-        A3(3,"A3"),
-        B1(4,"B1"),
-        B2(5,"B2"),
-        C1(6,"C1"),
-        C2(7,"C2"),
-        C3(8,"C3"),
-        C4(9,"C4"),
-        C5(10,"C5"),
-        D(11,"D"),
-        E(12,"E"),
-        F(13,"F"),
-        M(14,"M"),
-        N(15,"N"),
-        P(16,"P"),
-        ;
+        A1(1, "A1"),
+        A2(2, "A2"),
+        A3(3, "A3"),
+        B1(4, "B1"),
+        B2(5, "B2"),
+        C1(6, "C1"),
+        C2(7, "C2"),
+        C3(8, "C3"),
+        C4(9, "C4"),
+        C5(10, "C5"),
+        D(11, "D"),
+        E(12, "E"),
+        F(13, "F"),
+        M(14, "M"),
+        N(15, "N"),
+        P(16, "P"),;
         private Integer code;
         private String name;
 
@@ -281,15 +277,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                 list.add(e.getCode());
@@ -297,12 +293,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static DrivingTypeEnum get(Integer code) {
@@ -324,13 +320,13 @@ public class Enums {
         }
 
         public static String getName(String codeStr) {
-            if(codeStr == null) {
+            if (codeStr == null) {
                 return null;
             }
             String[] codeArray = codeStr.split(",");
             StringBuilder sb = new StringBuilder();
-            for(String code : codeArray) {
-                if(code == null || "".equals(code)) {
+            for (String code : codeArray) {
+                if (code == null || "".equals(code)) {
                     continue;
                 }
                 for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
@@ -356,7 +352,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (DrivingTypeEnum e : DrivingTypeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -390,8 +386,7 @@ public class Enums {
         MoTuoChePai(3, "摩托车牌"),
         JiSuanJi(4, "计算机相关专业"),
         ZhongWenWenMi(5, "中文文秘相关专业"),
-        KuaiJi(6, "会计相关专业")
-        ;
+        KuaiJi(6, "会计相关专业");
         private Integer code;
         private String name;
 
@@ -400,15 +395,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 list.add(e.getCode());
@@ -416,12 +411,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static SpecialPeopleEnum get(Integer code) {
@@ -443,13 +438,13 @@ public class Enums {
         }
 
         public static String getName(String codeStr) {
-            if(codeStr == null) {
+            if (codeStr == null) {
                 return null;
             }
             String[] codeArray = codeStr.split(",");
             StringBuilder sb = new StringBuilder();
-            for(String code : codeArray) {
-                if(code == null || "".equals(code)) {
+            for (String code : codeArray) {
+                if (code == null || "".equals(code)) {
                     continue;
                 }
                 for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
@@ -475,7 +470,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (SpecialPeopleEnum e : SpecialPeopleEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -503,10 +498,9 @@ public class Enums {
     /**
      * 是否退役军人
      */
-    public enum ExservicemanEnum{
+    public enum ExservicemanEnum {
         YES(1, "是"),
-        NO(0, "否")
-        ;
+        NO(0, "否");
 
         private Integer code;
         private String name;
@@ -516,15 +510,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
                 list.add(e.getCode());
@@ -532,12 +526,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static ExservicemanEnum get(Integer code) {
@@ -567,15 +561,13 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (ExservicemanEnum e : ExservicemanEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
             }
             return list;
         }
-
-
 
         public Integer getCode() {
             return code;
@@ -599,10 +591,8 @@ public class Enums {
      * 性别
      */
     public enum SexEnum {
-        MAN(1 , "男"),
-        MALE(2, "女")
-
-        ;
+        MAN(1, "男"),
+        MALE(2, "女");
 
         private Integer code;
         private String name;
@@ -612,15 +602,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (SexEnum e : SexEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (SexEnum e : SexEnum.values()) {
                 list.add(e.getCode());
@@ -628,12 +618,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (SexEnum e : SexEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static SexEnum get(Integer code) {
@@ -663,7 +653,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (SexEnum e : SexEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -698,9 +688,7 @@ public class Enums {
         JUNIOR_COLLEGE(3, "大专"),
         HIGH_SCHOOL(4, "高中"),
         SECONDARY_SPECIALIZED_SHCOOL(5, "中专"),
-        JUNIOR_MIDDLE_SCHOOL(6, "初中")
-
-        ;
+        JUNIOR_MIDDLE_SCHOOL(6, "初中");
 
         private Integer code;
         private String name;
@@ -710,15 +698,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (EducationEnum e : EducationEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (EducationEnum e : EducationEnum.values()) {
                 list.add(e.getCode());
@@ -726,12 +714,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (EducationEnum e : EducationEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static EducationEnum get(Integer code) {
@@ -761,7 +749,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (EducationEnum e : EducationEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -789,13 +777,12 @@ public class Enums {
     /**
      * 婚姻状况
      */
-    public enum MaritalStatusEnum{
+    public enum MaritalStatusEnum {
 
         UNMARRIED(1, "未婚"),
         MARRIED(2, "已婚"),
         DIVORCE(3, "离婚"),
-        WIDOWED_SPOUSE(4, "丧偶")
-        ;
+        WIDOWED_SPOUSE(4, "丧偶");
 
         private Integer code;
         private String name;
@@ -805,15 +792,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
                 list.add(e.getCode());
@@ -821,12 +808,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static MaritalStatusEnum get(Integer code) {
@@ -856,7 +843,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (MaritalStatusEnum e : MaritalStatusEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -889,10 +876,8 @@ public class Enums {
         QUIT(2, "辞职"),
         RETIRE(3, "退休"),
         DISMISS(4, "辞退"),
-        TRANSFER(5,"调离"),
-        DEATH(6,"去世")
-
-        ;
+        TRANSFER(5, "调离"),
+        DEATH(6, "去世");
 
         private Integer code;
         private String name;
@@ -902,15 +887,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
                 list.add(e.getCode());
@@ -918,12 +903,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static PersonnelTypeEnum get(Integer code) {
@@ -944,7 +929,6 @@ public class Enums {
             return null;
         }
 
-
         public static PersonnelTypeEnum get(String name) {
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
                 if (e.getName().equals(name)) {
@@ -954,7 +938,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (PersonnelTypeEnum e : PersonnelTypeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -984,8 +968,7 @@ public class Enums {
      */
     public enum AuthorizedStrengthTypeEnum {
         PUBLIC(1, "公建辅警"),
-        AREA(2, "区自建辅警")
-        ;
+        AREA(2, "区自建辅警");
 
         private Integer code;
         private String name;
@@ -995,15 +978,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
                 list.add(e.getCode());
@@ -1011,12 +994,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static AuthorizedStrengthTypeEnum get(Integer code) {
@@ -1046,7 +1029,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (AuthorizedStrengthTypeEnum e : AuthorizedStrengthTypeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1084,7 +1067,7 @@ public class Enums {
         BIAN_JI(7, "编辑"),
         XIN_XI_AN_QUAN_GUANL_LI(8, "信息安全助理"),
         XI_TONG_KAI_FA_YU_GUAN_LI(9, "系统开发与管理"),
-        XI_TONG_YUN_WEI_GUAN_LI(10 , "系统运维管理"),
+        XI_TONG_YUN_WEI_GUAN_LI(10, "系统运维管理"),
         WANG_LUO_GUAN_LI(11, "网络管理"),
         YOU_XIAN_TONG_XIN_YUN_WEI_GUAN_LI(12, "有线通信运维管理"),
         WU_XIAN_TONG_XIN_XI_TONG_GUAN_LI(13, "无线通信系统管理"),
@@ -1106,14 +1089,14 @@ public class Enums {
         CANG_KU_GUAN_LI(29, "仓库管理"),
         GONG_CHE_GUAN_LI(30, "公车管理"),
         NEI_QIN_ZONG_HE(31, "内勤综合"),
-        XUN_LUO_FANG_KONG_XIE_QIN(32,"巡逻防控协勤"),
+        XUN_LUO_FANG_KONG_XIE_QIN(32, "巡逻防控协勤"),
         SHE_QU_XIE_GUAN(33, "社区协管"),
         ZHI_ANA_XIE_QIN(34, "治安协勤"),
         FAN_PA_XIE_QIN(35, "反扒协勤"),
         TE_QIN_CHU_TU(36, "特勤处突"),
         REN_MIN_TIAO_JIE_YUAN(37, "人民调解员"),
         LU_MIAN_JIAO_TONG_XIE_QIN(38, "路面交通协勤"),
-        JIAO_TONG_SHI_GU_XIE_QIN(39 , "交通事故协勤"),
+        JIAO_TONG_SHI_GU_XIE_QIN(39, "交通事故协勤"),
         JIAO_TONG_ZHENG_LI_XIE_QIN(40, "交通整理协勤"),
         CHE_LIANG_CHA_YAN_XIE_QIN(41, "车辆查验协勤"),
         JIAO_TONG_YE_WU_JIE_DAI_BAN_LI(42, "交通业务接待办理"),
@@ -1130,8 +1113,7 @@ public class Enums {
         JIE_CHU_JING_DIAO_DU(53, "接处警调度"),
         SHI_PIN_JIAN_KAN(54, "视频监看"),
         FA_YI_ZHU_JIAN_YUAN(55, "法医助员"),
-        AN_JIAN_BAN_LI_XIE_QIN(56, "案件办理协勤")
-        ;
+        AN_JIAN_BAN_LI_XIE_QIN(56, "案件办理协勤");
 
         private Integer code;
         private String name;
@@ -1141,15 +1123,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
                 list.add(e.getCode());
@@ -1157,12 +1139,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static PlaceOfWorkEnum get(Integer code) {
@@ -1192,7 +1174,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (PlaceOfWorkEnum e : PlaceOfWorkEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1223,8 +1205,7 @@ public class Enums {
     public enum JobGradeEnum {
         FIRST(1, "一级辅警"),
         FIRST_THREE(2, "一级辅警(三级岗)"),
-        SECOND(3, "二级辅警")
-        ;
+        SECOND(3, "二级辅警");
 
         private Integer code;
         private String name;
@@ -1234,15 +1215,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (JobGradeEnum e : JobGradeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (JobGradeEnum e : JobGradeEnum.values()) {
                 list.add(e.getCode());
@@ -1250,12 +1231,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (JobGradeEnum e : JobGradeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static JobGradeEnum get(Integer code) {
@@ -1285,7 +1266,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (JobGradeEnum e : JobGradeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1316,8 +1297,7 @@ public class Enums {
     public enum TreatmentGradeEnum {
         THREE(1, "三级"),
         FOUR(2, "四级"),
-        FIRE(3, "五级")
-        ;
+        FIRE(3, "五级");
 
         private Integer code;
         private String name;
@@ -1327,15 +1307,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
                 list.add(e.getCode());
@@ -1343,12 +1323,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static TreatmentGradeEnum get(Integer code) {
@@ -1378,7 +1358,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (TreatmentGradeEnum e : TreatmentGradeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1410,8 +1390,7 @@ public class Enums {
 
         PUBLIC(1, "公开招聘"),
         INNER(2, "划转过渡"),
-        OTHER(3, "其他")
-        ;
+        OTHER(3, "其他");
 
         private Integer code;
         private String name;
@@ -1421,15 +1400,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
                 list.add(e.getCode());
@@ -1437,12 +1416,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static EnrollWayEnum get(Integer code) {
@@ -1472,7 +1451,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (EnrollWayEnum e : EnrollWayEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1505,8 +1484,7 @@ public class Enums {
         RETIRE(2, "退休"),
         DISMISS(3, "辞退"),
         TRANSFER(4, "调离"),
-        DEATH(5, "去世")
-        ;
+        DEATH(5, "去世");
 
         private Integer code;
         private String name;
@@ -1516,15 +1494,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
                 list.add(e.getCode());
@@ -1532,12 +1510,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static DimssionTypeEnum get(Integer code) {
@@ -1567,13 +1545,14 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (DimssionTypeEnum e : DimssionTypeEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
             }
             return list;
         }
+
         public Integer getCode() {
             return code;
         }
@@ -1596,8 +1575,7 @@ public class Enums {
      */
     public enum JobCategoryEnum {
         CIVILIAN_POST(1, "文职辅警"),
-        DUTY(2, "勤务辅警")
-        ;
+        DUTY(2, "勤务辅警");
 
         private Integer code;
         private String name;
@@ -1607,15 +1585,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
                 list.add(e.getCode());
@@ -1623,12 +1601,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static JobCategoryEnum get(Integer code) {
@@ -1658,7 +1636,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (JobCategoryEnum e : JobCategoryEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1683,15 +1661,13 @@ public class Enums {
         }
     }
 
-
     /**
      * 岗位类别
      */
     public enum DueContractEnum {
         FIRST(1, "第一次"),
         SECOND(2, "第二次"),
-        THIRD(3, "第三次")
-        ;
+        THIRD(3, "第三次");
 
         private Integer code;
         private String name;
@@ -1701,15 +1677,15 @@ public class Enums {
             this.name = name;
         }
 
-        public static String getAllCode(){
+        public static String getAllCode() {
             StringBuilder sb = new StringBuilder();
             for (DueContractEnum e : DueContractEnum.values()) {
                 sb.append(e.getCode()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
-        public static List<Integer> getAllCodeList(){
+        public static List<Integer> getAllCodeList() {
             List<Integer> list = Lists.newArrayList();
             for (DueContractEnum e : DueContractEnum.values()) {
                 list.add(e.getCode());
@@ -1717,12 +1693,12 @@ public class Enums {
             return list;
         }
 
-        public static String getAllName(){
+        public static String getAllName() {
             StringBuilder sb = new StringBuilder();
             for (DueContractEnum e : DueContractEnum.values()) {
                 sb.append(e.getName()).append(",");
             }
-            return sb.toString().substring(0,sb.toString().length()-1);
+            return sb.toString().substring(0, sb.toString().length() - 1);
         }
 
         public static DueContractEnum get(Integer code) {
@@ -1752,7 +1728,7 @@ public class Enums {
             return null;
         }
 
-        public static List<EnumVO> getAll(){
+        public static List<EnumVO> getAll() {
             List<EnumVO> list = Lists.newArrayList();
             for (DueContractEnum e : DueContractEnum.values()) {
                 list.add(new EnumVO(e.getCode(), e.getName()));
@@ -1777,5 +1753,36 @@ public class Enums {
         }
     }
 
-}
+    /**
+     * 用户类型
+     */
+    public enum UserTypeEnum {
+        FuJing(0, "辅警"),
+        MinJing(1, "民警");
 
+        private Integer code;
+        private String name;
+
+        UserTypeEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+}

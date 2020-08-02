@@ -9,7 +9,8 @@ public class ExpireEnums {
     public enum ExpireType {
         EmployeeCard(1, "工作证"),
         Contract(2, "合同"),
-        Retire(3, "退休")
+        Retire(3, "退休"),
+        Epidemic(4, "防疫")
         ;
         private Integer code;
         private String name;

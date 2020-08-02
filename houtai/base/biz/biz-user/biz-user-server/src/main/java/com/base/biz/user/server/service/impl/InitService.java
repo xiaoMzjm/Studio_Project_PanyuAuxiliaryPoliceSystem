@@ -54,6 +54,22 @@ public class InitService {
     private void initAuthority() throws Exception{
         AuthorityVO vo = null;
 
+        // 系统管理
+        try {
+            vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("角色权限绑定", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityService.add("用户角色绑定", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
+        }catch (Exception e) {}
+
         // 单位管理
         try {
             vo = authorityService.add("单位管理", "CompanyManager", AuthorityTypeEnum.Page.getType(),null);
@@ -73,24 +89,24 @@ public class InitService {
 
 
         // 基础数据统计
-        try {
-            vo = authorityService.add("年月报表管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("年度报表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("月度报表", "MonthStatistics" , AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年月报表管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年度报表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("月度报表", "MonthStatistics" , AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
+        //}catch (Exception e) {}
 
 
         // 考核管理
-        try {
-            vo = authorityService.add("考核管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("年度考核列表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("考核管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年度考核列表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
+        //}catch (Exception e) {}
 
 
         // 到期管理
@@ -109,64 +125,67 @@ public class InitService {
 
 
         // 工资管理
-        try {
-            vo = authorityService.add("工资管理", "WagesManager", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("工资明细", "WagesDetail", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("工资报销封面", "WagesReimbursement", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("工资变动", "WagesChange", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("工资管理", "WagesManager", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("工资明细", "WagesDetail", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("工资报销封面", "WagesReimbursement", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("工资变动", "WagesChange", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        //}catch (Exception e) {}
 
 
         // 考核管理
-        try {
-            vo = authorityService.add("年度考核管理", "AssessmentManager", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("年度考核列表", "AssessmentList", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("年度考核结果登记", "AssessmentResult", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年度考核管理", "AssessmentManager", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年度考核列表", "AssessmentList", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("年度考核结果登记", "AssessmentResult", AuthorityTypeEnum.Page.getType(),"AssessmentManager");
+        //}catch (Exception e) {}
 
 
         // 轮岗管理
-        try {
-            vo = authorityService.add("轮岗管理", "WorkShiftManger", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("轮岗人员列表", "WorkShiftList", AuthorityTypeEnum.Page.getType(),"WorkShiftManger");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("轮岗管理", "WorkShiftManger", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("轮岗人员列表", "WorkShiftList", AuthorityTypeEnum.Page.getType(),"WorkShiftManger");
+        //}catch (Exception e) {}
 
         // 图表管理
-        try {
-            vo = authorityService.add("图表管理", "ChartManger", AuthorityTypeEnum.Page.getType(),null);
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("图表列表", "ChartList", AuthorityTypeEnum.Page.getType(),"ChartManger");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("图表管理", "ChartManger", AuthorityTypeEnum.Page.getType(),null);
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("图表列表", "ChartList", AuthorityTypeEnum.Page.getType(),"ChartManger");
+        //}catch (Exception e) {}
 
 
-        // 系统管理
+
+        // 防疫管理
         try {
-            vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityService.add("防疫管理", "EpidemicManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("权限管理", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityService.add("防疫登记和查询", "EpidemicListManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityService.add("查询所有单位", "EpidemicListManagerSelectAllCompany", AuthorityTypeEnum.Function.getType(),"EpidemicListManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("角色绑定管理", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityService.add("防疫汇总", "EpidemicCollectManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {}
+
+
 
     }
 

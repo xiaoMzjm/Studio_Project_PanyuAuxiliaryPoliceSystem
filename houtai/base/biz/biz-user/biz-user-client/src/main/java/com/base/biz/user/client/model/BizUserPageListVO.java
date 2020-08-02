@@ -1,5 +1,7 @@
 package com.base.biz.user.client.model;
 
+import java.util.List;
+
 /**
  * @author:小M
  * @date:2020/4/9 11:57 PM
@@ -13,6 +15,10 @@ public class BizUserPageListVO {
     private String companyCode;
 
     private String companyName;
+
+    private List<String> roleCodeList;
+
+    private String policeCode;
 
     public String getCode() {
         return code;
@@ -44,5 +50,21 @@ public class BizUserPageListVO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public List<String> getRoleCodeList() {
+        return roleCodeList;
+    }
+
+    public void setRoleCodeList(List<String> roleCodeList) {
+        this.roleCodeList = roleCodeList;
+    }
+
+    public String getPoliceCode() {
+        return policeCode;
+    }
+
+    public void setPoliceCode(String policeCode) {
+        this.policeCode = policeCode;
     }
 }

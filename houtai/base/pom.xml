@@ -10,12 +10,10 @@
 		<module>lib</module>
 
 		<module>biz/main</module>
-
 		<module>biz/department</module>
-
 		<module>biz/biz-user</module>
 		<module>biz/biz-expire</module>
-		<module>biz/biz-authority</module>
+		<module>biz/biz-epidemic</module>
 
 	</modules>
 	<packaging>pom</packaging>
@@ -148,6 +146,23 @@
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>biz-expire-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- 防疫 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-epidemic</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-epidemic-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-epidemic-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
