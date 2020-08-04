@@ -25,7 +25,11 @@ public interface EpidemicManager {
 
     List<EpidemicDTO> select(EpidemicSelectParam epidemicSelectParam) throws Exception;
 
+    List<EpidemicDTO> selectInDate(Date date) throws Exception;
+
     void updateStatus(String code,Integer status) throws Exception;
+
+    void commitAll() throws Exception;
 
     void delete(String code) throws Exception;
 

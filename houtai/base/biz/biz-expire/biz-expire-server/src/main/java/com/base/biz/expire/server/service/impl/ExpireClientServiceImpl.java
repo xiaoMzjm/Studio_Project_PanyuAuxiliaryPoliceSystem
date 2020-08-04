@@ -24,7 +24,7 @@ public class ExpireClientServiceImpl implements ExpireClientService {
     private ExpireManager expireManager;
 
     @Override
-    public List<ExpireVO> selectByCreateTime(Date start, Date end, Integer type) throws Exception{
+    public List<ExpireVO> selectByTime(Date start, Date end, Integer type) throws Exception{
 
         List<ExpireDO> expireDOList = expireManager.getByTime(start, end, type);
         if(CollectionUtils.isEmpty(expireDOList)) {
@@ -45,5 +45,27 @@ public class ExpireClientServiceImpl implements ExpireClientService {
     @Override
     public void add(String fileName, String fileUrl, Date time, int type) throws Exception {
         expireManager.add(UUIDUtil.get(), fileName, fileUrl, time, type);
+    }
+
+    @Override
+    public ExpireVO findByCode(String code) throws Exception {
+        ExpireDO expireDO = expireManager.getByCode(code);
+        if(expireDO == null) {
+            return null;
+        }
+        ExpireVO expireVO = new ExpireVO();
+        expireVO.setCode(expireDO.getCode());
+        expireVO.setName(expireDO.getFileName());
+        expireVO.setTime(expireDO.getTime());
+        expireVO.setFileUrl(expireDO.getFileUrl());
+        return expireVO;
+    }
+
+    public ExpireManager getExpireManager() {
+        return expireManager;
+    }
+
+    public void setExpireManager(ExpireManager expireManager) {
+        this.expireManager = expireManager;
     }
 }

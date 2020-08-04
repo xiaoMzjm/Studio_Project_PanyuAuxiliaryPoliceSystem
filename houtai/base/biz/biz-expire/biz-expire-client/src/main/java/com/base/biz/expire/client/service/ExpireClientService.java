@@ -12,7 +12,9 @@ import com.sun.xml.internal.rngom.digested.DTextPattern;
  */
 public interface ExpireClientService {
 
-    List<ExpireVO> selectByCreateTime(Date start, Date end, Integer type) throws Exception;
+    List<ExpireVO> selectByTime(Date start, Date end, Integer type) throws Exception;
 
     void add(String fileName, String fileUrl, Date time, int type) throws Exception;
+
+    ExpireVO findByCode(String code) throws Exception;
 }

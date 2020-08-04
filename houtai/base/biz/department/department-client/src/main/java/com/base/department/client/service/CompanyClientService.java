@@ -19,4 +19,6 @@ public interface CompanyClientService {
     List<CompanyVO> findByCodeList(List<String> codeList) ;
 
     List<CompanyVO> findAll();
+
+    List<CompanyVO> findAllFaterCompany();
 }

@@ -15,6 +15,7 @@ import com.base.biz.epidemic.server.model.EpidemicDO;
 import com.base.biz.epidemic.server.model.EpidemicSelectParam;
 import com.base.biz.epidemic.server.model.convertor.EpidemicConvertor;
 import com.base.common.exception.BaseException;
+import com.base.common.util.DateUtil;
 import com.base.common.util.UUIDUtil;
 import com.google.j2objc.annotations.AutoreleasePool;
 import org.apache.commons.collections.CollectionUtils;
@@ -115,6 +116,19 @@ public class EpidemicManagerImpl implements EpidemicManager {
     }
 
     @Override
+    public List<EpidemicDTO> selectInDate(Date date) throws Exception {
+        String dateStr = DateUtil.convert2String(date,"yyyy-MM-dd 00:00:00");
+        String sql = String.format("select * from epidemic where begin_time <= '%s' and end_time >= '%s'" , dateStr , dateStr);
+        System.out.println(sql);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql, EpidemicDO.class);
+        List<EpidemicDO> bizUserDOList = query.getResultList();
+        entityManager.close();
+        return EpidemicConvertor.do2dtoList(bizUserDOList);
+
+    }
+
+    @Override
     public void updateStatus(String code, Integer status) throws Exception {
         EpidemicDO findEpidemicDO = epidemicDAO.findByCode(code);
         if(findEpidemicDO == null) {
@@ -122,6 +136,11 @@ public class EpidemicManagerImpl implements EpidemicManager {
         }
         findEpidemicDO.setStatus(status);
         epidemicDAO.save(findEpidemicDO);
+    }
+
+    @Override
+    public void commitAll() throws Exception {
+        epidemicDAO.commitAll();
     }
 
     @Override

@@ -638,6 +638,7 @@ public class BizUserManagerImpl implements BizUserManager {
         bizUserDO.setDueContract(param.dueContract);
         bizUserDO.setIcbcCardAccount(param.icbcCardAccount);
         bizUserDO.setRuZhiZuLinTime(DateUtil.convert2Date(param.ruZhiZuLinTime,BizUserConstant.DateFormat));
+        bizUserDO.setUserType(param.userType);
     }
 
     private String inStrList(List<String> list){

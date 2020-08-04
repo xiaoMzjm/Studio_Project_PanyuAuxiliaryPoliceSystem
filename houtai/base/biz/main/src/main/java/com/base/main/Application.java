@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 @EnableJpaRepositories("com.base")
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
 	/**

@@ -86,4 +86,10 @@ public class CompanyClientServiceImpl implements CompanyClientService {
         return CompanyConvertor.dto2voList(companyDTOList);
     }
 
+    @Override
+    public List<CompanyVO> findAllFaterCompany() {
+        List<CompanyDTO> companyDTOList = companyManager.findAllFatherCompany();
+        return CompanyConvertor.dto2voList(companyDTOList);
+    }
+
 }

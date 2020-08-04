@@ -66,6 +66,9 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
                 param.workUnitName = param.workUnitName.trim();
             }
         }
+        if(StringUtils.isEmpty(param.policeCode)) {
+            throw new BaseException(String.format("%s 警号为空", param.name));
+        }
         // 姓名
         if (StringUtils.isNotEmpty(param.name)) {
             param.name = param.name.trim();
@@ -86,7 +89,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.birthdate = param.birthdate.trim();
             Date birthday = DateUtil.convert2Date(param.birthdate, BizUserConstant.DateFormat);
             if (birthday == null) {
-                throw new BaseException(String.format("生日[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
+                birthday = DateUtil.convert2Date(param.birthdate, BizUserConstant.DateFormat2);
+                if (birthday == null) {
+                    throw new BaseException(String.format("生日[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
+                }
             }
         }
         // 民族
@@ -114,7 +120,7 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.politicalLandscapeStr = param.politicalLandscapeStr.trim();
             PoliticalLandscapeEnum e = PoliticalLandscapeEnum.get(param.politicalLandscapeStr);
             if (e == null) {
-                throw new BaseException(String.format("政治面貌[%s]格式错误，正确格式范围为[%s]",param.politicalLandscape, PoliticalLandscapeEnum.getAllName()));
+                throw new BaseException(String.format("%s 政治面貌[%s]格式错误，正确格式范围为[%s]",param.name , param.politicalLandscapeStr, PoliticalLandscapeEnum.getAllName()));
             }
             param.politicalLandscape = e.getCode();
         }
@@ -366,7 +372,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.beginWorkTime = param.beginWorkTime.trim();
             Date date = DateUtil.convert2Date(param.beginWorkTime, BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("参加工作时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
+                date = DateUtil.convert2Date(param.beginWorkTime, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("参加工作时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.beginWorkTime));
+                }
             }
         }
         // 合同生效时间
@@ -374,7 +383,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.effectiveDateOfTheContract = param.effectiveDateOfTheContract.trim();
             Date date = DateUtil.convert2Date(param.effectiveDateOfTheContract, BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.birthdate));
+                date = DateUtil.convert2Date(param.effectiveDateOfTheContract, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.effectiveDateOfTheContract));
+                }
             }
         }
         // 工作单位
@@ -446,7 +458,11 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.beginPoliceWorkTime = param.beginPoliceWorkTime.trim();
             Date date = DateUtil.convert2Date(param.beginPoliceWorkTime,BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("入职公安时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.beginPoliceWorkTime));
+                date = DateUtil.convert2Date(param.beginPoliceWorkTime, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("入职公安时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.beginPoliceWorkTime));
+
+                }
             }
         }
         // 合同失效时间
@@ -454,7 +470,11 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.contractExpirationDate = param.contractExpirationDate.trim();
             Date date = DateUtil.convert2Date(param.contractExpirationDate,BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("合同失效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.contractExpirationDate));
+                date = DateUtil.convert2Date(param.contractExpirationDate, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("合同失效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.contractExpirationDate));
+
+                }
             }
         }
         // 离职时间
@@ -462,7 +482,11 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.dimissionDate = param.dimissionDate.trim();
             Date date = DateUtil.convert2Date(param.dimissionDate,BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("离职时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.dimissionDate));
+                date = DateUtil.convert2Date(param.dimissionDate, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("离职时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.dimissionDate));
+
+                }
             }
         }
         // 离职原因
@@ -487,7 +511,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
             param.firstContractBeginTime = param.firstContractBeginTime.trim();
             Date date = DateUtil.convert2Date(param.firstContractBeginTime,BizUserConstant.DateFormat);
             if (date == null) {
-                throw new BaseException(String.format("第一次合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.firstContractBeginTime));
+                date = DateUtil.convert2Date(param.firstContractBeginTime, BizUserConstant.DateFormat2);
+                if (date == null) {
+                    throw new BaseException(String.format("第一次合同生效时间[%s]格式错误，正确格式为：yyyy/mm/dd",param.firstContractBeginTime));
+                }
             }else {
                 Date firstContractEndTimeTemp = DateUtil.addYears(date, 3);
                 String firstContractEndTimeStr = DateUtil.convert2String(firstContractEndTimeTemp, BizUserConstant.DateFormat);
@@ -544,7 +571,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
                     addParamExperience.timeStart = addParamExperience.timeStart.trim();
                     Date date = DateUtil.convert2Date(addParamExperience.timeStart,BizUserConstant.DateFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("履历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
+                        date = DateUtil.convert2Date(addParamExperience.timeStart, BizUserConstant.DateFormat2);
+                        if (date == null) {
+                            throw new BaseException(String.format("履历-起始日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeStart));
+                        }
                     }
                 }
                 // 结束日期
@@ -552,7 +582,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
                     addParamExperience.timeEnd = addParamExperience.timeEnd.trim();
                     Date date = DateUtil.convert2Date(addParamExperience.timeEnd,BizUserConstant.DateFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("履历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
+                        date = DateUtil.convert2Date(addParamExperience.timeEnd, BizUserConstant.DateFormat2);
+                        if (date == null) {
+                            throw new BaseException(String.format("履历-结束日期[%s]格式错误，正确格式为：yyyy/mm/dd",addParamExperience.timeEnd));
+                        }
                     }
                 }
                 // 单位或组织名称
@@ -656,7 +689,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
                     award.time = award.time.trim();
                     Date date = DateUtil.convert2Date(award.time,BizUserConstant.DateFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("奖惩情况-奖惩时间[%s]格式错误，正确格式为：yyyy/mm/dd",award.time));
+                        date = DateUtil.convert2Date(award.time, BizUserConstant.DateFormat2);
+                        if (date == null) {
+                            throw new BaseException(String.format("奖惩情况-奖惩时间[%s]格式错误，正确格式为：yyyy/mm/dd",award.time));
+                        }
                     }
                 }
                 // 奖惩原因
@@ -684,7 +720,10 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
                     addParamAssessment.time = addParamAssessment.time.trim();
                     Date date = DateUtil.convert2Date(addParamAssessment.time,BizUserConstant.DateYYYYFormat);
                     if (date == null) {
-                        throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy",addParamAssessment.time));
+                        date = DateUtil.convert2Date(addParamAssessment.time, BizUserConstant.DateFormat2);
+                        if (date == null) {
+                            throw new BaseException(String.format("考核情况-发生时间[%s]格式错误，正确格式为：yyyy",addParamAssessment.time));
+                        }
                     }
                 }
                 // 等级

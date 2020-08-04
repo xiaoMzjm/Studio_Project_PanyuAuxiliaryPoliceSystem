@@ -34,6 +34,8 @@ public class EpidemicDTO {
 
     private Integer status;
 
+    private Integer userType;
+
     public Long getId() {
         return id;
     }
@@ -136,5 +138,13 @@ public class EpidemicDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

@@ -8,6 +8,8 @@ public class BizUserConstant {
 
     public static final String DateFormat = "yyyy/MM/dd";
 
+    public static final String DateFormat2 = "yyyy-MM-dd";
+
     public static final String DateYYYYFormat = "yyyy";
 
     public static final String DateYYYYNianMMyueFormat = "yyyy年MM月";

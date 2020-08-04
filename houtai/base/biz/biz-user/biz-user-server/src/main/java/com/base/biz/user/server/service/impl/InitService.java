@@ -86,6 +86,13 @@ public class InitService {
         try {
             vo = authorityService.add("人员列表", "UserList", AuthorityTypeEnum.Page.getType(),"UserManager");
         }catch (Exception e) {}
+        try {
+            vo = authorityService.add("查询所有单位", "UserListSelectAllCompany", AuthorityTypeEnum.Function.getType(),"UserList");
+        }catch (Exception e) {
+        }
+        try {
+            vo = authorityService.add("删除人员", "UserListDeleteUser", AuthorityTypeEnum.Function.getType(),"UserList");
+        }catch (Exception e) {}
 
 
         // 基础数据统计
@@ -184,6 +191,7 @@ public class InitService {
         try {
             vo = authorityService.add("防疫汇总", "EpidemicCollectManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {}
+
 
 
 

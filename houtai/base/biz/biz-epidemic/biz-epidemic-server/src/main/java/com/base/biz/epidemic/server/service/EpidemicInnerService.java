@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import com.base.biz.epidemic.client.model.EpidemicStatisticsVO;
 import com.base.biz.epidemic.client.model.EpidemicVO;
 import com.base.biz.epidemic.server.model.EpidemicSelectParam;
 
@@ -29,5 +30,8 @@ public interface EpidemicInnerService {
              String beginTime, String endTime,
              String detail, String leaderCode) throws Exception;
 
+
     void createStatistics(InputStream zhengGongBan, InputStream shiJu , String date) throws Exception;
+
+    List<EpidemicStatisticsVO> selectStatistics(String date) throws Exception;
 }

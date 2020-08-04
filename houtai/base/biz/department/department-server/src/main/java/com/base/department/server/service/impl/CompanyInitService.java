@@ -27,39 +27,39 @@ public class CompanyInitService {
     }
 
     private void initCompany(){
-        List<CompanyDTO> fList = companyManager.findByName("政工办公室");
-        CompanyDTO f = null;
-        if(CollectionUtils.isEmpty(fList)) {
-            f = companyManager.add("政工办公室","","", "zhenggongbangongshi");
-        }
-        List<CompanyDTO> c = companyManager.findByName("人事组");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("人事组","",f.getCode(), "renshizu");
-        }
-        c = companyManager.findByName("教培组");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("教培组","",f.getCode(), "jiaopeizu");
-        }
-        c = companyManager.findByName("综合组");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("综合组","",f.getCode(), "zonghezu");
-        }
-        c = companyManager.findByName("内勤组");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("内勤组","",f.getCode(), "neiqinzu");
-        }
-        c = companyManager.findByName("辅警办");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("辅警办","",f.getCode(), "fujingban");
-        }
-        c = companyManager.findByName("训练大队");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("训练大队","",f.getCode(), "xunliandadui");
-        }
-        c = companyManager.findByName("老干组");
-        if(CollectionUtils.isEmpty(c)) {
-            companyManager.add("老干组","",f.getCode(), "laoganzu");
-        }
+        //List<CompanyDTO> fList = companyManager.findByName("政工办公室");
+        //CompanyDTO f = null;
+        //if(CollectionUtils.isEmpty(fList)) {
+        //    f = companyManager.add("政工办公室","","", "zhenggongbangongshi");
+        //}
+        //List<CompanyDTO> c = companyManager.findByName("人事组");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("人事组","",f.getCode(), "renshizu");
+        //}
+        //c = companyManager.findByName("教培组");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("教培组","",f.getCode(), "jiaopeizu");
+        //}
+        //c = companyManager.findByName("综合组");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("综合组","",f.getCode(), "zonghezu");
+        //}
+        //c = companyManager.findByName("内勤组");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("内勤组","",f.getCode(), "neiqinzu");
+        //}
+        //c = companyManager.findByName("辅警办");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("辅警办","",f.getCode(), "fujingban");
+        //}
+        //c = companyManager.findByName("训练大队");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("训练大队","",f.getCode(), "xunliandadui");
+        //}
+        //c = companyManager.findByName("老干组");
+        //if(CollectionUtils.isEmpty(c)) {
+        //    companyManager.add("老干组","",f.getCode(), "laoganzu");
+        //}
 
 
         //f = companyManager.findByName("交警大队");

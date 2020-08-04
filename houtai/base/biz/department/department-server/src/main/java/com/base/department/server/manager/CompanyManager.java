@@ -26,4 +26,6 @@ public interface CompanyManager {
     CompanyDTO add(String name, String desc, String fatherCode, String code);
 
     void delete(String code) throws Exception;
+
+    List<CompanyDTO> findAllFatherCompany() ;
 }

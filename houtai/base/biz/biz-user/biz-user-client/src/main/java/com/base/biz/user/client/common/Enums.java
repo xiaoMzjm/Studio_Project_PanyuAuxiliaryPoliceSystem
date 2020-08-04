@@ -163,7 +163,10 @@ public class Enums {
         ZHONG_GONG_DANG_YUAN(1, "中共党员"),
         ZHONG_GONG_YU_BEI_DANG_YUAN(2, "中共预备党员"),
         QUN_ZHONG(3, "群众"),
-        OTHER(4, "其他");
+        OTHER(4, "其他"),
+        GongQingTuanYuan(5,"共青团员"),
+
+        ;
 
         private Integer code;
         private String name;
@@ -268,7 +271,9 @@ public class Enums {
         F(13, "F"),
         M(14, "M"),
         N(15, "N"),
-        P(16, "P"),;
+        P(16, "P"),
+
+        ;
         private Integer code;
         private String name;
 
@@ -688,8 +693,19 @@ public class Enums {
         JUNIOR_COLLEGE(3, "大专"),
         HIGH_SCHOOL(4, "高中"),
         SECONDARY_SPECIALIZED_SHCOOL(5, "中专"),
-        JUNIOR_MIDDLE_SCHOOL(6, "初中");
+        JUNIOR_MIDDLE_SCHOOL(6, "初中"),
+        UNDERGRADUCATE2(7, "大学"),
+        YanJiuShengBiYe(8,"研究生毕业"),
+        SuoShiShengBiYe(9,"硕士研究生"),
+        SuoShiYanJiuSheng(10,"硕士研究生"),
+        WeiDangXiaoDaZhuan(11,"省（区、市）委党校大专"),
+        ShuangXueLiBenKe(12,"双学历本科"),
+        WeiDangXiaoDaXue(13,"省（区、市）委党校大学"),
+        ZhongYangDangXiaoDaXue(14,"中央党校大学"),
+        ZhongYangDangXiaoYanJiuSheng(15,"中央党校研究生"),
+        ZhongZhuanZhongJi(16,"中专中技"),
 
+        ;
         private Integer code;
         private String name;
 
@@ -782,7 +798,10 @@ public class Enums {
         UNMARRIED(1, "未婚"),
         MARRIED(2, "已婚"),
         DIVORCE(3, "离婚"),
-        WIDOWED_SPOUSE(4, "丧偶");
+        WIDOWED_SPOUSE(4, "丧偶"),
+        ZaiHun(5,"再婚"),
+
+            ;
 
         private Integer code;
         private String name;
@@ -872,12 +891,12 @@ public class Enums {
      * 人员类型
      */
     public enum PersonnelTypeEnum {
-        INCUMBENCY(1, "在职"),
-        QUIT(2, "辞职"),
-        RETIRE(3, "退休"),
-        DISMISS(4, "辞退"),
-        TRANSFER(5, "调离"),
-        DEATH(6, "去世");
+        INCUMBENCY(1, "在职人员"),
+        QUIT(2, "辞职人员"),
+        RETIRE(3, "退休人员"),
+        DISMISS(4, "辞退人员"),
+        TRANSFER(5, "调离人员"),
+        DEATH(6, "去世人员");
 
         private Integer code;
         private String name;
@@ -1113,7 +1132,13 @@ public class Enums {
         JIE_CHU_JING_DIAO_DU(53, "接处警调度"),
         SHI_PIN_JIAN_KAN(54, "视频监看"),
         FA_YI_ZHU_JIAN_YUAN(55, "法医助员"),
-        AN_JIAN_BAN_LI_XIE_QIN(56, "案件办理协勤");
+        AN_JIAN_BAN_LI_XIE_QIN(56, "案件办理协勤"),
+        JiaoTongNeiQinXieLi(57,"交通内勤协理"),
+
+
+
+
+        ;
 
         private Integer code;
         private String name;
@@ -1205,7 +1230,35 @@ public class Enums {
     public enum JobGradeEnum {
         FIRST(1, "一级辅警"),
         FIRST_THREE(2, "一级辅警(三级岗)"),
-        SECOND(3, "二级辅警");
+        SECOND(3, "二级辅警"),
+        ZhengChuJi(4, "正处级"),
+        YiJiDiaoYanYuan(5,"一级调研员"),
+        ErJiDiaoYanYuan(6,"二级调研员"),
+        SanJiDiaoYanYuan(7,"三级调研员"),
+        ErJiGaoJiJingZhang(8,"二级高级警长"),
+        ErJiJingYuan(9,"二级警员"),
+        ErJiJingZhang(10,"二级警长"),
+        ErJiZhuRenKeYuan(11,"二级主任科员"),
+        FuChuJi(12,"副处级"),
+        FuKeJi(13,"副科级"),
+        JingWuJiShuErJiZhuGuan(14,"警务技术二级主管"),
+        JingWuJiShuSanJiZhuGuan(15,"警务技术三级主管"),
+        JingWuJiShuSiJiZhuGuan(16,"警务技术四级主管"),
+        JingWuJiShuSiJiZhuRen(17,"警务技术四级主任"),
+        JingWuJiShuYiJiZhuGuan(18,"警务技术一级主管"),
+        JingWuJiShuYuan(19,"警务技术员"),
+        SanJiGaoJiJingZhang(20,"三级高级警长"),
+        SanJiJingZhang(21,"三级警长"),
+        SanJiJingZhangTaoYi(22,"三级警长(套一)"),
+        SiJiJingZhang(23,"四级警长"),
+        SiJiGaoJiJingZhang(24,"四级高级警长"),
+        WeiDingZhiGongWuYuan(25,"未定职公务员"),
+        YiJiJingYuan(26,"一级警员"),
+        YiJiJingYuanTaoYi(27,"一级警员(套一)"),
+        YiJiJingZhang(28,"一级警长"),
+        YiJiZhuRenKeYuan(29,"一级主任科员"),
+        ZhengKeJi(30,"正科级"),
+        ;
 
         private Integer code;
         private String name;
@@ -1390,7 +1443,10 @@ public class Enums {
 
         PUBLIC(1, "公开招聘"),
         INNER(2, "划转过渡"),
-        OTHER(3, "其他");
+        OTHER(3, "其他"),
+        TongYi(4, "统一招聘"),
+
+        ;
 
         private Integer code;
         private String name;
@@ -1574,8 +1630,8 @@ public class Enums {
      * 岗位类别
      */
     public enum JobCategoryEnum {
-        CIVILIAN_POST(1, "文职辅警"),
-        DUTY(2, "勤务辅警");
+        CIVILIAN_POST(1, "文职辅警类"),
+        DUTY(2, "勤务辅警类");
 
         private Integer code;
         private String name;

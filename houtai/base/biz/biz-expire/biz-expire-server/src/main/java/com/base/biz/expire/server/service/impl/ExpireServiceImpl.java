@@ -160,7 +160,7 @@ public class ExpireServiceImpl implements ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.EmployeeCard.getCode());
@@ -244,7 +244,7 @@ public class ExpireServiceImpl implements ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Contract.getCode());
@@ -333,7 +333,7 @@ public class ExpireServiceImpl implements ExpireService {
             }
             String savePath = diskStaticUrl + "files/";
             try {
-                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules);
+                String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
                 expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Retire.getCode());

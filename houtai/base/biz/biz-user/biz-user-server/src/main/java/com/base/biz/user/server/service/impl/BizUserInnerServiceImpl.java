@@ -270,7 +270,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         vo.setDueContractStr(DueContractEnum.getName(dto.getDueContract()));
         vo.setIcbcCardAccount(dto.getIcbcCardAccount());
         vo.setRuZhiZuLinTime(DateUtil.convert2String(dto.getRuZhiZuLinTime(), BizUserConstant.DateFormat));
-
+        vo.setUserType(dto.getUserType());
 
 
 
@@ -512,6 +512,9 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(inputStream);
         if(CollectionUtils.isNotEmpty(bizUserAddParamList)) {
             for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
+                bizUserAddUserCheckService.check(bizUserAddParam);
+            }
+            for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
                 BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(bizUserAddParam.identityCard);
                 // 如果已存在则更新
                 if (bizUserDTO != null) {
@@ -527,7 +530,6 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
                         throw new BaseException(String.format("该警号[%s]已存在",bizUserAddParam.identityCard));
                     }
                 }
-                bizUserAddUserCheckService.check(bizUserAddParam);
                 userService.add(bizUserAddParam.identityCard);
                 bizUserManager.add(bizUserAddParam);
             }
@@ -875,7 +877,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         }
 
         String savePath = diskStaticUrl + "files/";
-        String fileName = ExcelUtil.insertExcelAndSave(fromFileInputStream,1, 1, savePath, list);
+        String fileName = ExcelUtil.insertExcelAndSave(fromFileInputStream,1, 1, savePath, list, null);
         return savePath + fileName;
     }
 

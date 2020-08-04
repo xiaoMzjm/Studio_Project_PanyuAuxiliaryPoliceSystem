@@ -138,4 +138,10 @@ public class CompanyManagerImpl implements CompanyManager {
         }
         companyDORepository.deleteById(optional.get().getId());
     }
+
+    @Override
+    public List<CompanyDTO> findAllFatherCompany() {
+        List<CompanyDO> companyDOList = companyDORepository.findAllFatherCompany();
+        return CompanyConvertor.do2dtoList(companyDOList);
+    }
 }
