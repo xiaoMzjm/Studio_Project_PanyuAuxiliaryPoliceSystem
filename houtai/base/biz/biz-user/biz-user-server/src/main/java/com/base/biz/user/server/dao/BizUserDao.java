@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public interface BizUserDao extends JpaRepository<BizUserDO,Long> {
 
     @Query(nativeQuery = true, value="select * from biz_user where 1=1 and if(:name != '',name like CONCAT('%',:name,'%'),1=1)  "
-        + "and work_unit_code in(:companyList) order by name asc")
+        + "and if(:companyList != '',work_unit_code in(:companyList),1=1) order by name asc")
     List<BizUserDO> findByNameAndCompanyList(@Param("name") String name, @Param("companyList") List<String> companyList);
 
     void deleteByCode(String code);

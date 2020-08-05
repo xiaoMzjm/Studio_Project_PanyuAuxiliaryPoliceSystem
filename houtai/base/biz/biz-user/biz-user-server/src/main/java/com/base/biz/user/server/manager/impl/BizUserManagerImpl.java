@@ -20,6 +20,7 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MD5Util;
+import com.base.common.util.SqlUtil;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -72,7 +73,7 @@ public class BizUserManagerImpl implements BizUserManager {
             return null;
         }
 
-        String sql = "select * from biz_user where code in " + inStrList(codes) + " order by name asc";
+        String sql = "select * from biz_user where code in " + SqlUtil.inStrList(codes) + " order by name asc";
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
@@ -151,7 +152,7 @@ public class BizUserManagerImpl implements BizUserManager {
      */
     public List<BizUserDTO> findByIdentityCardList(List<String> identityCodeList){
         BizUserDO bizUserDO = new BizUserDO();
-        String sql = "select * from biz_user where identity_card in " + inStrList(identityCodeList);
+        String sql = "select * from biz_user where identity_card in " + SqlUtil.inStrList(identityCodeList);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
         List<BizUserDO> bizUserDOList = query.getResultList();
@@ -184,7 +185,23 @@ public class BizUserManagerImpl implements BizUserManager {
      * @return
      */
     public List<BizUserDTO> findByNameAndCompany(String name, List<String> companyCodeList) {
-        List<BizUserDO> bizUserDOList = bizUserDao.findByNameAndCompanyList(name, companyCodeList);
+        String sql = "select * from biz_user where 1=1";
+        if(StringUtils.isNotEmpty(name)) {
+            sql += " and name = '" + name + "'";
+        }
+        if(CollectionUtils.isNotEmpty(companyCodeList)) {
+            sql += " and work_unit_code in " + SqlUtil.inStrList(companyCodeList) ;
+        }
+
+        sql += " order by name asc";
+
+        System.out.println(sql);
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
+        List<BizUserDO> bizUserDOList = query.getResultList();
+        entityManager.close();
+
         return BizUserConvertor.do2dtoList(bizUserDOList);
     }
 
@@ -199,7 +216,7 @@ public class BizUserManagerImpl implements BizUserManager {
 
         String sql = "select * from biz_user where 1=1 ";
         if(CollectionUtils.isNotEmpty(param.companyCodeList)) {
-            sql += " and work_unit_code in " + inStrList(param.companyCodeList);
+            sql += " and work_unit_code in " + SqlUtil.inStrList(param.companyCodeList);
         }
         if(StringUtils.isNotEmpty(param.name)) {
             sql += " and name like '%%" + param.name + "%%' ";
@@ -211,10 +228,10 @@ public class BizUserManagerImpl implements BizUserManager {
             sql += " and birthdate <= '" + param.birthdateEnd + "'";
         }
         if(CollectionUtils.isNotEmpty(param.nationList)) {
-            sql += " and nation in " + inIntList(param.nationList);
+            sql += " and nation in " + SqlUtil.inIntList(param.nationList);
         }
         if(CollectionUtils.isNotEmpty(param.politicalLandscapeList)) {
-            sql += " and political_landscape in " + inIntList(param.politicalLandscapeList);
+            sql += " and political_landscape in " + SqlUtil.inIntList(param.politicalLandscapeList);
         }
         if(StringUtils.isNotEmpty(param.graduateInstitutions)) {
             sql += " and graduate_school like '%%" + param.graduateInstitutions + "%%' ";
@@ -252,7 +269,7 @@ public class BizUserManagerImpl implements BizUserManager {
             sql += " and permanent_residence_address like '%%"+param.permanentResidenceAddress+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.sexList)) {
-            sql += " and sex in " + inIntList(param.sexList);
+            sql += " and sex in " + SqlUtil.inIntList(param.sexList);
         }
         if(param.ageBegin != null) {
             Date now = new Date();
@@ -270,13 +287,13 @@ public class BizUserManagerImpl implements BizUserManager {
             sql += " and native_place like '%%"+ param.nativePlace +"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.educationList)) {
-            sql += " and education in " + inIntList(param.educationList);
+            sql += " and education in " + SqlUtil.inIntList(param.educationList);
         }
         if(StringUtils.isNotEmpty(param.major)) {
             sql += " and major like '%%"+param.major+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.maritalStatusList)) {
-            sql += " and marital_status in " + inIntList(param.maritalStatusList);
+            sql += " and marital_status in " + SqlUtil.inIntList(param.maritalStatusList);
         }
         if(StringUtils.isNotEmpty(param.identityCard)) {
             sql += " and identity_card like '%%"+param.identityCard+"%%'";
@@ -285,19 +302,19 @@ public class BizUserManagerImpl implements BizUserManager {
             sql += " and phone like '%%"+param.phone+"%%'";
         }
         if(CollectionUtils.isNotEmpty(param.personnelTypeList)) {
-            sql += " and personnel_type in " + inIntList(param.personnelTypeList);
+            sql += " and personnel_type in " + SqlUtil.inIntList(param.personnelTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.authorizedStrengthTypeList)) {
-            sql += " and authorized_strength_type in " + inIntList(param.authorizedStrengthTypeList);
+            sql += " and authorized_strength_type in " + SqlUtil.inIntList(param.authorizedStrengthTypeList);
         }
         if(CollectionUtils.isNotEmpty(param.placeOfWorkList)) {
-            sql += " and place_of_work in " + inIntList(param.placeOfWorkList);
+            sql += " and place_of_work in " + SqlUtil.inIntList(param.placeOfWorkList);
         }
         if (CollectionUtils.isNotEmpty(param.treatmentGradeList)) {
-            sql += " and treatment_grade in " + inIntList(param.treatmentGradeList);
+            sql += " and treatment_grade in " + SqlUtil.inIntList(param.treatmentGradeList);
         }
         if(CollectionUtils.isNotEmpty(param.enrollWayList)) {
-            sql += " and enroll_way in " + inIntList(param.enrollWayList);
+            sql += " and enroll_way in " + SqlUtil.inIntList(param.enrollWayList);
         }
         if(StringUtils.isNotEmpty(param.beginWorkTimeBegin)) {
             sql += " and begin_work_time >= '"+param.beginWorkTimeBegin+"'";
@@ -318,16 +335,16 @@ public class BizUserManagerImpl implements BizUserManager {
             sql += " and retirement_date <= '"+param.retirementDateEnd+"'";
         }
         if(CollectionUtils.isNotEmpty(param.workUnitList)) {
-            sql += " and work_unit_code in " + inStrList(param.workUnitList);
+            sql += " and work_unit_code in " + SqlUtil.inStrList(param.workUnitList);
         }
         if(CollectionUtils.isNotEmpty(param.organizationUnitList)) {
-            sql += " and organization_unit_code in " + inStrList(param.organizationUnitList);
+            sql += " and organization_unit_code in " + SqlUtil.inStrList(param.organizationUnitList);
         }
         if(CollectionUtils.isNotEmpty(param.jobCategoryList)) {
-            sql += " and job_category in " + inIntList(param.jobCategoryList);
+            sql += " and job_category in " + SqlUtil.inIntList(param.jobCategoryList);
         }
         if(CollectionUtils.isNotEmpty(param.jobGradeList)) {
-            sql += " and job_grade in " + inIntList(param.jobGradeList);
+            sql += " and job_grade in " + SqlUtil.inIntList(param.jobGradeList);
         }
         if(StringUtils.isNotEmpty(param.duty)) {
             sql += " and duty like '%%"+param.duty+"%%'";
@@ -411,7 +428,7 @@ public class BizUserManagerImpl implements BizUserManager {
         }
 
         if(CollectionUtils.isNotEmpty(param.dueContractList)) {
-            sql += " and due_contract in " + inIntList(param.dueContractList);
+            sql += " and due_contract in " + SqlUtil.inIntList(param.dueContractList);
         }
         if(StringUtils.isNotEmpty(param.icbcCardAccount)) {
             sql += " and icbc_card_account like '%%"+param.icbcCardAccount+"%%'";
@@ -587,7 +604,7 @@ public class BizUserManagerImpl implements BizUserManager {
         bizUserDO.setPassword(DigestUtils.md5Hex("123456"));
         //bizUserDO.setPassword("123456");
         bizUserDO.setPicUrl(param.headPicCode);
-        bizUserDO.setBirthdate(DateUtil.convert2Date(param.birthdate,BizUserConstant.DateFormat));
+        bizUserDO.setBirthdate(convert2Date(param.birthdate));
         bizUserDO.setNation(param.nation);
         bizUserDO.setPoliticalLandscape(param.politicalLandscape);
         bizUserDO.setGraduateSchool(param.graduateInstitutions);
@@ -615,61 +632,40 @@ public class BizUserManagerImpl implements BizUserManager {
         bizUserDO.setJobGrade(param.jobGrade);
         bizUserDO.setTreatmentGrade(param.treatmentGrade);
         bizUserDO.setEnrollWay(param.enrollWay);
-        bizUserDO.setBeginWorkTime(DateUtil.convert2Date(param.beginWorkTime,BizUserConstant.DateFormat));
-        bizUserDO.setEffectiveDateOfTheContrace(DateUtil.convert2Date(param.effectiveDateOfTheContract,BizUserConstant.DateFormat));
+        bizUserDO.setBeginWorkTime(convert2Date(param.beginWorkTime));
+        bizUserDO.setEffectiveDateOfTheContrace(convert2Date(param.effectiveDateOfTheContract));
         bizUserDO.setWorkUnitCode(param.workUnit);
         bizUserDO.setOrganizationUnitCode(param.organizationUnit);
         bizUserDO.setJobCategory(param.jobCategory);
         bizUserDO.setDuty(param.duty);
         bizUserDO.setSocialSecurityNumber(param.socialSecurityNumber);
-        bizUserDO.setBeginWorkTime(DateUtil.convert2Date(param.beginWorkTime,BizUserConstant.DateFormat));
-        bizUserDO.setContractExpirationDate(DateUtil.convert2Date(param.contractExpirationDate,BizUserConstant.DateFormat));
-        bizUserDO.setDimssionDate(DateUtil.convert2Date(param.dimissionDate,BizUserConstant.DateFormat));
+        bizUserDO.setBeginWorkTime(convert2Date(param.beginWorkTime));
+        bizUserDO.setContractExpirationDate(convert2Date(param.contractExpirationDate));
+        bizUserDO.setDimssionDate(convert2Date(param.dimissionDate));
         bizUserDO.setDimssionReason(param.dimissionReason);
-        bizUserDO.setBeginPoliceWorkTime(DateUtil.convert2Date(param.beginPoliceWorkTime,BizUserConstant.DateFormat));
-        bizUserDO.setFirstGradeTime(DateUtil.convert2Date(param.firstGradeTime,BizUserConstant.DateFormat));
-        bizUserDO.setWorkCardBeginTime(DateUtil.convert2Date(param.workCardBeginTime,BizUserConstant.DateFormat));
-        bizUserDO.setFirstContractBeginTime(DateUtil.convert2Date(param.firstContractBeginTime,BizUserConstant.DateFormat));
-        bizUserDO.setFirstContractEngTime(DateUtil.convert2Date(param.firstContractEngTime,BizUserConstant.DateFormat));
-        bizUserDO.setSecondContractBeginTime(DateUtil.convert2Date(param.secondContractBeginTime,BizUserConstant.DateFormat));
-        bizUserDO.setSecondContractEngTime(DateUtil.convert2Date(param.secondContractEngTime,BizUserConstant.DateFormat));
-        bizUserDO.setThirdContractBeginTime(DateUtil.convert2Date(param.thirdContractBeginTime,BizUserConstant.DateFormat));
-        bizUserDO.setThirdContractEngTime(DateUtil.convert2Date(param.thirdContractEngTime,BizUserConstant.DateFormat));
+        bizUserDO.setBeginPoliceWorkTime(convert2Date(param.beginPoliceWorkTime));
+        bizUserDO.setFirstGradeTime(convert2Date(param.firstGradeTime));
+        bizUserDO.setWorkCardBeginTime(convert2Date(param.workCardBeginTime));
+        bizUserDO.setFirstContractBeginTime(convert2Date(param.firstContractBeginTime));
+        bizUserDO.setFirstContractEngTime(convert2Date(param.firstContractEngTime));
+        bizUserDO.setSecondContractBeginTime(convert2Date(param.secondContractBeginTime));
+        bizUserDO.setSecondContractEngTime(convert2Date(param.secondContractEngTime));
+        bizUserDO.setThirdContractBeginTime(convert2Date(param.thirdContractBeginTime));
+        bizUserDO.setThirdContractEngTime(convert2Date(param.thirdContractEngTime));
         bizUserDO.setDueContract(param.dueContract);
         bizUserDO.setIcbcCardAccount(param.icbcCardAccount);
-        bizUserDO.setRuZhiZuLinTime(DateUtil.convert2Date(param.ruZhiZuLinTime,BizUserConstant.DateFormat));
+        bizUserDO.setRuZhiZuLinTime(convert2Date(param.ruZhiZuLinTime));
         bizUserDO.setUserType(param.userType);
     }
 
-    private String inStrList(List<String> list){
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
+    private Date convert2Date(String date) {
+        Date d = DateUtil.convert2Date(date,BizUserConstant.DateFormat);
+        if(d == null) {
+            d = DateUtil.convert2Date(date,BizUserConstant.DateFormat2);
         }
-        StringBuilder sb = new StringBuilder();
-        for(String s : list) {
-            sb.append("'" + s + "'").append(",");
-        }
-        String str = sb.toString();
-        if(str.endsWith(",")) {
-            str = str.substring(0,str.length()-1);
-        }
-        return "(" + str + ")";
+        return d;
     }
 
-    private String inIntList(List<Integer> list){
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        for(Integer i : list) {
-            sb.append(i).append(",");
-        }
-        String str = sb.toString();
-        if(str.endsWith(",")) {
-            str = str.substring(0,str.length()-1);
-        }
-        return "(" + str + ")";
-    }
 
 
 

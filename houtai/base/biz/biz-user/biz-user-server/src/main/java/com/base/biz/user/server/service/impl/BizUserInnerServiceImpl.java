@@ -68,6 +68,7 @@ import com.base.resource.client.model.ResourceVO;
 import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -118,9 +119,11 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      */
     public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) throws Exception{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         if(org.springframework.util.CollectionUtils.isEmpty(companyList)) {
-            return Lists.newArrayList();
-        }
+
+        //if(StringUtils.isEmpty(name) && CollectionUtils.isEmpty(companyList)) {
+        //    throw new BaseException("请输入查询条件");
+        //}
+
         List<BizUserDTO> bizUserDTOList = bizUserManager.findByNameAndCompany(name, companyList);
         if(CollectionUtils.isEmpty(bizUserDTOList)) {
             return Lists.newArrayList();

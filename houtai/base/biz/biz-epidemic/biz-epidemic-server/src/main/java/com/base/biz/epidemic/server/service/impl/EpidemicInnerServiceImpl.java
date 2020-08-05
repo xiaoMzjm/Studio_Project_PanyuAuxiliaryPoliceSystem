@@ -74,11 +74,29 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         Date beginTimeDate = DateUtil.convert2Date(beginTime, "yyyy/MM/dd");
         Date endTimeDate = DateUtil.convert2Date(endTime, "yyyy/MM/dd");
 
+        check(type,location);
+
         epidemicManager.add(companyCode, type,
             location, userCode,
             beginTimeDate, endTimeDate,
             detail, leaderCode, EpidemicStatusEnum.Edit.getStatus());
 
+    }
+
+    private void check(Integer type, Integer location) throws Exception{
+        if(EpidemicTypeEnum.GeLiWeiShangBan.getType().equals(type)) {
+            if(!(EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
+                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
+                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
+                throw new BaseException("'处于隔离观察期未上班'类型只能选择'自行隔离'或'单位集中'或'卫健部门'");
+            }
+        }else {
+            if((EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
+                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
+                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
+                throw new BaseException("'因公外出'或'因私外出'只能选择'或'北京/湖北/境内中高风险地区/广东省内/境内其他地区/境外'");
+            }
+        }
     }
 
     @Override
@@ -175,6 +193,8 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                        String beginTime, String endTime, String detail, String leaderCode) throws Exception {
         Date beginTimeDate = DateUtil.convert2Date(beginTime, "yyyy/MM/dd");
         Date endTimeDate = DateUtil.convert2Date(endTime, "yyyy/MM/dd");
+
+        check(type,location);
 
         EpidemicDTO findEpidemicDTO = epidemicManager.selectByCode(code);
         if (findEpidemicDTO == null) {
