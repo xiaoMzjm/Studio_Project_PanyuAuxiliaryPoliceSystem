@@ -38,7 +38,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByWorkCardBeginTime(start, end);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
             for (BizUserDTO dto : bizUserDTOList) {
-                result.add(bizUserInnerSerivce.dto2vo(dto));
+                result.add(bizUserInnerSerivce.dto2vo(dto,null));
             }
         }
         return result;
@@ -50,7 +50,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByContractEngTime(start, end);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
             for (BizUserDTO dto : bizUserDTOList) {
-                result.add(bizUserInnerSerivce.dto2vo(dto));
+                result.add(bizUserInnerSerivce.dto2vo(dto,null));
             }
         }
         return result;
@@ -62,7 +62,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByBirthDayAndSex(start, end, sex);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
             for (BizUserDTO dto : bizUserDTOList) {
-                result.add(bizUserInnerSerivce.dto2vo(dto));
+                result.add(bizUserInnerSerivce.dto2vo(dto,null));
             }
         }
         return result;
@@ -76,7 +76,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         List<BizUserDTO> bizUserDTOList = bizUserManager.findBySuperParam(param);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
             for (BizUserDTO dto : bizUserDTOList) {
-                result.add(bizUserInnerSerivce.dto2vo(dto));
+                result.add(bizUserInnerSerivce.dto2vo(dto,null));
             }
         }
         return result;
@@ -88,7 +88,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         List<BizUserDetailVO> bizUserDetailVOList = Lists.newArrayList();
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
             for (BizUserDTO dto : bizUserDTOList) {
-                bizUserDetailVOList.add(bizUserInnerSerivce.dto2vo(dto));
+                bizUserDetailVOList.add(bizUserInnerSerivce.dto2vo(dto,null));
             }
         }
         Map<String,BizUserDetailVO> result = bizUserDetailVOList.stream().collect(Collectors.toMap(BizUserDetailVO::getCode, Function

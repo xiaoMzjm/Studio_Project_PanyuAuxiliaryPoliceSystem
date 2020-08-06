@@ -24,6 +24,15 @@ public class EpidemicEnums {
             this.desc = desc;
         }
 
+        public static String getDesc(Integer type){
+            for(EpidemicTypeEnum e : EpidemicTypeEnum.values()) {
+                if(e.getType().equals(type)) {
+                    return e.getDesc();
+                }
+            }
+            return "";
+        }
+
         public static List<EnumVO> getAll(){
             List<EnumVO> list = Lists.newArrayList();
             for (EpidemicTypeEnum e : EpidemicTypeEnum.values()) {
@@ -67,6 +76,15 @@ public class EpidemicEnums {
         EpidemicLocationEnum(Integer location, String desc) {
             this.location = location;
             this.desc = desc;
+        }
+
+        public static String getDesc(Integer type){
+            for(EpidemicLocationEnum e : EpidemicLocationEnum.values()) {
+                if(e.getLocation().equals(type)) {
+                    return e.getDesc();
+                }
+            }
+            return "";
         }
 
         public static List<EnumVO> getAll(){

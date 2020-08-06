@@ -120,9 +120,9 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      */
     public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) throws Exception{
 
-        //if(StringUtils.isEmpty(name) && CollectionUtils.isEmpty(companyList)) {
-        //    throw new BaseException("请输入查询条件");
-        //}
+        if(StringUtils.isEmpty(name) && CollectionUtils.isEmpty(companyList)) {
+            throw new BaseException("请输入查询条件");
+        }
 
         List<BizUserDTO> bizUserDTOList = bizUserManager.findByNameAndCompany(name, companyList);
         if(CollectionUtils.isEmpty(bizUserDTOList)) {
@@ -184,10 +184,13 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
             throw new BaseException("Code为空");
         }
         BizUserDTO dto = bizUserManager.findByCode(code);
-        return dto2vo(dto);
+        return dto2vo(dto,null);
     }
 
-    public BizUserDetailVO dto2vo(BizUserDTO dto){
+    public BizUserDetailVO dto2vo(BizUserDTO dto , Map<String,String> companyCode2NameMap){
+        if(companyCode2NameMap == null) {
+            companyCode2NameMap = new HashMap<>();
+        }
         BizUserDetailVO vo = new BizUserDetailVO();
         vo.setName(dto.getName());
         String picName = dto.getPicUrl();
@@ -274,20 +277,62 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         vo.setIcbcCardAccount(dto.getIcbcCardAccount());
         vo.setRuZhiZuLinTime(DateUtil.convert2String(dto.getRuZhiZuLinTime(), BizUserConstant.DateFormat));
         vo.setUserType(dto.getUserType());
-
-
-
-        List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getWorkUnitCode()));
-        if (CollectionUtils.isNotEmpty(companyVOList)) {
-            CompanyVO companyVO = companyVOList.get(0);
-            vo.setWorkUnitName(companyVO.getName());
-        }
         vo.setOrganizationUnit(dto.getOrganizationUnitCode());
-        companyVOList = companyService.findByCodeList(Lists.newArrayList(dto.getOrganizationUnitCode()));
-        if (CollectionUtils.isNotEmpty(companyVOList)) {
-            CompanyVO companyVO = companyVOList.get(0);
-            vo.setOrganizationUnitName(companyVO.getName());
+
+
+
+        String companyName = companyCode2NameMap.get(dto.getWorkUnitCode());
+        if(StringUtils.isNotEmpty(companyName)) {
+            vo.setWorkUnitName(companyName);
+        }else {
+            companyName = "";
+            String companyCode = dto.getWorkUnitCode();
+            while (true) {
+                List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(companyCode));
+                if (CollectionUtils.isNotEmpty(companyVOList)) {
+                    CompanyVO companyVO = companyVOList.get(0);
+                    companyName = companyVO.getName() + "/" + companyName;
+                    if(StringUtils.isNotEmpty(companyVO.getFatherCode())) {
+                        companyCode = companyVO.getFatherCode();
+                    }else {
+                        break;
+                    }
+                }
+            }
+            if(companyName.endsWith("/")) {
+                companyName = companyName.substring(0,companyName.length()-1);
+            }
+            vo.setWorkUnitName(companyName);
+            companyCode2NameMap.put(dto.getWorkUnitCode(),companyName);
         }
+
+
+
+        companyName = companyCode2NameMap.get(dto.getOrganizationUnitCode());
+        if(StringUtils.isNotEmpty(companyName)) {
+            vo.setOrganizationUnitName(companyName);
+        }else {
+            companyName = "";
+            String companyCode = dto.getOrganizationUnitCode();
+            while (true) {
+                List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(companyCode));
+                if (CollectionUtils.isNotEmpty(companyVOList)) {
+                    CompanyVO companyVO = companyVOList.get(0);
+                    companyName = companyVO.getName() + "/" + companyName;
+                    if(StringUtils.isNotEmpty(companyVO.getFatherCode())) {
+                        companyCode = companyVO.getFatherCode();
+                    }else {
+                        break;
+                    }
+                }
+            }
+            if(companyName.endsWith("/")) {
+                companyName = companyName.substring(0,companyName.length()-1);
+            }
+            vo.setOrganizationUnitName(companyName);
+            companyCode2NameMap.put(dto.getOrganizationUnitCode(),companyName);
+        }
+
         vo.setJobCategory(dto.getJobCategory());
         vo.setJobCategoryStr(JobCategoryEnum.getName(dto.getJobCategory()));
         vo.setDuty(dto.getDuty());
@@ -823,9 +868,10 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
             throw new RuntimeException("查询不到人员，请重试");
         }
 
+        Map<String,String> companyCode2NameMap = new HashMap<>();
         List<List<CellDTO>> list = Lists.newArrayList();
         for(BizUserDTO bizUserDTO : bizUserDTOList) {
-            BizUserDetailVO vo = dto2vo(bizUserDTO);
+            BizUserDetailVO vo = dto2vo(bizUserDTO,companyCode2NameMap);
             List<CellDTO> row = Lists.newArrayList();
             row.add(new CellDTO(vo.getName()));
             CellDTO birthdayCell = new CellDTO(vo.getBirthdate());

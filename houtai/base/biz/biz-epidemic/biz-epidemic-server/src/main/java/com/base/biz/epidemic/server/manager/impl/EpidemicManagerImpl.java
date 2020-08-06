@@ -38,6 +38,7 @@ public class EpidemicManagerImpl implements EpidemicManager {
     @Override
     public void add(String companyCode, Integer type, Integer location, String userCode, Date beginTime, Date endTime,
                     String detail, String leaderCode, Integer status) throws Exception {
+        checkAdd(userCode,beginTime,endTime);
         EpidemicDO epidemicDO = new EpidemicDO();
         epidemicDO.setCode(UUIDUtil.get());
         Date now = new Date();
@@ -189,5 +190,37 @@ public class EpidemicManagerImpl implements EpidemicManager {
             str = str.substring(0,str.length()-1);
         }
         return "(" + str + ")";
+    }
+
+    private void checkAdd(String userCode, Date beginTime, Date endTime) throws Exception{
+        String beginTimeStr = DateUtil.convert2String(beginTime , "yyyy/MM/dd");
+        String endTimeStr = DateUtil.convert2String(endTime , "yyyy/MM/dd");
+        String sql1 = "select * from epidemic where user_code = '"+ userCode +"'  and begin_time <= '"+endTimeStr+"' and begin_time >= '"+beginTimeStr+"'" ;
+        System.out.println("sql1 = " + sql1);
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query query = entityManager.createNativeQuery(sql1, EpidemicDO.class);
+        List<EpidemicDO> bizUserDOList = query.getResultList();
+        if(CollectionUtils.isNotEmpty(bizUserDOList)) {
+            throw new BaseException("该人员在该所选时间范围内已有记录");
+        }
+
+        String sql2 = "select * from epidemic where user_code = '"+ userCode +"'  and begin_time <= '"+beginTimeStr+"' and end_time >= '"+endTimeStr+"'" ;
+        System.out.println("sql2 = " + sql2);
+        query = entityManager.createNativeQuery(sql2, EpidemicDO.class);
+        bizUserDOList = query.getResultList();
+        if(CollectionUtils.isNotEmpty(bizUserDOList)) {
+            throw new BaseException("该人员在该所选时间范围内已有记录");
+        }
+
+        String sql3 = "select * from epidemic where user_code = '"+ userCode +"'  and end_time >= '"+beginTimeStr+"' and end_time <= '"+endTimeStr+"'" ;
+        System.out.println("sql3 = " + sql3);
+        query = entityManager.createNativeQuery(sql3, EpidemicDO.class);
+        bizUserDOList = query.getResultList();
+        if(CollectionUtils.isNotEmpty(bizUserDOList)) {
+            throw new BaseException("该人员在该所选时间范围内已有记录");
+        }
+
+        entityManager.close();
     }
 }

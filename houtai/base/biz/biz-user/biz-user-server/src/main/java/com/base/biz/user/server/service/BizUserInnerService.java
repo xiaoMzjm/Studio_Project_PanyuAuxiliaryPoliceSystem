@@ -3,6 +3,7 @@ package com.base.biz.user.server.service;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import com.base.authority.client.model.AuthorityVO;
 import com.base.biz.user.client.model.BizUserDetailVO;
@@ -23,7 +24,7 @@ public interface BizUserInnerService {
 
     BizUserDetailVO findByCode(String code) throws Exception;
 
-    BizUserDetailVO dto2vo(BizUserDTO dto);
+    BizUserDetailVO dto2vo(BizUserDTO dto , Map<String,String> companyCode2NameMap);
 
     List<BizUserPageListVO> superPageList(SuperPageListParam param) throws Exception;
 

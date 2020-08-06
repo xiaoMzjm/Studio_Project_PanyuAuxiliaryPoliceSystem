@@ -74,6 +74,28 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         Date beginTimeDate = DateUtil.convert2Date(beginTime, "yyyy/MM/dd");
         Date endTimeDate = DateUtil.convert2Date(endTime, "yyyy/MM/dd");
 
+        if(StringUtils.isEmpty(companyCode)) {
+            throw new BaseException("单位必须填写");
+        }
+        if(type == null) {
+            throw new BaseException("类型必须填写");
+        }
+        if(location == null) {
+            throw new BaseException("地点必须填写");
+        }
+        if(StringUtils.isEmpty(userCode)) {
+            throw new BaseException("人员必须填写");
+        }
+        if(StringUtils.isEmpty(beginTime)) {
+            throw new BaseException("起始日期必须填写");
+        }
+        if(StringUtils.isEmpty(endTime)) {
+            throw new BaseException("结束日期必须填写");
+        }
+        if(StringUtils.isEmpty(leaderCode)) {
+            throw new BaseException("审批领导必须填写");
+        }
+
         check(type,location);
 
         epidemicManager.add(companyCode, type,
@@ -270,8 +292,10 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
             if(!CollectionUtils.isEmpty(epidemicVOS)) {
                 for(EpidemicVO epidemicVO : epidemicVOS) {
-                    details += epidemicVO.getDetail() + "\n";
-                    allDetails += epidemicVO.getDetail() + "\n";
+
+                    String detail = companyName + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + EpidemicTypeEnum.getDesc(epidemicVO.getType());
+                    details += detail + "\n";
+                    allDetails += detail + "\n";
                     if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.ZiXingGeLi.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {

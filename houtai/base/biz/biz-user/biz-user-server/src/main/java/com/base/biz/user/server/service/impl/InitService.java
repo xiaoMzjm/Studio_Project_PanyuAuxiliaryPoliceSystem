@@ -93,15 +93,15 @@ public class InitService {
         try {
             vo = authorityService.add("删除人员", "UserListDeleteUser", AuthorityTypeEnum.Function.getType(),"UserList");
         }catch (Exception e) {}
-        try {
-            vo = authorityService.add("导出收入证明", "UserListExportShouRu", AuthorityTypeEnum.Function.getType(),"UserList");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("导出在职证明", "UserListExportZaiZhi", AuthorityTypeEnum.Function.getType(),"UserList");
-        }catch (Exception e) {}
-        try {
-            vo = authorityService.add("修改他人资料", "UserListUpdateOthers", AuthorityTypeEnum.Function.getType(),"UserList");
-        }catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("导出收入证明", "UserListExportShouRu", AuthorityTypeEnum.Function.getType(),"UserList");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("导出在职证明", "UserListExportZaiZhi", AuthorityTypeEnum.Function.getType(),"UserList");
+        //}catch (Exception e) {}
+        //try {
+        //    vo = authorityService.add("修改他人资料", "UserListUpdateOthers", AuthorityTypeEnum.Function.getType(),"UserList");
+        //}catch (Exception e) {}
 
 
         // 基础数据统计
@@ -192,7 +192,6 @@ public class InitService {
         try {
             vo = authorityService.add("防疫登记和查询", "EpidemicListManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {
-            e.printStackTrace();
         }
         try {
             vo = authorityService.add("查询所有单位", "EpidemicListManagerSelectAllCompany", AuthorityTypeEnum.Function.getType(),"EpidemicListManager");
