@@ -104,7 +104,7 @@ public class EpidemicController {
         epidemicService.update(addRequest.code, addRequest.companyCode,addRequest.type,
             addRequest.location,addRequest.userCode,
             addRequest.beginTime, addRequest.endTime,
-            addRequest.detail,addRequest.leaderCode);
+            addRequest.detail,addRequest.leaderCode,addRequest.detailLocation);
 
         return JSON.toJSONString(Result.success(""));
     }

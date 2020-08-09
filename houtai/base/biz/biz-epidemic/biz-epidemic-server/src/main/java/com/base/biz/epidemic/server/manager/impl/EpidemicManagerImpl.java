@@ -62,7 +62,7 @@ public class EpidemicManagerImpl implements EpidemicManager {
 
     @Override
     public void update(String code, String companyCode, Integer type, Integer location, String userCode, Date beginTime,
-                       Date endTime, String detail, String leaderCode, Integer status) throws Exception {
+                       Date endTime, String detail, String leaderCode, String detailLocation, Integer status) throws Exception {
         EpidemicDO findEpidemicDO = epidemicDAO.findByCode(code);
         if(findEpidemicDO == null) {
             throw new BaseException("记录不存在:" + code);
@@ -82,6 +82,7 @@ public class EpidemicManagerImpl implements EpidemicManager {
         epidemicDO.setLeaderCode(leaderCode);
         epidemicDO.setStatus(status);
         epidemicDO.setUserCode(userCode);
+        epidemicDO.setDetailLocation(detailLocation);
         epidemicDAO.save(epidemicDO);
     }
 

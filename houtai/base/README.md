@@ -1,5 +1,5 @@
 1. 打包
-mvn clean package
+mvn clean package -Dmaven.test.skip=true
 
 2. 上传
 上传 scp biz/main/target/base.jar root@39.96.189.242:/home/admin/base

@@ -24,6 +24,7 @@ import com.base.biz.user.server.model.UpdateParam;
 import com.base.biz.user.server.service.BizUserInnerService;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
+import com.base.common.exception.BaseException;
 import com.base.common.util.UUIDUtil;
 import com.base.user.client.common.UserConstant;
 import com.base.user.client.model.TokenFilter;
@@ -270,6 +271,9 @@ public class BizUserController {
         String url = "";
         try {
             String name = UUIDUtil.get();
+            if(!oriName.endsWith("xlsx")) {
+                throw new BaseException("请上传xlsx后缀格式的excel文件");
+            }
             url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
             file.transferTo(new File(url));
             File f = new File(url);
@@ -300,8 +304,11 @@ public class BizUserController {
         }
 
         String oriName = file.getOriginalFilename();
-
         String diskPath = diskStaticUrl + "files";
+
+        if(!oriName.endsWith("zip")) {
+            throw new BaseException("请上传zip后缀格式的压缩文件");
+        }
 
         // 创建目录
         File pathFolder = new File(diskPath);

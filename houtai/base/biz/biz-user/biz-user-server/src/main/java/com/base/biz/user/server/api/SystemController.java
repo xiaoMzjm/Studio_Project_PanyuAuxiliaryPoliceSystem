@@ -49,9 +49,9 @@ public class SystemController {
     public void downloadhelp(HttpServletResponse response) throws Exception {
 
 
-        ClassPathResource classPathResource = new ClassPathResource("static/file/《广州市公安局番禺分局辅警管理系统》用户使用手册.docx");
+        ClassPathResource classPathResource = new ClassPathResource("static/file/《广州市公安局番禺分局政工系统》用户使用手册.docx");
         InputStream inputStream = classPathResource.getInputStream();
-        String fileName = new String("《广州市公安局番禺分局辅警管理系统》用户使用手册.docx".getBytes("UTF-8"),"ISO-8859-1");
+        String fileName = new String("《广州市公安局番禺分局政工系统》用户使用手册.docx".getBytes("UTF-8"),"ISO-8859-1");
 
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
         OutputStream os = response.getOutputStream();

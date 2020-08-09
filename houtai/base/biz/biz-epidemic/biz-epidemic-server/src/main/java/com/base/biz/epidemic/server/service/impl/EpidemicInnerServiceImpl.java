@@ -216,7 +216,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Override
     public void update(String code, String companyCode, Integer type, Integer location, String userCode,
-                       String beginTime, String endTime, String detail, String leaderCode) throws Exception {
+                       String beginTime, String endTime, String detail, String leaderCode, String detailLocation) throws Exception {
         Date beginTimeDate = DateUtil.convert2Date(beginTime, "yyyy/MM/dd");
         Date endTimeDate = DateUtil.convert2Date(endTime, "yyyy/MM/dd");
 
@@ -233,7 +233,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         epidemicManager.update(code, companyCode, type,
             location, userCode,
             beginTimeDate, endTimeDate,
-            detail, leaderCode, EpidemicStatusEnum.Edit.getStatus());
+            detail, leaderCode, detailLocation, EpidemicStatusEnum.Edit.getStatus());
     }
 
     @Override

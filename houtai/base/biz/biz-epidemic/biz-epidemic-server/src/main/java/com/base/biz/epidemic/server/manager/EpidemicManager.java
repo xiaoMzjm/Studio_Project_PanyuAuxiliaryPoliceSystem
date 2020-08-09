@@ -21,7 +21,7 @@ public interface EpidemicManager {
     void update (String code, String companyCode, Integer type,
                  Integer location, String userCode,
                  Date beginTime, Date endTime,
-                 String detail, String leaderCode, Integer status) throws Exception;
+                 String detail, String leaderCode, String detailLocation, Integer status) throws Exception;
 
     List<EpidemicDTO> select(EpidemicSelectParam epidemicSelectParam) throws Exception;
 

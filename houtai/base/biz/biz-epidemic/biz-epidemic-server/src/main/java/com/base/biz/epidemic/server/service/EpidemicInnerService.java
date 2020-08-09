@@ -28,7 +28,7 @@ public interface EpidemicInnerService {
     void update(String code, String companyCode, Integer type,
              Integer location, String userCode,
              String beginTime, String endTime,
-             String detail, String leaderCode) throws Exception;
+             String detail, String leaderCode, String detailLocation) throws Exception;
 
 
     void createStatistics(InputStream zhengGongBan, InputStream shiJu , String date, String remark) throws Exception;
