@@ -44,6 +44,8 @@ public class EpidemicVO {
 
     private Integer userType;
 
+    private String detailLocation;
+
     public Long getId() {
         return id;
     }
@@ -186,5 +188,13 @@ public class EpidemicVO {
 
     public void setGmtCreateStr(String gmtCreateStr) {
         this.gmtCreateStr = gmtCreateStr;
+    }
+
+    public String getDetailLocation() {
+        return detailLocation;
+    }
+
+    public void setDetailLocation(String detailLocation) {
+        this.detailLocation = detailLocation;
     }
 }

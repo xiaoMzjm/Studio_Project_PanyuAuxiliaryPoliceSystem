@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -68,11 +70,12 @@ import com.base.resource.client.model.ResourceVO;
 import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.UserVO;
 import com.base.user.client.service.UserService;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,6 +88,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class BizUserInnerServiceImpl implements BizUserInnerService {
+
+    private final static Logger logger = LoggerFactory.getLogger(BizUserInnerServiceImpl.class);
+
+    private final static int forkJoinNum = 20;
 
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
@@ -118,6 +125,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param companyList
      * @return
      */
+    @Override
     public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) throws Exception{
 
         if(StringUtils.isEmpty(name) && CollectionUtils.isEmpty(companyList)) {
@@ -179,6 +187,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param code
      * @return
      */
+    @Override
     public BizUserDetailVO findByCode(String code) throws Exception{
         if(StringUtils.isBlank(code)) {
             throw new BaseException("Code为空");
@@ -187,6 +196,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
         return dto2vo(dto,null);
     }
 
+    @Override
     public BizUserDetailVO dto2vo(BizUserDTO dto , Map<String,String> companyCode2NameMap){
         if(companyCode2NameMap == null) {
             companyCode2NameMap = new HashMap<>();
@@ -297,6 +307,8 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
                     }else {
                         break;
                     }
+                }else {
+                    break;
                 }
             }
             if(companyName.endsWith("/")) {
@@ -305,8 +317,6 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
             vo.setWorkUnitName(companyName);
             companyCode2NameMap.put(dto.getWorkUnitCode(),companyName);
         }
-
-
 
         companyName = companyCode2NameMap.get(dto.getOrganizationUnitCode());
         if(StringUtils.isNotEmpty(companyName)) {
@@ -324,6 +334,8 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
                     }else {
                         break;
                     }
+                }else {
+                    break;
                 }
             }
             if(companyName.endsWith("/")) {
@@ -413,6 +425,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param param
      * @throws Exception
      */
+    @Override
     public List<BizUserPageListVO> superPageList(SuperPageListParam param) throws Exception{
 
         List<BizUserDTO> bizUserDTOList = bizUserManager.findBySuperParam(param);
@@ -458,6 +471,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      * @throws Exception
      */
+    @Override
     public BizUserLoginVO login(String account, String password) throws Exception{
 
         VerifyUtil.isNotNull(account, "", "账户为空");
@@ -486,6 +500,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      */
     @Transactional(rollbackFor = Throwable.class)
+    @Override
     public BizUserDTO add(BizUserAddParam param) throws Exception {
         bizUserAddUserCheckService.check(param);
         BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(param.identityCard);
@@ -513,8 +528,9 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param param
      * @throws Exception
      */
+    @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void update(UpdateParam param) throws Exception {
+    public void update(UpdateParam param) throws RuntimeException {
         bizUserAddUserCheckService.check(param);
         if (StringUtils.isEmpty(param.getCode())) {
             throw new BaseException("人员Code为空");
@@ -536,7 +552,8 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param code
      */
     @Transactional(rollbackFor = Throwable.class)
-    public void deleteByCode(String code, boolean deleteUser) throws Exception{
+    @Override
+    public void deleteByCode(String code, boolean deleteUser) throws RuntimeException{
         BizUserDTO dto = bizUserManager.findByCode(code);
         if(dto == null) {
             throw new BaseException(String.format("该人员不存在[%s]", code));
@@ -556,31 +573,76 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param inputStream
      */
     @Transactional(rollbackFor = Throwable.class)
+    @Override
     public void importUser(InputStream inputStream)throws Exception {
         List<BizUserAddParam> bizUserAddParamList = BizUserAddExcelReader.readExcel(inputStream);
         if(CollectionUtils.isNotEmpty(bizUserAddParamList)) {
             for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
                 bizUserAddUserCheckService.check(bizUserAddParam);
             }
-            for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
-                BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(bizUserAddParam.identityCard);
-                // 如果已存在则更新
-                if (bizUserDTO != null) {
-                    UpdateParam updateParam = new UpdateParam();
-                    BeanUtils.copyProperties(bizUserAddParam, updateParam);
-                    updateParam.setCode(bizUserDTO.getCode());
-                    update(updateParam);
-                    continue ;
+            //for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
+            //    importOneUser(bizUserAddParam);
+            //}
+
+            ImportUserForkJoinTask task = new ImportUserForkJoinTask(bizUserAddParamList);
+            ForkJoinPool commonPool = ForkJoinPool.commonPool();
+            commonPool.invoke(task);
+            task.get();
+        }
+    }
+
+    private void importOneUser(BizUserAddParam bizUserAddParam) throws RuntimeException{
+        BizUserDTO bizUserDTO = bizUserManager.findByIdentityCard(bizUserAddParam.identityCard);
+        // 如果已存在则更新
+        if (bizUserDTO != null) {
+            UpdateParam updateParam = new UpdateParam();
+            BeanUtils.copyProperties(bizUserAddParam, updateParam);
+            updateParam.setCode(bizUserDTO.getCode());
+            update(updateParam);
+        }
+        else {
+            if(StringUtils.isNotEmpty(bizUserAddParam.policeCode)) {
+                bizUserDTO = bizUserManager.findByPoliceCode(bizUserAddParam.policeCode);
+                if (bizUserDTO != null && !bizUserDTO.getIdentityCard().equals(bizUserDTO.getIdentityCard())) {
+                    throw new BaseException(String.format("该警号[%s]已存在",bizUserAddParam.identityCard));
                 }
-                if(StringUtils.isNotEmpty(bizUserAddParam.policeCode)) {
-                    bizUserDTO = bizUserManager.findByPoliceCode(bizUserAddParam.policeCode);
-                    if (bizUserDTO != null && !bizUserDTO.getIdentityCard().equals(bizUserDTO.getIdentityCard())) {
-                        throw new BaseException(String.format("该警号[%s]已存在",bizUserAddParam.identityCard));
-                    }
-                }
-                userService.add(bizUserAddParam.identityCard);
-                bizUserManager.add(bizUserAddParam);
             }
+            userService.add(bizUserAddParam.identityCard);
+            bizUserManager.add(bizUserAddParam);
+        }
+
+    }
+
+    class ImportUserForkJoinTask extends RecursiveTask<Void> {
+
+        private List<BizUserAddParam> bizUserAddParamList ;
+
+        public ImportUserForkJoinTask(List<BizUserAddParam> bizUserAddParamList) {
+            this.bizUserAddParamList = bizUserAddParamList;
+        }
+
+        @Override
+        protected Void compute(){
+            if(CollectionUtils.isEmpty(bizUserAddParamList)) {
+                return null;
+            }
+            if(bizUserAddParamList.size() < forkJoinNum) {
+                for(BizUserAddParam bizUserAddParam : bizUserAddParamList) {
+                    importOneUser(bizUserAddParam);
+                }
+                return null;
+            }
+            int mid = bizUserAddParamList.size() / 2;
+            List<BizUserAddParam> left = bizUserAddParamList.subList(0,mid);
+            List<BizUserAddParam> right = bizUserAddParamList.subList(mid,bizUserAddParamList.size());
+            ImportUserForkJoinTask leftTask = new ImportUserForkJoinTask(left);
+            ImportUserForkJoinTask rightTask = new ImportUserForkJoinTask(right);
+            leftTask.fork();
+            rightTask.fork();
+            leftTask.join();
+            rightTask.join();
+
+            return null;
         }
     }
 
@@ -589,6 +651,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @param file
      * @throws Exception
      */
+    @Override
     public List<String> importImage(File file) throws Exception {
         if(StringUtils.isEmpty(diskStaticUrl)) {
             throw new BaseException("diskStaticUrl is null");
@@ -638,6 +701,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      * @throws Exception
      */
+    @Override
     public File exportUser(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
@@ -752,6 +816,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      * @throws Exception
      */
+    @Override
     public File exportIncomeCertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
@@ -804,6 +869,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      * @throws Exception
      */
+    @Override
     public File exportOnTheJobCertificate(String code, InputStream inputStream) throws Exception{
         if(StringUtils.isEmpty(code)) {
             throw new BaseException("code is null");
@@ -857,6 +923,7 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
 
     }
 
+    @Override
     public String exportSelectUser(InputStream fromFileInputStream, List<String> userCodes) throws Exception {
 
         if(CollectionUtils.isEmpty(userCodes)) {

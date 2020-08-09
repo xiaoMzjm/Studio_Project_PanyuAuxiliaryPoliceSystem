@@ -211,8 +211,6 @@ public class BizUserController {
     }
 
 
-    // http://localhost/user/downloadimportdemo?token=e316d1bbee694663b1053b509a7fc1d9
-
     @TokenFilter
     @ResultFilter
     @ApiOperation(value = "下载导入模板" , notes = "下载导入模板")
@@ -226,8 +224,6 @@ public class BizUserController {
         // 名称
         String fileName = new String("导入模板.xlsx".getBytes("UTF-8"),"ISO-8859-1");
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        //Long contentLength = file.length();
-        //response.setHeader("content-length", contentLength + "");
 
         OutputStream os = response.getOutputStream();
         BufferedInputStream bis = new BufferedInputStream(inputStream);

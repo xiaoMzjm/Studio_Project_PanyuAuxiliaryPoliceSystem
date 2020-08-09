@@ -16,7 +16,7 @@ public interface EpidemicManager {
     void add(String companyCode, Integer type,
              Integer location, String userCode,
              Date beginTime, Date endTime,
-             String detail, String leaderCode, Integer status) throws Exception;
+             String detail, String leaderCode, String detailLocation, Integer status) throws Exception;
 
     void update (String code, String companyCode, Integer type,
                  Integer location, String userCode,

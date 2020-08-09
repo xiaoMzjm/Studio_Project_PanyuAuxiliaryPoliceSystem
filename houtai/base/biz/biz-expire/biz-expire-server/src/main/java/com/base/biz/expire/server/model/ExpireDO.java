@@ -46,6 +46,9 @@ public class ExpireDO {
     @Column
     private Integer type;
 
+    @Column(length = 512)
+    private String remark;
+
     public Integer getId() {
         return id;
     }
@@ -108,5 +111,13 @@ public class ExpireDO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -61,7 +61,6 @@ public class InitService {
         try {
             vo = authorityService.add("角色权限绑定", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
         }catch (Exception e) {
-            e.printStackTrace();
         }
         try {
             vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");

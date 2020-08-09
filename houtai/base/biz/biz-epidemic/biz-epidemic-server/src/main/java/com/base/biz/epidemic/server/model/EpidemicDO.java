@@ -58,6 +58,9 @@ public class EpidemicDO {
     @Column(length =  64, nullable = false)
     private String leaderCode;
 
+    @Column(length =  128)
+    private String detailLocation;
+
     @Column(nullable = false)
     private Integer status;
 
@@ -163,5 +166,13 @@ public class EpidemicDO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDetailLocation() {
+        return detailLocation;
+    }
+
+    public void setDetailLocation(String detailLocation) {
+        this.detailLocation = detailLocation;
     }
 }

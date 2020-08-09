@@ -23,7 +23,7 @@ public class ExpireManager {
     @Autowired
     private ExpireDAO expireDAO;
 
-    public void add(String code, String fileName, String fileUrl, Date time, int type){
+    public void add(String code, String fileName, String fileUrl, Date time, String remark, int type){
 
         Date now = new Date();
         ExpireDO expireDO = getByCode(code);
@@ -39,6 +39,7 @@ public class ExpireManager {
         expireDO.setGmtModified(now);
         expireDO.setTime(time);
         expireDO.setType(type);
+        expireDO.setRemark(remark);
         expireDAO.save(expireDO);
         return ;
     }

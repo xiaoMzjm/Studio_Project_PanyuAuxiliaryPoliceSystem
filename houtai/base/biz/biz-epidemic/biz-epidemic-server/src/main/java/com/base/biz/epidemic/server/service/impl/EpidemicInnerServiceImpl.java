@@ -69,7 +69,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public void add(String companyCode, Integer type,
                     Integer location, String userCode,
                     String beginTime, String endTime,
-                    String detail, String leaderCode) throws Exception {
+                    String detail, String leaderCode, String detailLocation) throws Exception {
 
         Date beginTimeDate = DateUtil.convert2Date(beginTime, "yyyy/MM/dd");
         Date endTimeDate = DateUtil.convert2Date(endTime, "yyyy/MM/dd");
@@ -95,13 +95,16 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         if(StringUtils.isEmpty(leaderCode)) {
             throw new BaseException("审批领导必须填写");
         }
+        //if(StringUtils.isEmpty(detailLocation)) {
+        //    throw new BaseException("详细地址必须填写");
+        //}
 
         check(type,location);
 
         epidemicManager.add(companyCode, type,
             location, userCode,
             beginTimeDate, endTimeDate,
-            detail, leaderCode, EpidemicStatusEnum.Edit.getStatus());
+            detail, leaderCode, detailLocation, EpidemicStatusEnum.Edit.getStatus());
 
     }
 
@@ -162,6 +165,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             String userCode = epidemicDTO.getUserCode();
             String leaderCode = epidemicDTO.getLeaderCode();
             String companyCode = epidemicDTO.getCompanyCode();
+            epidemicVO.setDetailLocation(epidemicDTO.getDetailLocation());
 
             BizUserDetailVO userVO = bizUserDetailVOMap.get(userCode);
             if (userVO != null) {
@@ -234,7 +238,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createStatistics(InputStream zhengGongBan, InputStream shiJu , String dateStr) throws Exception {
+    public void createStatistics(InputStream zhengGongBan, InputStream shiJu , String dateStr, String remark) throws Exception {
 
         // 找出对应日期的记录
         Date date = DateUtil.convert2Date(dateStr , "yyyy/MM/dd");
@@ -293,7 +297,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             if(!CollectionUtils.isEmpty(epidemicVOS)) {
                 for(EpidemicVO epidemicVO : epidemicVOS) {
 
-                    String detail = companyName + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + EpidemicTypeEnum.getDesc(epidemicVO.getType());
+                    if(epidemicVO.getDetailLocation() == null) {
+                        epidemicVO.setDetailLocation("");
+                    }
+                    String detail = companyName + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + epidemicVO.getDetailLocation() + EpidemicTypeEnum.getDesc(epidemicVO.getType());
+
                     details += detail + "\n";
                     allDetails += detail + "\n";
                     if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
@@ -393,8 +401,8 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             a21++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.HuBei.getLocation()) {
-                            c21++;
-                            a21++;
+                            c22++;
+                            a22++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
                             c23++;
@@ -534,7 +542,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String fileUrl2 = savePath + wordName2;
         String fileName1 = "(政工办掌握)" + dateStr + "番禺分局队伍内防疫工作情况统计表(不需要报送)";
         String fileName2 = "(报市局)"+dateStr+"番禺分局队伍内部防疫工作情况统计表";
-        expireClientService.add(fileName1 + "@" + fileName2, fileUrl1 + "@" + fileUrl2, date, ExpireType.Epidemic.getCode());
+        expireClientService.add(fileName1 + "@" + fileName2, fileUrl1 + "@" + fileUrl2, date, remark, ExpireType.Epidemic.getCode());
     }
 
     @Override
@@ -558,6 +566,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             String shiJuFileName = "";
             String zhengGongFileCode = "";
             String shiJuFileCode = "";
+            String remark = "";
             if(expireVO != null) {
                 String names = expireVO.getName();
                 String[] nameArray = names.split("@");
@@ -565,6 +574,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                 shiJuFileName = nameArray[1];
                 zhengGongFileCode = expireVO.getCode() + "@1";
                 shiJuFileCode = expireVO.getCode() + "@2";
+                remark = expireVO.getRemark();
             }
             EpidemicStatisticsVO epidemicStatisticsVO = new EpidemicStatisticsVO();
             epidemicStatisticsVO.setDay(i);
@@ -572,8 +582,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             epidemicStatisticsVO.setZhengGongFileCode(zhengGongFileCode);
             epidemicStatisticsVO.setShiJuFileName(shiJuFileName);
             epidemicStatisticsVO.setShiJuFileCode(shiJuFileCode);
+            epidemicStatisticsVO.setRemark(remark);
+
             result.add(epidemicStatisticsVO);
         }
         return result;
     }
+
 }

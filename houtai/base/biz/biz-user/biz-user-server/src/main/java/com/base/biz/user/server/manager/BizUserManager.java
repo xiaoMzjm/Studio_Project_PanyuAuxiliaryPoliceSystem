@@ -14,13 +14,13 @@ import com.base.biz.user.server.model.UpdateParam;
  */
 public interface BizUserManager{
 
-    BizUserDTO findByCode(String code) throws Exception;
+    BizUserDTO findByCode(String code) throws RuntimeException;
 
-    List<BizUserDTO> findByCodes(List<String> codes) throws Exception;
+    List<BizUserDTO> findByCodes(List<String> codes) throws RuntimeException;
 
-    BizUserDTO findByCodeAndPassword(String code, String password) throws Exception;
+    BizUserDTO findByCodeAndPassword(String code, String password) throws RuntimeException;
 
-    BizUserDTO findByPoliceCodeAndPassword(String code, String password) throws Exception;
+    BizUserDTO findByPoliceCodeAndPassword(String code, String password) throws RuntimeException;
 
     BizUserDTO findByIdentityCard(String identityCode);
 
@@ -38,9 +38,9 @@ public interface BizUserManager{
 
     BizUserDTO add(BizUserAddParam param);
 
-    void update(UpdateParam param) throws Exception;
+    void update(UpdateParam param) throws RuntimeException;
 
-    void updateImage(String code , String imageCode) throws Exception;
+    void updateImage(String code , String imageCode) throws RuntimeException;
 
     void deleteByCode(String code);
 

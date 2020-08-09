@@ -163,7 +163,7 @@ public class ExpireServiceImpl implements ExpireService {
                 String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
-                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.EmployeeCard.getCode());
+                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), "",ExpireType.EmployeeCard.getCode());
             }catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -247,7 +247,7 @@ public class ExpireServiceImpl implements ExpireService {
                 String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
-                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Contract.getCode());
+                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), "",ExpireType.Contract.getCode());
             }catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -336,7 +336,7 @@ public class ExpireServiceImpl implements ExpireService {
                 String wordName = ExcelUtil.insertExcelAndSave(inputStream, 2, 0, savePath, rules, null);
                 String fileUrl = savePath + wordName;
                 String fileName = DateUtil.convert2String(DateUtil.getFirstDayOfMonth(year,month), "yyyy-MM");
-                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), ExpireType.Retire.getCode());
+                expireManager.add(code, fileName, fileUrl, DateUtil.getFirstDayOfMonth(year,month), "",ExpireType.Retire.getCode());
             }catch (Exception e) {
                 e.printStackTrace();
                 throw e;

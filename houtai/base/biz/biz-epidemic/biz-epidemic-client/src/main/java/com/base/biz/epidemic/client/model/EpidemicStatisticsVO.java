@@ -16,6 +16,8 @@ public class EpidemicStatisticsVO {
 
     private String shiJuFileCode;
 
+    private String remark;
+
     public String getZhengGongFileName() {
         return zhengGongFileName;
     }
@@ -54,5 +56,14 @@ public class EpidemicStatisticsVO {
 
     public void setDay(Integer day) {
         this.day = day;
+    }
+
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

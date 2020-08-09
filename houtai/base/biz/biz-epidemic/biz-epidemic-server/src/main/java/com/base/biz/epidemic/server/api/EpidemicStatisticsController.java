@@ -57,11 +57,12 @@ public class EpidemicStatisticsController {
         ClassPathResource classPathResource2 = new ClassPathResource("static/file/防疫市局统计表.xlsx");
         InputStream shiJuFile = classPathResource2.getInputStream();
 
-        epidemicInnerService.createStatistics(zhengGongBanFile, shiJuFile, createRequest.date);
+        epidemicInnerService.createStatistics(zhengGongBanFile, shiJuFile, createRequest.date, createRequest.remark);
         return JSON.toJSONString(Result.success(""));
     }
     static class CreateRequest{
         public String date;
+        public String remark;
     }
 
     @ResultFilter
@@ -74,7 +75,6 @@ public class EpidemicStatisticsController {
     static class SelectRequest{
         public String date;
     }
-
 
     @TokenFilter
     @ResultFilter

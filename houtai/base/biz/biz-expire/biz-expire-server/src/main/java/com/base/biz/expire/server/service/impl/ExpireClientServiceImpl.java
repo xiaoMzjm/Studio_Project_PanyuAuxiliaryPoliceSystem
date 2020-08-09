@@ -37,14 +37,15 @@ public class ExpireClientServiceImpl implements ExpireClientService {
             expireVO.setName(expireDO.getFileName());
             expireVO.setTime(expireDO.getTime());
             expireVO.setFileUrl(expireDO.getFileUrl());
+            expireVO.setRemark(expireDO.getRemark());
             result.add(expireVO);
         }
         return result;
     }
 
     @Override
-    public void add(String fileName, String fileUrl, Date time, int type) throws Exception {
-        expireManager.add(UUIDUtil.get(), fileName, fileUrl, time, type);
+    public void add(String fileName, String fileUrl, Date time, String remark, int type) throws Exception {
+        expireManager.add(UUIDUtil.get(), fileName, fileUrl, time, remark, type);
     }
 
     @Override
@@ -58,6 +59,7 @@ public class ExpireClientServiceImpl implements ExpireClientService {
         expireVO.setName(expireDO.getFileName());
         expireVO.setTime(expireDO.getTime());
         expireVO.setFileUrl(expireDO.getFileUrl());
+        expireVO.setRemark(expireDO.getRemark());
         return expireVO;
     }
 

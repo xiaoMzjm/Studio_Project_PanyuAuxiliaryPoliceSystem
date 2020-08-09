@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicStatusEnum;
@@ -33,11 +34,13 @@ public class EpidemicManagerImpl implements EpidemicManager {
     private EpidemicDAO epidemicDAO;
     @Autowired
     private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     @Override
     public void add(String companyCode, Integer type, Integer location, String userCode, Date beginTime, Date endTime,
-                    String detail, String leaderCode, Integer status) throws Exception {
+                    String detail, String leaderCode, String detailLocation, Integer status) throws Exception {
         checkAdd(userCode,beginTime,endTime);
         EpidemicDO epidemicDO = new EpidemicDO();
         epidemicDO.setCode(UUIDUtil.get());
@@ -53,6 +56,7 @@ public class EpidemicManagerImpl implements EpidemicManager {
         epidemicDO.setLeaderCode(leaderCode);
         epidemicDO.setStatus(status);
         epidemicDO.setUserCode(userCode);
+        epidemicDO.setDetailLocation(detailLocation);
         epidemicDAO.save(epidemicDO);
     }
 
@@ -108,7 +112,6 @@ public class EpidemicManagerImpl implements EpidemicManager {
 
         System.out.println("sql = " + sql);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, EpidemicDO.class);
         List<EpidemicDO> bizUserDOList = query.getResultList();
         entityManager.close();
@@ -121,7 +124,6 @@ public class EpidemicManagerImpl implements EpidemicManager {
         String dateStr = DateUtil.convert2String(date,"yyyy-MM-dd 00:00:00");
         String sql = String.format("select * from epidemic where begin_time <= '%s' and end_time >= '%s'" , dateStr , dateStr);
         System.out.println(sql);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, EpidemicDO.class);
         List<EpidemicDO> bizUserDOList = query.getResultList();
         entityManager.close();
@@ -198,7 +200,6 @@ public class EpidemicManagerImpl implements EpidemicManager {
         String sql1 = "select * from epidemic where user_code = '"+ userCode +"'  and begin_time <= '"+endTimeStr+"' and begin_time >= '"+beginTimeStr+"'" ;
         System.out.println("sql1 = " + sql1);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql1, EpidemicDO.class);
         List<EpidemicDO> bizUserDOList = query.getResultList();
         if(CollectionUtils.isNotEmpty(bizUserDOList)) {

@@ -40,7 +40,7 @@ public class EpidemicController {
         epidemicService.add(addRequest.companyCode,addRequest.type,
             addRequest.location,addRequest.userCode,
             addRequest.beginTime, addRequest.endTime,
-            addRequest.detail,addRequest.leaderCode);
+            addRequest.detail,addRequest.leaderCode,addRequest.detailLocation);
 
         return JSON.toJSONString(Result.success(""));
     }
@@ -55,6 +55,7 @@ public class EpidemicController {
         public String endTime;
         public String detail;
         public String leaderCode;
+        public String detailLocation;
     }
 
 

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.base.biz.expire.client.model.ExpireVO;
-import com.sun.xml.internal.rngom.digested.DTextPattern;
 
 /**
  * @author:小M
@@ -14,7 +13,7 @@ public interface ExpireClientService {
 
     List<ExpireVO> selectByTime(Date start, Date end, Integer type) throws Exception;
 
-    void add(String fileName, String fileUrl, Date time, int type) throws Exception;
+    void add(String fileName, String fileUrl, Date time, String remark, int type) throws Exception;
 
     ExpireVO findByCode(String code) throws Exception;
 }

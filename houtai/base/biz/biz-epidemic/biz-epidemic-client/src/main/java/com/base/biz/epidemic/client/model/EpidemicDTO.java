@@ -36,6 +36,8 @@ public class EpidemicDTO {
 
     private Integer userType;
 
+    private String detailLocation;
+
     public Long getId() {
         return id;
     }
@@ -146,5 +148,13 @@ public class EpidemicDTO {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public String getDetailLocation() {
+        return detailLocation;
+    }
+
+    public void setDetailLocation(String detailLocation) {
+        this.detailLocation = detailLocation;
     }
 }

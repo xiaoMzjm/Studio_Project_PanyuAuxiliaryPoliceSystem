@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.base.biz.user.client.common.BizUserConstant;
@@ -41,6 +42,8 @@ public class BizUserManagerImpl implements BizUserManager {
     private BizUserDao bizUserDao;
     @Autowired
     private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * 根据code查询
@@ -48,7 +51,7 @@ public class BizUserManagerImpl implements BizUserManager {
      * @return
      * @throws Exception
      */
-    public BizUserDTO findByCode(String code) throws Exception{
+    public BizUserDTO findByCode(String code) throws RuntimeException{
 
         if(StringUtils.isBlank(code)) {
             return null;
@@ -67,7 +70,7 @@ public class BizUserManagerImpl implements BizUserManager {
         return BizUserConvertor.do2dto(bizUserDO);
     }
 
-    public List<BizUserDTO> findByCodes(List<String> codes) throws Exception {
+    public List<BizUserDTO> findByCodes(List<String> codes) throws RuntimeException {
 
         if(CollectionUtils.isEmpty(codes)) {
             return null;
@@ -75,7 +78,6 @@ public class BizUserManagerImpl implements BizUserManager {
 
         String sql = "select * from biz_user where code in " + SqlUtil.inStrList(codes) + " order by name asc";
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
         List<BizUserDO> bizUserDOList = query.getResultList();
         return BizUserConvertor.do2dtoList(bizUserDOList);
@@ -89,7 +91,7 @@ public class BizUserManagerImpl implements BizUserManager {
      * @return
      * @throws Exception
      */
-    public BizUserDTO findByCodeAndPassword(String code, String password) throws Exception{
+    public BizUserDTO findByCodeAndPassword(String code, String password) throws RuntimeException{
 
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setCode(code);
@@ -112,7 +114,7 @@ public class BizUserManagerImpl implements BizUserManager {
      * @return
      * @throws Exception
      */
-    public BizUserDTO findByPoliceCodeAndPassword(String code, String password) throws Exception{
+    public BizUserDTO findByPoliceCodeAndPassword(String code, String password) throws RuntimeException{
 
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setPoliceCode(code);
@@ -153,7 +155,6 @@ public class BizUserManagerImpl implements BizUserManager {
     public List<BizUserDTO> findByIdentityCardList(List<String> identityCodeList){
         BizUserDO bizUserDO = new BizUserDO();
         String sql = "select * from biz_user where identity_card in " + SqlUtil.inStrList(identityCodeList);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
         List<BizUserDO> bizUserDOList = query.getResultList();
         entityManager.close();
@@ -197,7 +198,6 @@ public class BizUserManagerImpl implements BizUserManager {
 
         System.out.println(sql);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
         List<BizUserDO> bizUserDOList = query.getResultList();
         entityManager.close();
@@ -447,7 +447,6 @@ public class BizUserManagerImpl implements BizUserManager {
         System.out.println(sql);
         System.out.println("==========");
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createNativeQuery(sql, BizUserDO.class);
         List<BizUserDO> bizUserDOList = query.getResultList();
         entityManager.close();
@@ -511,7 +510,7 @@ public class BizUserManagerImpl implements BizUserManager {
      * @param param
      * @throws Exception
      */
-    public void update(UpdateParam param) throws Exception{
+    public void update(UpdateParam param) throws RuntimeException{
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setCode(param.code);
         Example<BizUserDO> example = Example.of(bizUserDO);
@@ -534,7 +533,7 @@ public class BizUserManagerImpl implements BizUserManager {
      * @param imageCode
      * @throws Exception
      */
-    public void updateImage(String code , String imageCode) throws Exception{
+    public void updateImage(String code , String imageCode) throws RuntimeException{
         BizUserDO bizUserDO = new BizUserDO();
         bizUserDO.setCode(code);
         Example<BizUserDO> example = Example.of(bizUserDO);

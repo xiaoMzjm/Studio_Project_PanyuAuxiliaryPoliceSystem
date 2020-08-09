@@ -15,6 +15,7 @@ public class ExpireVO {
     // 防疫新增
     private Date time;
     private String fileUrl;
+    private String remark;
 
     public ExpireVO() {
     }
@@ -66,5 +67,13 @@ public class ExpireVO {
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
