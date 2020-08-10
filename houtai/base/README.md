@@ -9,7 +9,7 @@ mvn clean package -Dmaven.test.skip=true
 
 3. 部署
 nohup java -jar base.jar -Xmx1g --spring.profiles.active=online --ResourceStaticUrl=/Users/zhangjiaming/Documents/fujing/static/  &
-nohup java -jar base.jar -Xmx1g --spring.profiles.active=online --ResourceStaticUrl=/home/admin/base/fujing/static/ -Djava.rmi.server.hostname=39.96.189.242 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false &
+nohup java -jar base.jar -Xmx1g --spring.profiles.active=online --ResourceStaticUrl=/home/admin/base/fujing/static/ &
 
 
 > 把上面的"部署"命令用一个start.sh文件报错，后台启动：nohup ./start.sh &

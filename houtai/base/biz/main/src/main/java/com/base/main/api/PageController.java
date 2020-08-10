@@ -40,4 +40,10 @@ public class PageController {
     public String login(){
         return "index";
     }
+
+    @ApiOperation(value = "防疫" ,  notes="防疫")
+    @GetMapping("/EpidemicManager/*")
+    public String epidemic(){
+        return "index";
+    }
 }

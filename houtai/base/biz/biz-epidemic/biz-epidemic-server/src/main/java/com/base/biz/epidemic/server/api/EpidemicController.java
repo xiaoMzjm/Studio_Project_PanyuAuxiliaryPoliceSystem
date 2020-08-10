@@ -69,6 +69,16 @@ public class EpidemicController {
         return JSON.toJSONString(Result.success(result));
     }
 
+    @ResultFilter
+    @TokenFilter
+    @RequestMapping("selectCurrent")
+    public String selectCurrent()throws Exception{
+
+        List<EpidemicVO> result= epidemicService.selectCurrent();
+
+        return JSON.toJSONString(Result.success(result));
+    }
+
 
     @ResultFilter
     @TokenFilter

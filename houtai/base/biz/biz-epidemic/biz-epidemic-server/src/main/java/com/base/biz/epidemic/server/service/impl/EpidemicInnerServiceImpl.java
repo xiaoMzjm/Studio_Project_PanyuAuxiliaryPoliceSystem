@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.xml.stream.events.EndDocument;
+
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicLocationEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicStatusEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicTypeEnum;
@@ -37,6 +39,7 @@ import com.google.common.collect.Lists;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,9 +98,9 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         if(StringUtils.isEmpty(leaderCode)) {
             throw new BaseException("审批领导必须填写");
         }
-        //if(StringUtils.isEmpty(detailLocation)) {
-        //    throw new BaseException("详细地址必须填写");
-        //}
+        if(StringUtils.isEmpty(detailLocation)) {
+            throw new BaseException("详细地址必须填写");
+        }
 
         check(type,location);
 
@@ -134,6 +137,16 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             }
         }
 
+        List<EpidemicDTO> epidemicDTOList = epidemicManager.select(epidemicSelectParam);
+        return dtoToVo(epidemicDTOList);
+    }
+
+    @Override
+    public List<EpidemicVO> selectCurrent() throws Exception {
+        EpidemicSelectParam epidemicSelectParam = new EpidemicSelectParam();
+        String date = DateUtil.getCurrentDateStr("yyyy-MM-dd");
+        epidemicSelectParam.setBeginTime(date);
+        epidemicSelectParam.setEndTime(date);
         List<EpidemicDTO> epidemicDTOList = epidemicManager.select(epidemicSelectParam);
         return dtoToVo(epidemicDTOList);
     }
@@ -282,7 +295,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             a11 = 0,a12 = 0,a13 = 0,a14 = 0,a15 = 0,a16 = 0,a17 = 0,a18 = 0,a19 = 0,a20 = 0,
             a21 = 0,a22 = 0,a23 = 0,a24 = 0,a25 = 0,a26 = 0,a27 = 0,a28 = 0,a29 = 0,a30 = 0,
             a31 = 0,a32 = 0 ;
-        String allDetails = "";
+        String allDetailsGeLi = "";
+        String allDetailsWaiChu = "";
+        Integer i = 1;
+        Integer j = 1;
+        Integer z = 1;
         for(CompanyVO companyVO : companyVOList) {
             String companyCode = companyVO.getCode();
             String companyName = companyVO.getName();
@@ -295,15 +312,25 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                 c31 = 0,c32 = 0 ;
 
             if(!CollectionUtils.isEmpty(epidemicVOS)) {
+
                 for(EpidemicVO epidemicVO : epidemicVOS) {
 
                     if(epidemicVO.getDetailLocation() == null) {
                         epidemicVO.setDetailLocation("");
                     }
-                    String detail = companyName + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + epidemicVO.getDetailLocation() + EpidemicTypeEnum.getDesc(epidemicVO.getType());
+                    String userTypeStr = UserTypeEnum.getName(epidemicVO.getUserType());
+                    String detail = companyName + userTypeStr + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + epidemicVO.getDetailLocation() + EpidemicTypeEnum.getDesc(epidemicVO.getType());
+                    if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
+                        allDetailsGeLi += i.toString() + "." + detail + "\n";
+                        i++;
+                    }else {
+                        allDetailsWaiChu += j.toString() + "." + detail + "\n";
+                        j++;
+                    }
 
-                    details += detail + "\n";
-                    allDetails += detail + "\n";
+                    details += z.toString() + "." + detail + "\n";
+                    z++;
+
                     if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.ZiXingGeLi.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
@@ -448,7 +475,6 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             a32++;
                         }
                     }
-
                 }
             }
 
@@ -486,7 +512,9 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             list.add(new CellDTO(String.valueOf(c30)));
             list.add(new CellDTO(String.valueOf(c31)));
             list.add(new CellDTO(String.valueOf(c32)));
-            list.add(new CellDTO(details));
+            CellDTO detailCell = new CellDTO(details);
+            detailCell.horizontalAlignment = HorizontalAlignment.LEFT;
+            list.add(detailCell);
             list.add(new CellDTO(""));
 
             rules.add(list);
@@ -532,7 +560,20 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         list.add(new CellDTO(String.valueOf(a30)));
         list.add(new CellDTO(String.valueOf(a31)));
         list.add(new CellDTO(String.valueOf(a32)));
-        list.add(new CellDTO(allDetails));
+        if(StringUtils.isEmpty(allDetailsGeLi)) {
+            allDetailsGeLi = "一、隔离情况\n" + "无\n";
+        }else {
+            allDetailsGeLi = "一、隔离情况\n" + allDetailsGeLi;
+        }
+        if(StringUtils.isEmpty(allDetailsWaiChu)) {
+            allDetailsWaiChu = "二、外出情况\n" + "无\n";
+        }else {
+            allDetailsWaiChu = "二、外出情况\n" + allDetailsWaiChu;
+        }
+
+        CellDTO detailCell = new CellDTO(allDetailsGeLi + allDetailsWaiChu);
+        detailCell.horizontalAlignment = HorizontalAlignment.LEFT;
+        list.add(detailCell);
         list.add(new CellDTO(""));
         allRules.add(list);
         String wordName2 = ExcelUtil.insertExcelAndSave(shiJu, 5, 0, savePath, allRules, replacemap);

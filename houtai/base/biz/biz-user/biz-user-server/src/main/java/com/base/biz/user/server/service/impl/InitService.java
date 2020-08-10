@@ -193,6 +193,10 @@ public class InitService {
         }catch (Exception e) {
         }
         try {
+            vo = authorityService.add("随时修改", "EpidemicListManagerSuperUpdate", AuthorityTypeEnum.Page.getType(),"EpidemicListManager");
+        }catch (Exception e) {
+        }
+        try {
             vo = authorityService.add("查询所有单位", "EpidemicListManagerSelectAllCompany", AuthorityTypeEnum.Function.getType(),"EpidemicListManager");
         }catch (Exception e) {}
         try {

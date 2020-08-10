@@ -20,7 +20,7 @@ public class ScheduleServiceImpl {
     @Autowired
     private EpidemicManager epidemicManager;
 
-    @Scheduled(cron = "0 0 11 * * ?")
+    @Scheduled(cron = "0 30 11 * * ?")
     public void commit() {
         try {
             epidemicManager.commitAll();

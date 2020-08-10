@@ -1824,6 +1824,15 @@ public class Enums {
             this.name = name;
         }
 
+        public static String getName(Integer type) {
+            for(UserTypeEnum e : UserTypeEnum.values()) {
+                if(e.getCode().equals(type)) {
+                    return e.getName();
+                }
+            }
+            return "";
+        }
+
         public Integer getCode() {
             return code;
         }
