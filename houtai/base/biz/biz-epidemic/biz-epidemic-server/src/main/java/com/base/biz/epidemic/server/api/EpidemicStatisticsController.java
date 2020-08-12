@@ -75,6 +75,9 @@ public class EpidemicStatisticsController {
         List<EpidemicStatisticsVO> result = Lists.newArrayList();
         if(epidemicStatisticsVO != null) {
             result.add(epidemicStatisticsVO);
+        }else {
+            EpidemicStatisticsVO epidemicStatisticsVO1 = new EpidemicStatisticsVO();
+            result.add(epidemicStatisticsVO1);
         }
         return JSON.toJSONString(Result.success(result));
     }
