@@ -46,4 +46,10 @@ public class PageController {
     public String epidemic(){
         return "index";
     }
+
+    @ApiOperation(value = "系统管理" ,  notes="系统管理")
+    @GetMapping("/SystemManager/*")
+    public String systemManager(){
+        return "index";
+    }
 }

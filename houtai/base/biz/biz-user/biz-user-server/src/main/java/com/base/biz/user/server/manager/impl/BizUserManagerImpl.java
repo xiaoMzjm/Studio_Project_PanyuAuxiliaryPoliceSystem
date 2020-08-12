@@ -188,7 +188,7 @@ public class BizUserManagerImpl implements BizUserManager {
     public List<BizUserDTO> findByNameAndCompany(String name, List<String> companyCodeList) {
         String sql = "select * from biz_user where 1=1";
         if(StringUtils.isNotEmpty(name)) {
-            sql += " and name = '" + name + "'";
+            sql += " and name like '%" + name + "%'";
         }
         if(CollectionUtils.isNotEmpty(companyCodeList)) {
             sql += " and work_unit_code in " + SqlUtil.inStrList(companyCodeList) ;

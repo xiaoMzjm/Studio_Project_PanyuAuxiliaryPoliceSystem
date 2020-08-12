@@ -144,9 +144,10 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     @Override
     public List<EpidemicVO> selectCurrent() throws Exception {
         EpidemicSelectParam epidemicSelectParam = new EpidemicSelectParam();
-        String date = DateUtil.getCurrentDateStr("yyyy-MM-dd");
-        epidemicSelectParam.setBeginTime(date);
-        epidemicSelectParam.setEndTime(date);
+        String beginTime = DateUtil.getCurrentDateStr("yyyy-MM-dd 00:00:00");
+
+        epidemicSelectParam.setBeginTime(beginTime);
+        epidemicSelectParam.setEndTime(beginTime);
         List<EpidemicDTO> epidemicDTOList = epidemicManager.select(epidemicSelectParam);
         return dtoToVo(epidemicDTOList);
     }
@@ -628,6 +629,38 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             result.add(epidemicStatisticsVO);
         }
         return result;
+    }
+
+    @Override
+    public EpidemicStatisticsVO selectStatisticsByDay(String date) throws Exception {
+        Date dayBegin = DateUtil.convert2Date(date, "yyyy/MM/dd");
+        Date nextDayBegin = DateUtil.addDays(dayBegin,1);
+        List<ExpireVO> expireVOList = expireClientService.selectByTime(dayBegin, nextDayBegin, ExpireType.Epidemic.getCode());
+        if(CollectionUtils.isNotEmpty(expireVOList)) {
+            ExpireVO expireVO = expireVOList.get(0);
+            String zhengGongFileName = "";
+            String shiJuFileName = "";
+            String zhengGongFileCode = "";
+            String shiJuFileCode = "";
+            String remark = "";
+            if(expireVO != null) {
+                String names = expireVO.getName();
+                String[] nameArray = names.split("@");
+                zhengGongFileName = nameArray[0];
+                shiJuFileName = nameArray[1];
+                zhengGongFileCode = expireVO.getCode() + "@1";
+                shiJuFileCode = expireVO.getCode() + "@2";
+                remark = expireVO.getRemark();
+            }
+            EpidemicStatisticsVO epidemicStatisticsVO = new EpidemicStatisticsVO();
+            epidemicStatisticsVO.setZhengGongFileName(zhengGongFileName);
+            epidemicStatisticsVO.setZhengGongFileCode(zhengGongFileCode);
+            epidemicStatisticsVO.setShiJuFileName(shiJuFileName);
+            epidemicStatisticsVO.setShiJuFileCode(shiJuFileCode);
+            epidemicStatisticsVO.setRemark(remark);
+            return epidemicStatisticsVO;
+        }
+        return null;
     }
 
 }

@@ -101,11 +101,18 @@ public class EpidemicManagerImpl implements EpidemicManager {
         if(CollectionUtils.isNotEmpty(param.getLocationList())) {
             sql += " and location in " + inIntegerList(param.getLocationList());
         }
-        if(StringUtils.isNotEmpty(param.getBeginTime())) {
-            sql += " and begin_time >= '" + param.getBeginTime()+"'";
+        if(StringUtils.isNotEmpty(param.getBeginTime()) && StringUtils.isNotEmpty(param.getEndTime())) {
+            sql += " and ( ";
+            sql += "    (begin_time <= '" + param.getBeginTime()+"' and end_time >= '" + param.getBeginTime() + "' )";
+            sql += " or (begin_time >= '" + param.getBeginTime()+"' and end_time <= '" + param.getEndTime() + "' )";
+            sql += " or (begin_time <= '" + param.getEndTime()+"' and end_time >= '" + param.getEndTime() + "' )";
+            sql += " )";
         }
-        if(StringUtils.isNotEmpty(param.getEndTime())) {
-            sql += " and end_time <= '" + param.getEndTime()+"'";
+        else if(StringUtils.isNotEmpty(param.getBeginTime())) {
+            sql += " and begin_time <= '" + param.getBeginTime()+"'";
+        }
+        else if(StringUtils.isNotEmpty(param.getEndTime())) {
+            sql += " and end_time >= '" + param.getEndTime()+"'";
         }
         if(CollectionUtils.isNotEmpty(param.getStatusList())) {
             sql += " and status in " + inIntegerList(param.getStatusList());

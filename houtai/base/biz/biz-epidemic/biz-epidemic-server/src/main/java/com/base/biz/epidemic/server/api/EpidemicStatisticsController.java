@@ -19,6 +19,7 @@ import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.common.exception.BaseException;
 import com.base.user.client.model.TokenFilter;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -69,8 +70,13 @@ public class EpidemicStatisticsController {
     @TokenFilter
     @RequestMapping("select")
     public String select(@RequestBody SelectRequest selectRequest)throws Exception{
-        List<EpidemicStatisticsVO> epidemicStatisticsVOList = epidemicInnerService.selectStatistics(selectRequest.date);
-        return JSON.toJSONString(Result.success(epidemicStatisticsVOList));
+        //List<EpidemicStatisticsVO> epidemicStatisticsVOList = epidemicInnerService.selectStatistics(selectRequest.date);
+        EpidemicStatisticsVO epidemicStatisticsVO = epidemicInnerService.selectStatisticsByDay(selectRequest.date);
+        List<EpidemicStatisticsVO> result = Lists.newArrayList();
+        if(epidemicStatisticsVO != null) {
+            result.add(epidemicStatisticsVO);
+        }
+        return JSON.toJSONString(Result.success(result));
     }
     static class SelectRequest{
         public String date;

@@ -37,4 +37,6 @@ public interface EpidemicInnerService {
 
     List<EpidemicStatisticsVO> selectStatistics(String date) throws Exception;
 
+    EpidemicStatisticsVO selectStatisticsByDay(String date) throws Exception;
+
 }
