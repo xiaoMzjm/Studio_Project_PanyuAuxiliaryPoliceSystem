@@ -21,4 +21,6 @@ public interface CompanyClientService {
     List<CompanyVO> findAll();
 
     List<CompanyVO> findAllFaterCompany();
+
+    List<String> findCompanyTree(String companyCode);
 }

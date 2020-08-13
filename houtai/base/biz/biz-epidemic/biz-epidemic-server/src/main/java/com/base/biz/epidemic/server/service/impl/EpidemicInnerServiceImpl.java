@@ -67,7 +67,6 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Autowired
     private ExpireClientService expireClientService;
-
     @Override
     public void add(String companyCode, Integer type,
                     Integer location, String userCode,
@@ -111,21 +110,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     }
 
-    private void check(Integer type, Integer location) throws Exception{
-        if(EpidemicTypeEnum.GeLiWeiShangBan.getType().equals(type)) {
-            if(!(EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
-                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
-                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
-                throw new BaseException("'处于隔离观察期未上班'类型只能选择'自行隔离'或'单位集中'或'卫健部门'");
-            }
-        }else {
-            if((EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
-                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
-                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
-                throw new BaseException("'因公外出'或'因私外出'只能选择'或'北京/湖北/境内中高风险地区/广东省内/境内其他地区/境外'");
-            }
-        }
-    }
+
 
     @Override
     public List<EpidemicVO> select(EpidemicSelectParam epidemicSelectParam) throws Exception {
@@ -143,6 +128,9 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Override
     public List<EpidemicVO> selectCurrent() throws Exception {
+
+        List<String> rest = companyClientService.findCompanyTree("cffbdcb8dd1243a8a85926e743a5729d");
+
         EpidemicSelectParam epidemicSelectParam = new EpidemicSelectParam();
         String beginTime = DateUtil.getCurrentDateStr("yyyy-MM-dd 00:00:00");
 
@@ -150,6 +138,22 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         epidemicSelectParam.setEndTime(beginTime);
         List<EpidemicDTO> epidemicDTOList = epidemicManager.select(epidemicSelectParam);
         return dtoToVo(epidemicDTOList);
+    }
+
+    private void check(Integer type, Integer location) throws Exception{
+        if(EpidemicTypeEnum.GeLiWeiShangBan.getType().equals(type)) {
+            if(!(EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
+                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
+                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
+                throw new BaseException("'处于隔离观察期未上班'类型只能选择'自行隔离'或'单位集中'或'卫健部门'");
+            }
+        }else {
+            if((EpidemicLocationEnum.ZiXingGeLi.getLocation().equals(location) ||
+                EpidemicLocationEnum.DanWeiJiZhong.getLocation().equals(location) ||
+                EpidemicLocationEnum.WeiJianBuMen.getLocation().equals(location))) {
+                throw new BaseException("'因公外出'或'因私外出'只能选择'或'北京/湖北/境内中高风险地区/广东省内/境内其他地区/境外'");
+            }
+        }
     }
 
     private List<EpidemicVO> dtoToVo(List<EpidemicDTO> epidemicDTOList) throws Exception{

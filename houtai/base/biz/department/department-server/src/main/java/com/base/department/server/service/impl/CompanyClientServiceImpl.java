@@ -10,6 +10,7 @@ import com.base.department.server.manager.CompanyManager;
 import com.base.department.server.manager.impl.CompanyManagerImpl;
 import com.base.department.server.model.CompanyConvertor;
 import com.base.department.server.model.CompanyDTO;
+import com.base.department.server.service.CompanyInnerService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,8 @@ public class CompanyClientServiceImpl implements CompanyClientService {
 
     @Autowired
     private CompanyManager companyManager;
+    @Autowired
+    private CompanyInnerService companyInnerService;
 
     @Override
     public CompanyVO findByCode(String code) {
@@ -69,10 +72,7 @@ public class CompanyClientServiceImpl implements CompanyClientService {
         return result;
     }
 
-    private List<CompanyVO> findByFatherCode(String fatherCode){
-        List<CompanyDTO> companyDTOList = companyManager.findByFatherCode(fatherCode);
-        return CompanyConvertor.dto2voList(companyDTOList);
-    }
+
 
     @Override
     public List<CompanyVO> findByCodeList(List<String> codeList) {
@@ -92,4 +92,53 @@ public class CompanyClientServiceImpl implements CompanyClientService {
         return CompanyConvertor.dto2voList(companyDTOList);
     }
 
+    @Override
+    public List<String> findCompanyTree(String companyCode) {
+        List<CompanyVO> companyVOList = companyInnerService.listAll();
+        List<String> result = Lists.newArrayList();
+        this.buildTree(companyCode, companyVOList,false,result);
+        return result;
+    }
+
+    private boolean buildTree(String code, List<CompanyVO> companyVOList, boolean isFind, List<String> result) {
+        if(CollectionUtils.isEmpty(companyVOList)) {
+            return isFind;
+        }
+        if(isFind) {
+            // 如果父节点已经是目标节点了，那么这层的节点都包含
+            result.addAll(companyVOList.stream().map(CompanyVO::getCode).collect(Collectors.toList()));
+            companyVOList.forEach(item->{
+                // 这层节点下面所有节点也都包含进来
+                buildTree(code, item.getChildren(),isFind,result);
+            });
+            return isFind;
+        }else {
+            for(CompanyVO companyVO : companyVOList) {
+                if(companyVO.getCode().equals(code)) {
+                    buildTree(code, companyVO.getChildren(), true, result);
+                    if(StringUtils.isEmpty(companyVO.getFatherCode())) {
+                        result.add(companyVO.getCode());
+                    }else {
+                        result.addAll(companyVOList.stream().map(CompanyVO::getCode).collect(Collectors.toList()));
+                    }
+                    return true;
+                }else {
+                    boolean find = buildTree(code, companyVO.getChildren(),isFind,result);
+                    if(find && StringUtils.isNotEmpty(companyVO.getFatherCode())) {
+                        result.addAll(companyVOList.stream().map(CompanyVO::getCode).collect(Collectors.toList()));
+                        return true;
+                    }else if(find) {
+                        result.add(companyVO.getCode());
+                        return true;
+                    }
+                }
+            }
+        }
+        return isFind;
+    }
+
+    private List<CompanyVO> findByFatherCode(String fatherCode){
+        List<CompanyDTO> companyDTOList = companyManager.findByFatherCode(fatherCode);
+        return CompanyConvertor.dto2voList(companyDTOList);
+    }
 }
