@@ -418,7 +418,7 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         }
         if (StringUtils.isNotEmpty(param.organizationUnitName)) {
             param.organizationUnitName = param.organizationUnitName.trim();
-            CompanyVO companyVO = companyService.findByMultiName(param.workUnitName);
+            CompanyVO companyVO = companyService.findByMultiName(param.organizationUnitName);
             if (companyVO == null) {
                 throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitName));
             }

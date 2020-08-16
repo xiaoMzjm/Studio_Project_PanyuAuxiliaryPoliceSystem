@@ -45,6 +45,11 @@
             <artifactId>biz-expire-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.base</groupId>
+            <artifactId>authority-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- ================================================= -->
         <!-- web                                               -->
         <!-- ================================================= -->

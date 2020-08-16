@@ -1,7 +1,6 @@
 package com.base.biz.epidemic.server.service.impl;
 
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.xml.stream.events.EndDocument;
-
+import com.base.authority.client.service.AuthorityService;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicLocationEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicStatusEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicTypeEnum;
@@ -18,10 +16,8 @@ import com.base.biz.epidemic.client.model.EpidemicDTO;
 import com.base.biz.epidemic.client.model.EpidemicStatisticsVO;
 import com.base.biz.epidemic.client.model.EpidemicVO;
 import com.base.biz.epidemic.server.manager.EpidemicManager;
-import com.base.biz.epidemic.server.model.EpidemicDO;
 import com.base.biz.epidemic.server.model.EpidemicSelectParam;
 import com.base.biz.epidemic.server.service.EpidemicInnerService;
-import com.base.biz.expire.client.common.ExpireEnums;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClientService;
@@ -34,9 +30,7 @@ import com.base.common.util.ExcelUtil;
 import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.department.client.model.CompanyVO;
 import com.base.department.client.service.CompanyClientService;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.google.common.collect.Lists;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -45,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * @author:小M
@@ -55,18 +50,18 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Autowired
     private EpidemicManager epidemicManager;
-
     @Autowired
     private BizUserClientService bizUserClientService;
-
     @Autowired
     private CompanyClientService companyClientService;
-
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
-
     @Autowired
     private ExpireClientService expireClientService;
+    @Autowired
+    private AuthorityService authorityService;
+
+
     @Override
     public void add(String companyCode, Integer type,
                     Integer location, String userCode,
@@ -116,7 +111,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public List<EpidemicVO> select(EpidemicSelectParam epidemicSelectParam) throws Exception {
 
         if(StringUtils.isNotEmpty(epidemicSelectParam.getUserName())) {
-            List<BizUserDetailVO> bizUserDetailVOList = bizUserClientService.getByNameLike(epidemicSelectParam.getUserName());
+            List<BizUserDetailVO> bizUserDetailVOList = bizUserClientService.listByNameLike(epidemicSelectParam.getUserName());
             if(CollectionUtils.isNotEmpty(bizUserDetailVOList)) {
                 epidemicSelectParam.setUserCodeList(bizUserDetailVOList.stream().map(BizUserDetailVO::getCode).collect(Collectors.toList()));
             }
@@ -127,12 +122,19 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     }
 
     @Override
-    public List<EpidemicVO> selectCurrent() throws Exception {
-
-        List<String> rest = companyClientService.findCompanyTree("cffbdcb8dd1243a8a85926e743a5729d");
+    public List<EpidemicVO> selectCurrent(String userCode) throws Exception {
 
         EpidemicSelectParam epidemicSelectParam = new EpidemicSelectParam();
         String beginTime = DateUtil.getCurrentDateStr("yyyy-MM-dd 00:00:00");
+
+        // 获取是否有查看全部的权限，没有的话，要设置该人所在的单位列表
+        boolean selectAllAuth = authorityService.hasAuthority(userCode, "EpidemicListManagerSelectAllCompany");
+        if(!selectAllAuth) {
+            BizUserDetailVO bizUserDetailVO = bizUserClientService.getByUserCode(userCode);
+            Assert.notNull(bizUserDetailVO, "查询不到用户" + userCode);
+            List<String> companyCodeList = companyClientService.findCompanyTree(bizUserDetailVO.getWorkUnit());
+            epidemicSelectParam.setCompanyCodeList(companyCodeList);
+        }
 
         epidemicSelectParam.setBeginTime(beginTime);
         epidemicSelectParam.setEndTime(beginTime);
@@ -165,7 +167,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         List<String> leaderCodes = epidemicDTOList.stream().map(EpidemicDTO::getLeaderCode).collect(
             Collectors.toList());
         userCodes.addAll(leaderCodes);
-        Map<String, BizUserDetailVO> bizUserDetailVOMap = bizUserClientService.getByCodeList(userCodes);
+        Map<String, BizUserDetailVO> bizUserDetailVOMap = bizUserClientService.listByCodeList(userCodes);
 
         List<String> companyCodeList = epidemicDTOList.stream().map(EpidemicDTO::getCompanyCode).collect(
             Collectors.toList());
@@ -304,8 +306,9 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String allDetailsWaiChu = "";
         Integer i = 1;
         Integer j = 1;
-        Integer z = 1;
+
         for(CompanyVO companyVO : companyVOList) {
+            Integer z = 1;
             String companyCode = companyVO.getCode();
             String companyName = companyVO.getName();
             String details = "";
@@ -517,6 +520,9 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             list.add(new CellDTO(String.valueOf(c30)));
             list.add(new CellDTO(String.valueOf(c31)));
             list.add(new CellDTO(String.valueOf(c32)));
+            if(StringUtils.isNotEmpty(details) &&  details.endsWith("\n")) {
+                details = details.substring(0,details.length() - 1);
+            }
             CellDTO detailCell = new CellDTO(details);
             detailCell.horizontalAlignment = HorizontalAlignment.LEFT;
             list.add(detailCell);
@@ -576,8 +582,13 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             allDetailsWaiChu = "二、外出情况\n" + allDetailsWaiChu;
         }
 
-        CellDTO detailCell = new CellDTO(allDetailsGeLi + allDetailsWaiChu);
+        String allDetail = allDetailsGeLi + allDetailsWaiChu;
+        if(StringUtils.isNotEmpty(allDetail) &&  allDetail.endsWith("\n")) {
+            allDetail = allDetail.substring(0,allDetail.length() - 1);
+        }
+        CellDTO detailCell = new CellDTO(allDetail);
         detailCell.horizontalAlignment = HorizontalAlignment.LEFT;
+
         list.add(detailCell);
         list.add(new CellDTO(""));
         allRules.add(list);

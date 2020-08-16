@@ -132,7 +132,7 @@ public class ExpireServiceImpl implements ExpireService {
         Date firstDayOfThreeMonthLater = DateUtil.addMonths(firstDayOfMonth , 3);
         Date firstDayOfTwoMonthLaterOfThreeYearAgo = DateUtil.addYears(firstDayOfTwoMonthLater, -3);
         Date firstDayOfThreeMonthLaterOfThreeYearAgo = DateUtil.addYears(firstDayOfThreeMonthLater, -3);
-        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.getByWorkCardBeginTime(firstDayOfTwoMonthLaterOfThreeYearAgo,
+        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.listByWorkCardBeginTime(firstDayOfTwoMonthLaterOfThreeYearAgo,
             firstDayOfThreeMonthLaterOfThreeYearAgo);
         if(CollectionUtils.isNotEmpty(bizUserDetailVOList)) {
             List<List<CellDTO>> rules = Lists.newArrayList();
@@ -202,7 +202,7 @@ public class ExpireServiceImpl implements ExpireService {
         Date start = DateUtil.addMonths(DateUtil.getFirstDayOfMonth(year,month), 1);
         Date end = DateUtil.addMonths(DateUtil.getFirstDayOfMonth(year,month), 2);
 
-        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.getByContractEngTime(start,end);
+        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.listByContractEngTime(start,end);
 
         if(CollectionUtils.isNotEmpty(bizUserDetailVOList)) {
             List<List<CellDTO>> rules = Lists.newArrayList();
@@ -290,14 +290,14 @@ public class ExpireServiceImpl implements ExpireService {
         Date start = DateUtil.addYears(firstMonth , -60);
         Date end = DateUtil.addYears(secondMonth , -60);
         List<BizUserDetailVO> allList = Lists.newArrayList();
-        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.getByBirthDayAndSex(start,end, SexEnum.MAN.getCode());
+        List<BizUserDetailVO> bizUserDetailVOList = bizUserService.listByBirthDayAndSex(start,end, SexEnum.MAN.getCode());
         if(CollectionUtils.isNotEmpty(bizUserDetailVOList)){
             allList.addAll(bizUserDetailVOList);
         }
 
         start = DateUtil.addYears(firstMonth , -50);
         end = DateUtil.addYears(secondMonth , -50);
-        List<BizUserDetailVO> bizUserDetailVOList2 = bizUserService.getByBirthDayAndSex(start,end, SexEnum.MALE.getCode());
+        List<BizUserDetailVO> bizUserDetailVOList2 = bizUserService.listByBirthDayAndSex(start,end, SexEnum.MALE.getCode());
         if(CollectionUtils.isNotEmpty(bizUserDetailVOList2)){
             allList.addAll(bizUserDetailVOList2);
         }

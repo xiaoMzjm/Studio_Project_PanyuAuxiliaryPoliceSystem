@@ -126,10 +126,22 @@ public class BizUserInnerServiceImpl implements BizUserInnerService {
      * @return
      */
     @Override
-    public List<BizUserPageListVO> findByNameAndCompanyCodeList(String name, List<String> companyList) throws Exception{
+    public List<BizUserPageListVO> findByNameAndCompanyCodeList(String userCode, String name, List<String> companyList) throws Exception{
 
         if(StringUtils.isEmpty(name) && CollectionUtils.isEmpty(companyList)) {
             throw new BaseException("请输入查询条件");
+        }
+
+        // 如果有了名称，忽略单位
+        if(StringUtils.isNotEmpty(name)) {
+            boolean hasAuth = authorityService.hasAuthority(userCode, "UserListSelectAllCompany");
+            BizUserDTO bizUserDTO = bizUserManager.findByCode(userCode);
+            if(!hasAuth) {
+                List<String> companyCodes = companyService.findCompanyTree(bizUserDTO.getWorkUnitCode());
+                companyList = companyCodes;
+            }else {
+                companyList = null;
+            }
         }
 
         List<BizUserDTO> bizUserDTOList = bizUserManager.findByNameAndCompany(name, companyList);

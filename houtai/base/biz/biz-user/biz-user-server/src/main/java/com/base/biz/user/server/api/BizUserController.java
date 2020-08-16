@@ -151,8 +151,9 @@ public class BizUserController {
     @ApiOperation(value = "普通查询人员" , notes = "普通查询人员")
     @RequestMapping(value = "/pagelist", method = RequestMethod.POST)
     @ResponseBody
-    public String pagelist(@RequestBody PageListParam param) throws Exception{
-        List<BizUserPageListVO> bizUserPageListVOList = bizUserService.findByNameAndCompanyCodeList(param.name, param.companyCodeList);
+    public String pagelist(@RequestBody PageListParam param, HttpServletRequest request) throws Exception{
+        UserVO userVO = (UserVO)request.getAttribute(UserConstant.REQUEST_USER);
+        List<BizUserPageListVO> bizUserPageListVOList = bizUserService.findByNameAndCompanyCodeList(userVO.getCode(), param.name, param.companyCodeList);
         return JSON.toJSONString(Result.success(bizUserPageListVOList));
     }
     static class PageListParam {

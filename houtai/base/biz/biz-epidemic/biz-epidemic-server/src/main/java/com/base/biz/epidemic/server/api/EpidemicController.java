@@ -2,6 +2,8 @@ package com.base.biz.epidemic.server.api;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSON;
 
 import com.base.biz.epidemic.client.model.EpidemicVO;
@@ -9,7 +11,9 @@ import com.base.biz.epidemic.server.service.EpidemicInnerService;
 import com.base.biz.epidemic.server.model.EpidemicSelectParam;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
+import com.base.user.client.common.UserConstant;
 import com.base.user.client.model.TokenFilter;
+import com.base.user.client.model.UserVO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,9 +76,10 @@ public class EpidemicController {
     @ResultFilter
     @TokenFilter
     @RequestMapping("selectCurrent")
-    public String selectCurrent()throws Exception{
+    public String selectCurrent(HttpServletRequest request)throws Exception{
 
-        List<EpidemicVO> result= epidemicService.selectCurrent();
+        UserVO userVO = (UserVO)request.getAttribute(UserConstant.REQUEST_USER);
+        List<EpidemicVO> result= epidemicService.selectCurrent(userVO.getCode());
 
         return JSON.toJSONString(Result.success(result));
     }

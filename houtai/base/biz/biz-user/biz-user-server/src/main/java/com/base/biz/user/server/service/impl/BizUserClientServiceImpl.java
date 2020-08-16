@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.service.BizUserClientService;
 import com.base.biz.user.server.manager.BizUserManager;
+import com.base.biz.user.server.model.BizUserConvertor;
 import com.base.biz.user.server.model.BizUserDTO;
 import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.service.BizUserInnerService;
@@ -33,7 +34,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
     }
 
     @Override
-    public List<BizUserDetailVO> getByWorkCardBeginTime(Date start, Date end) {
+    public List<BizUserDetailVO> listByWorkCardBeginTime(Date start, Date end) {
         List<BizUserDetailVO> result = Lists.newArrayList();
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByWorkCardBeginTime(start, end);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
@@ -45,7 +46,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
     }
 
     @Override
-    public List<BizUserDetailVO> getByContractEngTime(Date start, Date end) {
+    public List<BizUserDetailVO> listByContractEngTime(Date start, Date end) {
         List<BizUserDetailVO> result = Lists.newArrayList();
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByContractEngTime(start, end);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
@@ -57,7 +58,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
     }
 
     @Override
-    public List<BizUserDetailVO> getByBirthDayAndSex(Date start, Date end, Integer sex) {
+    public List<BizUserDetailVO> listByBirthDayAndSex(Date start, Date end, Integer sex) {
         List<BizUserDetailVO> result = Lists.newArrayList();
         List<BizUserDTO> bizUserDTOList = bizUserManager.getByBirthDayAndSex(start, end, sex);
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
@@ -69,7 +70,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
     }
 
     @Override
-    public List<BizUserDetailVO> getByNameLike(String name) {
+    public List<BizUserDetailVO> listByNameLike(String name) {
         List<BizUserDetailVO> result = Lists.newArrayList();
         SuperPageListParam param = new SuperPageListParam();
         param.name = name;
@@ -83,7 +84,7 @@ public class BizUserClientServiceImpl implements BizUserClientService {
     }
 
     @Override
-    public Map<String,BizUserDetailVO> getByCodeList(List<String> codeList) throws Exception{
+    public Map<String,BizUserDetailVO> listByCodeList(List<String> codeList){
         List<BizUserDTO> bizUserDTOList = bizUserManager.findByCodes(codeList);
         List<BizUserDetailVO> bizUserDetailVOList = Lists.newArrayList();
         if(CollectionUtils.isNotEmpty(bizUserDTOList)) {
@@ -94,6 +95,12 @@ public class BizUserClientServiceImpl implements BizUserClientService {
         Map<String,BizUserDetailVO> result = bizUserDetailVOList.stream().collect(Collectors.toMap(BizUserDetailVO::getCode, Function
             .identity()));
         return result;
+    }
+
+    @Override
+    public BizUserDetailVO getByUserCode(String userCode){
+        BizUserDTO bizUserDTO = bizUserManager.findByCode(userCode);
+        return bizUserInnerSerivce.dto2vo(bizUserDTO,null);
     }
 
 }

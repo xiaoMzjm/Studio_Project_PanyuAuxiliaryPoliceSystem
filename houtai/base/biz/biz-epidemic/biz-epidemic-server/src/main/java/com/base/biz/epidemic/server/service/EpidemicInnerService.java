@@ -21,7 +21,7 @@ public interface EpidemicInnerService {
 
     List<EpidemicVO> select(EpidemicSelectParam epidemicSelectParam) throws Exception;
 
-    List<EpidemicVO> selectCurrent() throws Exception;
+    List<EpidemicVO> selectCurrent(String userCode) throws Exception;
 
     void confirm(String code) throws Exception;
 

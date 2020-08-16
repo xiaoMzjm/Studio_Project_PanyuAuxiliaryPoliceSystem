@@ -12,13 +12,15 @@ public interface BizUserClientService {
 
     Long countByCompanyCode(String companyCode);
 
-    List<BizUserDetailVO> getByWorkCardBeginTime(Date start, Date end);
+    List<BizUserDetailVO> listByWorkCardBeginTime(Date start, Date end);
 
-    List<BizUserDetailVO> getByContractEngTime(Date start, Date end);
+    List<BizUserDetailVO> listByContractEngTime(Date start, Date end);
 
-    List<BizUserDetailVO> getByBirthDayAndSex(Date start, Date end, Integer sex);
+    List<BizUserDetailVO> listByBirthDayAndSex(Date start, Date end, Integer sex);
 
-    List<BizUserDetailVO> getByNameLike(String name);
+    List<BizUserDetailVO> listByNameLike(String name);
 
-    Map<String,BizUserDetailVO> getByCodeList(List<String> codeList) throws Exception;
+    Map<String,BizUserDetailVO> listByCodeList(List<String> codeList) ;
+
+    BizUserDetailVO getByUserCode(String userCode);
 }
