@@ -458,8 +458,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             allJingWaiNum++;
                             allJingWaiYinGongNum++;
                         }
-                        allWaiChuPeopleNum++;
-                        allWaiChuYinGongPeopleNum++;
+                        if(epidemicVO.getLocation() != EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
+                            allWaiChuPeopleNum++;
+                            allWaiChuYinGongPeopleNum++;
+                        }
+
                     }
                     // 因公外出 && 辅警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinGongWaiChu.getType() &&
@@ -498,8 +501,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             allJingWaiNum++;
                             allJingWaiYinGongNum++;
                         }
-                        allWaiChuPeopleNum++;
-                        allWaiChuYinGongPeopleNum++;
+                        if(epidemicVO.getLocation() != EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
+                            allWaiChuPeopleNum++;
+                            allWaiChuYinGongPeopleNum++;
+                        }
+
                     }
                     // 因私外出 && 民警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinSiWaiChu.getType() &&
@@ -538,8 +544,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             allJingWaiNum++;
                             allJingWaiYinSiNum++;
                         }
-                        allWaiChuPeopleNum++;
-                        allWaiChuYinSiPeopleNum++;
+                        if(epidemicVO.getLocation() != EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
+                            allWaiChuPeopleNum++;
+                            allWaiChuYinSiPeopleNum++;
+                        }
+
                     }
                     // 因私外出 && 辅警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinSiWaiChu.getType() &&
@@ -578,8 +587,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                             allJingWaiNum++;
                             allJingWaiYinSiNum++;
                         }
-                        allWaiChuPeopleNum++;
-                        allWaiChuYinSiPeopleNum++;
+                        if(epidemicVO.getLocation() != EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
+                            allWaiChuPeopleNum++;
+                            allWaiChuYinSiPeopleNum++;
+                        }
+
                     }
                 }
             }
@@ -726,7 +738,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String fileUrl3 = savePath + wordName3;
         String fileName1 = "(政工办掌握)" + dateStr + "番禺分局队伍内防疫工作情况统计表(不需要报送)";
         String fileName2 = "(报市局)"+dateStr+"番禺分局队伍内部防疫工作情况统计表";
-        String fileName3 = dateStr+"短信";
+        String fileName3 = dateStr+"今日防疫报告";
         expireClientService.add(fileName1 + "@" + fileName2 + "@" + fileName3, fileUrl1 + "@" + fileUrl2 + "@" + fileUrl3, date, remark, ExpireType.Epidemic.getCode());
     }
 
