@@ -58,7 +58,10 @@ public class EpidemicStatisticsController {
         ClassPathResource classPathResource2 = new ClassPathResource("static/file/防疫市局统计表.xlsx");
         InputStream shiJuFile = classPathResource2.getInputStream();
 
-        epidemicInnerService.createStatistics(zhengGongBanFile, shiJuFile, createRequest.date, createRequest.remark);
+        ClassPathResource classPathResource3 = new ClassPathResource("static/file/短信.docx");
+        InputStream messageFile = classPathResource3.getInputStream();
+
+        epidemicInnerService.createStatistics(zhengGongBanFile, shiJuFile, messageFile, createRequest.date, createRequest.remark);
         return JSON.toJSONString(Result.success(""));
     }
     static class CreateRequest{
@@ -109,15 +112,19 @@ public class EpidemicStatisticsController {
         String name = expireVO.getName();
         String url = expireVO.getFileUrl();
         if(Integer.valueOf(type).equals(1)) {
-            fileName = name.split("@")[0];
+            fileName = name.split("@")[0]+".xlsx";
             fileUrl = url.split("@")[0];
-        }else {
-            fileName = name.split("@")[1];
+        }else if(Integer.valueOf(type).equals(2)){
+            fileName = name.split("@")[1]+".xlsx";
             fileUrl = url.split("@")[1];
+        }
+        else if(Integer.valueOf(type).equals(3)){
+            fileName = name.split("@")[2]+".docx";
+            fileUrl = url.split("@")[2];
         }
 
         // 名称
-        fileName = new String((fileName+".xlsx").getBytes("UTF-8"),"ISO-8859-1");
+        fileName = new String((fileName).getBytes("UTF-8"),"ISO-8859-1");
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         File file = new File(fileUrl);

@@ -18,6 +18,11 @@ public class EpidemicStatisticsVO {
 
     private String remark;
 
+    private String messageFileName;
+
+    private String messageFileCode;
+
+
     public String getZhengGongFileName() {
         return zhengGongFileName;
     }
@@ -65,5 +70,21 @@ public class EpidemicStatisticsVO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getMessageFileName() {
+        return messageFileName;
+    }
+
+    public void setMessageFileName(String messageFileName) {
+        this.messageFileName = messageFileName;
+    }
+
+    public String getMessageFileCode() {
+        return messageFileCode;
+    }
+
+    public void setMessageFileCode(String messageFileCode) {
+        this.messageFileCode = messageFileCode;
     }
 }

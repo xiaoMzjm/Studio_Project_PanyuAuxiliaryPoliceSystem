@@ -28,6 +28,8 @@ import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
 import com.base.common.util.ExcelUtil.CellDTO;
+import com.base.common.util.WordUtil;
+import com.base.common.util.WordUtil.TextDTO;
 import com.base.department.client.model.CompanyVO;
 import com.base.department.client.service.CompanyClientService;
 import com.google.common.collect.Lists;
@@ -98,14 +100,14 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
         check(type,location);
 
-        epidemicManager.add(companyCode, type,
-            location, userCode,
-            beginTimeDate, endTimeDate,
-            detail, leaderCode, detailLocation, EpidemicStatusEnum.Edit.getStatus());
-
+        String[] userCodes = userCode.split(",");
+        for(String code : userCodes) {
+            epidemicManager.add(companyCode, type,
+                location, code,
+                beginTimeDate, endTimeDate,
+                detail, leaderCode, detailLocation, EpidemicStatusEnum.Edit.getStatus());
+        }
     }
-
-
 
     @Override
     public List<EpidemicVO> select(EpidemicSelectParam epidemicSelectParam) throws Exception {
@@ -258,7 +260,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createStatistics(InputStream zhengGongBan, InputStream shiJu , String dateStr, String remark) throws Exception {
+    public void createStatistics(InputStream zhengGongBan, InputStream shiJu , InputStream message, String dateStr, String remark) throws Exception {
 
         // 找出对应日期的记录
         Date date = DateUtil.convert2Date(dateStr , "yyyy/MM/dd");
@@ -304,6 +306,35 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             a31 = 0,a32 = 0 ;
         String allDetailsGeLi = "";
         String allDetailsWaiChu = "";
+
+        Integer allWaiChuPeopleNum = 0;
+        Integer allWaiChuYinGongPeopleNum = 0;
+        Integer allWaiChuYinSiPeopleNum = 0;
+
+        Integer allBeiJingWaiChuNum = 0;
+        Integer allBeiJingYinGongWaiChuNum = 0;
+        Integer allBeiJingYinSiWaiChuNum = 0;
+
+        Integer allHuBeiWaiChuNum = 0;
+        Integer allHuBeiYinGongWaiChuNum = 0;
+        Integer allHuBeiYinSiWaiChuNum = 0;
+
+        Integer allGuangDongWaiChuNum = 0;
+        Integer allGuangDongYinGongWaiChuNum = 0;
+        Integer allGuangDongYinSiWaiChuNum = 0;
+
+        Integer allJingNeiWaiChuNum = 0;
+        Integer allJingNeiYinGongWaiChuNum = 0;
+        Integer allJingNeiYinSiWaiChuNum = 0;
+
+        Integer allJingWaiNum = 0;
+        Integer allJingWaiYinGongNum = 0;
+        Integer allJingWaiYinSiNum = 0;
+
+        Integer allGeLiNum = 0;
+        Integer allGeLiMinJingNum = 0;
+        Integer allGeLiFuJingNum = 0;
+
         Integer i = 1;
         Integer j = 1;
 
@@ -329,7 +360,12 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                     String userTypeStr = UserTypeEnum.getName(epidemicVO.getUserType());
                     String detail = companyName + userTypeStr + epidemicVO.getUserName() + "从" + epidemicVO.getBeginTime() + "至" + epidemicVO.getEndTime() + "在" + EpidemicLocationEnum.getDesc(epidemicVO.getLocation()) + epidemicVO.getDetailLocation() + EpidemicTypeEnum.getDesc(epidemicVO.getType());
                     if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
-                        allDetailsGeLi += i.toString() + "." + detail + "\n";
+                        if(StringUtils.isNotEmpty(epidemicVO.getDetail())) {
+                            allDetailsGeLi += i.toString() + "." + detail + "(" + epidemicVO.getDetail() + ")" + "\n";
+                        }else {
+                            allDetailsGeLi += i.toString() + "." + detail + "\n";
+                        }
+
                         i++;
                     }else {
                         allDetailsWaiChu += j.toString() + "." + detail + "\n";
@@ -339,51 +375,66 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                     details += z.toString() + "." + detail + "\n";
                     z++;
 
+                    // 处于隔离观察期未上班
                     if(epidemicVO.getType() == EpidemicTypeEnum.GeLiWeiShangBan.getType()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.ZiXingGeLi.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
                             c1++;
                             a1++;
+                            allGeLiMinJingNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.ZiXingGeLi.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.FuJing.getCode()) {
                             c2++;
                             a2++;
+                            allGeLiFuJingNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.DanWeiJiZhong.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
                             c3++;
                             a3++;
+                            allGeLiMinJingNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.DanWeiJiZhong.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.FuJing.getCode()) {
                             c4++;
                             a4++;
+                            allGeLiFuJingNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.WeiJianBuMen.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
                             c5++;
                             a5++;
+                            allGeLiMinJingNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.WeiJianBuMen.getLocation() &&
                             epidemicVO.getUserType() == UserTypeEnum.FuJing.getCode()) {
                             c6++;
                             a6++;
+                            allGeLiFuJingNum++;
                         }
                         c7 = c1 + c3 + c5;
                         a7 = a1 + a3 + a5;
                         c8 = c2 + c4 + c6;
                         a8 = a2 + a4 + a6;
+
+                        allGeLiNum++;
                     }
+
+                    // 因公外出 && 民警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinGongWaiChu.getType() &&
                         epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.BeiJing.getLocation()) {
                             c9++;
                             a9++;
+                            allBeiJingWaiChuNum++;
+                            allBeiJingYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.HuBei.getLocation()) {
                             c10++;
                             a10++;
+                            allHuBeiWaiChuNum++;
+                            allHuBeiYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
                             c11++;
@@ -392,25 +443,38 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.GuangDongShenNei.getLocation()) {
                             c12++;
                             a12++;
+                            allGuangDongWaiChuNum++;
+                            allGuangDongYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiQiTaDiQu.getLocation()) {
                             c13++;
                             a13++;
+                            allJingNeiWaiChuNum++;
+                            allJingNeiYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingWai.getLocation()) {
                             c14++;
                             a14++;
+                            allJingWaiNum++;
+                            allJingWaiYinGongNum++;
                         }
+                        allWaiChuPeopleNum++;
+                        allWaiChuYinGongPeopleNum++;
                     }
+                    // 因公外出 && 辅警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinGongWaiChu.getType() &&
                         epidemicVO.getUserType() == UserTypeEnum.FuJing.getCode()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.BeiJing.getLocation()) {
                             c15++;
                             a15++;
+                            allBeiJingWaiChuNum++;
+                            allBeiJingYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.HuBei.getLocation()) {
                             c16++;
                             a16++;
+                            allHuBeiWaiChuNum++;
+                            allHuBeiYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
                             c17++;
@@ -419,25 +483,38 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.GuangDongShenNei.getLocation()) {
                             c18++;
                             a18++;
+                            allGuangDongWaiChuNum++;
+                            allGuangDongYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiQiTaDiQu.getLocation()) {
                             c19++;
                             a19++;
+                            allJingNeiWaiChuNum++;
+                            allJingNeiYinGongWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingWai.getLocation()) {
                             c20++;
                             a20++;
+                            allJingWaiNum++;
+                            allJingWaiYinGongNum++;
                         }
+                        allWaiChuPeopleNum++;
+                        allWaiChuYinGongPeopleNum++;
                     }
+                    // 因私外出 && 民警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinSiWaiChu.getType() &&
                         epidemicVO.getUserType() == UserTypeEnum.MinJing.getCode()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.BeiJing.getLocation()) {
                             c21++;
                             a21++;
+                            allBeiJingWaiChuNum++;
+                            allBeiJingYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.HuBei.getLocation()) {
                             c22++;
                             a22++;
+                            allHuBeiWaiChuNum++;
+                            allHuBeiYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
                             c23++;
@@ -446,25 +523,38 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.GuangDongShenNei.getLocation()) {
                             c24++;
                             a24++;
+                            allGuangDongWaiChuNum++;
+                            allGuangDongYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiQiTaDiQu.getLocation()) {
                             c25++;
                             a25++;
+                            allJingNeiWaiChuNum++;
+                            allJingNeiYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingWai.getLocation()) {
                             c26++;
                             a26++;
+                            allJingWaiNum++;
+                            allJingWaiYinSiNum++;
                         }
+                        allWaiChuPeopleNum++;
+                        allWaiChuYinSiPeopleNum++;
                     }
+                    // 因私外出 && 辅警
                     if(epidemicVO.getType() == EpidemicTypeEnum.YinSiWaiChu.getType() &&
                         epidemicVO.getUserType() == UserTypeEnum.FuJing.getCode()) {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.BeiJing.getLocation()) {
                             c27++;
                             a27++;
+                            allBeiJingWaiChuNum++;
+                            allBeiJingYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.HuBei.getLocation()) {
                             c28++;
                             a28++;
+                            allHuBeiWaiChuNum++;
+                            allHuBeiYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiZhongGaoFengXianDiQu.getLocation()) {
                             c29++;
@@ -473,15 +563,23 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.GuangDongShenNei.getLocation()) {
                             c30++;
                             a30++;
+                            allGuangDongWaiChuNum++;
+                            allGuangDongYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingNeiQiTaDiQu.getLocation()) {
                             c31++;
                             a31++;
+                            allJingNeiWaiChuNum++;
+                            allJingNeiYinSiWaiChuNum++;
                         }
                         if(epidemicVO.getLocation() == EpidemicLocationEnum.JingWai.getLocation()) {
                             c32++;
                             a32++;
+                            allJingWaiNum++;
+                            allJingWaiYinSiNum++;
                         }
+                        allWaiChuPeopleNum++;
+                        allWaiChuYinSiPeopleNum++;
                     }
                 }
             }
@@ -595,11 +693,41 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String wordName2 = ExcelUtil.insertExcelAndSave(shiJu, 5, 0, savePath, allRules, replacemap);
 
 
+        // 短信word
+        Map<String,Object> wordMap = new HashMap<>();
+        String dateString = DateUtil.convert2String(date , "MM月dd日");
+        wordMap.put("${date}",new TextDTO(dateString,false));
+        wordMap.put("${allWaiChuPeopleNum}",new TextDTO(allWaiChuPeopleNum.toString(),false));
+        wordMap.put("${allWaiChuYinGongPeopleNum}",new TextDTO(allWaiChuYinGongPeopleNum.toString(),false));
+        wordMap.put("${allWaiChuYinSiPeopleNum}",new TextDTO(allWaiChuYinSiPeopleNum.toString(),false));
+        wordMap.put("${allBeiJingWaiChuNum}",new TextDTO(allBeiJingWaiChuNum.toString(),false));
+        wordMap.put("${allBeiJingYinGongWaiChuNum}",new TextDTO(allBeiJingYinGongWaiChuNum.toString(),false));
+        wordMap.put("${allBeiJingYinSiWaiChuNum}",new TextDTO(allBeiJingYinSiWaiChuNum.toString(),false));
+        wordMap.put("${allHuBeiWaiChuNum}",new TextDTO(allHuBeiWaiChuNum.toString(),false));
+        wordMap.put("${allHuBeiYinGongWaiChuNum}",new TextDTO(allHuBeiYinGongWaiChuNum.toString(),false));
+        wordMap.put("${allHuBeiYinSiWaiChuNum}",new TextDTO(allHuBeiYinSiWaiChuNum.toString(),false));
+        wordMap.put("${allGuangDongWaiChuNum}",new TextDTO(allGuangDongWaiChuNum.toString(),false));
+        wordMap.put("${allGuangDongYinGongWaiChuNum}",new TextDTO(allGuangDongYinGongWaiChuNum.toString(),false));
+        wordMap.put("${allGuangDongYinSiWaiChuNum}",new TextDTO(allGuangDongYinSiWaiChuNum.toString(),false));
+        wordMap.put("${allJingNeiWaiChuNum}",new TextDTO(allJingNeiWaiChuNum.toString(),false));
+        wordMap.put("${allJingNeiYinGongWaiChuNum}",new TextDTO(allJingNeiYinGongWaiChuNum.toString(),false));
+        wordMap.put("${allJingNeiYinSiWaiChuNum}",new TextDTO(allJingNeiYinSiWaiChuNum.toString(),false));
+        wordMap.put("${allJingWaiNum}",new TextDTO(allJingWaiNum.toString(),false));
+        wordMap.put("${allJingWaiYinGongNum}",new TextDTO(allJingWaiYinGongNum.toString(),false));
+        wordMap.put("${allJingWaiYinSiNum}",new TextDTO(allJingWaiYinSiNum.toString(),false));
+        wordMap.put("${allGeLiNum}",new TextDTO(allGeLiNum.toString(),false));
+        wordMap.put("${allGeLiMinJingNum}",new TextDTO(allGeLiMinJingNum.toString(),false));
+        wordMap.put("${allGeLiFuJingNum}",new TextDTO(allGeLiFuJingNum.toString(),false));
+        String wordName3 = WordUtil.replaceWordAndSave(message, savePath, wordMap);
+
+        // 保存数据库
         String fileUrl1 = savePath + wordName;
         String fileUrl2 = savePath + wordName2;
+        String fileUrl3 = savePath + wordName3;
         String fileName1 = "(政工办掌握)" + dateStr + "番禺分局队伍内防疫工作情况统计表(不需要报送)";
         String fileName2 = "(报市局)"+dateStr+"番禺分局队伍内部防疫工作情况统计表";
-        expireClientService.add(fileName1 + "@" + fileName2, fileUrl1 + "@" + fileUrl2, date, remark, ExpireType.Epidemic.getCode());
+        String fileName3 = dateStr+"短信";
+        expireClientService.add(fileName1 + "@" + fileName2 + "@" + fileName3, fileUrl1 + "@" + fileUrl2 + "@" + fileUrl3, date, remark, ExpireType.Epidemic.getCode());
     }
 
     @Override
@@ -657,14 +785,20 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             String shiJuFileName = "";
             String zhengGongFileCode = "";
             String shiJuFileCode = "";
+            String messageFileName = "";
+            String messageFileCode = "";
             String remark = "";
             if(expireVO != null) {
                 String names = expireVO.getName();
                 String[] nameArray = names.split("@");
                 zhengGongFileName = nameArray[0];
                 shiJuFileName = nameArray[1];
+                messageFileName = nameArray[2];
+
                 zhengGongFileCode = expireVO.getCode() + "@1";
                 shiJuFileCode = expireVO.getCode() + "@2";
+                messageFileCode = expireVO.getCode() + "@3";
+
                 remark = expireVO.getRemark();
             }
             EpidemicStatisticsVO epidemicStatisticsVO = new EpidemicStatisticsVO();
@@ -672,6 +806,8 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             epidemicStatisticsVO.setZhengGongFileCode(zhengGongFileCode);
             epidemicStatisticsVO.setShiJuFileName(shiJuFileName);
             epidemicStatisticsVO.setShiJuFileCode(shiJuFileCode);
+            epidemicStatisticsVO.setMessageFileName(messageFileName);
+            epidemicStatisticsVO.setMessageFileCode(messageFileCode);
             epidemicStatisticsVO.setRemark(remark);
             return epidemicStatisticsVO;
         }

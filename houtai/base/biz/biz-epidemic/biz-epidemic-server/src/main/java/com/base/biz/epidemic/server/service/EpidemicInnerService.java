@@ -33,7 +33,7 @@ public interface EpidemicInnerService {
              String detail, String leaderCode, String detailLocation) throws Exception;
 
 
-    void createStatistics(InputStream zhengGongBan, InputStream shiJu , String date, String remark) throws Exception;
+    void createStatistics(InputStream zhengGongBan, InputStream shiJu, InputStream message, String date, String remark) throws Exception;
 
     List<EpidemicStatisticsVO> selectStatistics(String date) throws Exception;
 
