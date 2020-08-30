@@ -10,7 +10,8 @@ public class ExpireEnums {
         EmployeeCard(1, "工作证"),
         Contract(2, "合同"),
         Retire(3, "退休"),
-        Epidemic(4, "防疫")
+        Epidemic(4, "防疫"),
+        Wages(5, "工资")
         ;
         private Integer code;
         private String name;

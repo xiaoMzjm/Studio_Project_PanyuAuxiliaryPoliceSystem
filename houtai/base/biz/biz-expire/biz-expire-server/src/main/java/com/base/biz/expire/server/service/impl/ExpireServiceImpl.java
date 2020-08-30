@@ -13,7 +13,7 @@ import com.base.biz.expire.server.service.ExpireService;
 import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserClientService;
+import com.base.biz.user.client.service.BizUserClient;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
 import com.google.common.collect.Lists;
@@ -36,7 +36,7 @@ public class ExpireServiceImpl implements ExpireService {
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
     @Autowired
-    private BizUserClientService bizUserService;
+    private BizUserClient bizUserService;
 
     /**
      * 获取各种到期提醒列表

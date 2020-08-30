@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.base.biz.epidemic.client.model.EpidemicStatisticsVO;
 import com.base.biz.epidemic.server.service.EpidemicInnerService;
 import com.base.biz.expire.client.model.ExpireVO;
-import com.base.biz.expire.client.service.ExpireClientService;
+import com.base.biz.expire.client.service.ExpireClient;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.common.exception.BaseException;
@@ -46,7 +46,7 @@ public class EpidemicStatisticsController {
     @Autowired
     private EpidemicInnerService epidemicInnerService;
     @Autowired
-    private ExpireClientService expireClientService;
+    private ExpireClient expireClient;
 
     @ResultFilter
     @TokenFilter
@@ -105,7 +105,7 @@ public class EpidemicStatisticsController {
         String fileName = "";
         String fileUrl = "";
 
-        ExpireVO expireVO = expireClientService.findByCode(expireCode);
+        ExpireVO expireVO = expireClient.findByCode(expireCode);
         if (expireVO == null) {
             throw new BaseException("文件不存在，请重新生成");
         }

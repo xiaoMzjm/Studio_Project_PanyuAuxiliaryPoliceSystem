@@ -1,15 +1,16 @@
-package com.base.biz.expire.server.service.impl;
+package com.base.biz.expire.server.client;
 
 import java.util.Date;
 import java.util.List;
 
 import com.base.biz.expire.client.model.ExpireVO;
-import com.base.biz.expire.client.service.ExpireClientService;
+import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.expire.server.manager.ExpireManager;
 import com.base.biz.expire.server.model.ExpireDO;
 import com.base.common.util.UUIDUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @date:2020/8/2 6:17 PM
  */
 @Service
-public class ExpireClientServiceImpl implements ExpireClientService {
+public class ExpireClientImpl implements ExpireClient {
 
     @Autowired
     private ExpireManager expireManager;
@@ -44,8 +45,17 @@ public class ExpireClientServiceImpl implements ExpireClientService {
     }
 
     @Override
-    public void add(String fileName, String fileUrl, Date time, String remark, int type) throws Exception {
-        expireManager.add(UUIDUtil.get(), fileName, fileUrl, time, remark, type);
+    public void add(String code, String fileName, String fileUrl, Date time, String remark, int type) throws Exception {
+        String c = UUIDUtil.get();
+        if(StringUtils.isNotEmpty(code)) {
+            c = code;
+        }
+        expireManager.add(c, fileName, fileUrl, time, remark, type);
+    }
+
+    @Override
+    public Long delete(String code) {
+        return expireManager.delete(code);
     }
 
     @Override

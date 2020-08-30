@@ -40,7 +40,7 @@ public class ExpireDO {
     @Column(length = 128)
     private String fileName;
 
-    @Column(length = 512)
+    @Column(length = 2048)
     private String fileUrl;
 
     @Column

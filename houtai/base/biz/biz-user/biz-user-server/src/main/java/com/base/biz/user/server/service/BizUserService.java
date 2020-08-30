@@ -18,7 +18,7 @@ import com.base.biz.user.server.model.UpdateParam;
  * @author:小M
  * @date:2020/7/4 11:37 PM
  */
-public interface BizUserInnerService {
+public interface BizUserService {
 
     List<BizUserPageListVO> findByNameAndCompanyCodeList(String userCode, String name, List<String> companyList)  throws Exception;
 

@@ -8,7 +8,7 @@ import com.base.biz.user.client.model.BizUserDetailVO;
  * @author:小M
  * @date:2020/4/11 8:02 PM
  */
-public interface BizUserClientService {
+public interface BizUserClient {
 
     Long countByCompanyCode(String companyCode);
 

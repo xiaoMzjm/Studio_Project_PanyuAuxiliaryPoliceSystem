@@ -20,10 +20,10 @@ import com.base.biz.epidemic.server.model.EpidemicSelectParam;
 import com.base.biz.epidemic.server.service.EpidemicInnerService;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
-import com.base.biz.expire.client.service.ExpireClientService;
+import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.user.client.common.Enums.UserTypeEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserClientService;
+import com.base.biz.user.client.service.BizUserClient;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
@@ -53,13 +53,13 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     @Autowired
     private EpidemicManager epidemicManager;
     @Autowired
-    private BizUserClientService bizUserClientService;
+    private BizUserClient bizUserClient;
     @Autowired
     private CompanyClientService companyClientService;
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
     @Autowired
-    private ExpireClientService expireClientService;
+    private ExpireClient expireClient;
     @Autowired
     private AuthorityService authorityService;
 
@@ -113,7 +113,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public List<EpidemicVO> select(EpidemicSelectParam epidemicSelectParam) throws Exception {
 
         if(StringUtils.isNotEmpty(epidemicSelectParam.getUserName())) {
-            List<BizUserDetailVO> bizUserDetailVOList = bizUserClientService.listByNameLike(epidemicSelectParam.getUserName());
+            List<BizUserDetailVO> bizUserDetailVOList = bizUserClient.listByNameLike(epidemicSelectParam.getUserName());
             if(CollectionUtils.isNotEmpty(bizUserDetailVOList)) {
                 epidemicSelectParam.setUserCodeList(bizUserDetailVOList.stream().map(BizUserDetailVO::getCode).collect(Collectors.toList()));
             }
@@ -132,7 +132,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         // 获取是否有查看全部的权限，没有的话，要设置该人所在的单位列表
         boolean selectAllAuth = authorityService.hasAuthority(userCode, "EpidemicListManagerSelectAllCompany");
         if(!selectAllAuth) {
-            BizUserDetailVO bizUserDetailVO = bizUserClientService.getByUserCode(userCode);
+            BizUserDetailVO bizUserDetailVO = bizUserClient.getByUserCode(userCode);
             Assert.notNull(bizUserDetailVO, "查询不到用户" + userCode);
             List<String> companyCodeList = companyClientService.findCompanyTree(bizUserDetailVO.getWorkUnit());
             epidemicSelectParam.setCompanyCodeList(companyCodeList);
@@ -169,7 +169,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         List<String> leaderCodes = epidemicDTOList.stream().map(EpidemicDTO::getLeaderCode).collect(
             Collectors.toList());
         userCodes.addAll(leaderCodes);
-        Map<String, BizUserDetailVO> bizUserDetailVOMap = bizUserClientService.listByCodeList(userCodes);
+        Map<String, BizUserDetailVO> bizUserDetailVOMap = bizUserClient.listByCodeList(userCodes);
 
         List<String> companyCodeList = epidemicDTOList.stream().map(EpidemicDTO::getCompanyCode).collect(
             Collectors.toList());
@@ -739,14 +739,14 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String fileName1 = "(政工办掌握)" + dateStr + "番禺分局队伍内防疫工作情况统计表(不需要报送)";
         String fileName2 = "(报市局)"+dateStr+"番禺分局队伍内部防疫工作情况统计表";
         String fileName3 = dateStr+"今日防疫报告";
-        expireClientService.add(fileName1 + "@" + fileName2 + "@" + fileName3, fileUrl1 + "@" + fileUrl2 + "@" + fileUrl3, date, remark, ExpireType.Epidemic.getCode());
+        expireClient.add(null, fileName1 + "@" + fileName2 + "@" + fileName3, fileUrl1 + "@" + fileUrl2 + "@" + fileUrl3, date, remark, ExpireType.Epidemic.getCode());
     }
 
     @Override
     public List<EpidemicStatisticsVO> selectStatistics(String date) throws Exception {
         Date monthBegin = DateUtil.convert2Date(date, "yyyy/MM");
         Date nextMonthBegin = DateUtil.addMonths(monthBegin,1);
-        List<ExpireVO> expireVOList = expireClientService.selectByTime(monthBegin, nextMonthBegin, ExpireType.Epidemic.getCode());
+        List<ExpireVO> expireVOList = expireClient.selectByTime(monthBegin, nextMonthBegin, ExpireType.Epidemic.getCode());
 
         Integer dayNumOfMonth = DateUtil.getDayNumOfMonth(DateUtil.getYear(monthBegin),DateUtil.getMonth(monthBegin));
 
@@ -790,7 +790,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public EpidemicStatisticsVO selectStatisticsByDay(String date) throws Exception {
         Date dayBegin = DateUtil.convert2Date(date, "yyyy/MM/dd");
         Date nextDayBegin = DateUtil.addDays(dayBegin,1);
-        List<ExpireVO> expireVOList = expireClientService.selectByTime(dayBegin, nextDayBegin, ExpireType.Epidemic.getCode());
+        List<ExpireVO> expireVOList = expireClient.selectByTime(dayBegin, nextDayBegin, ExpireType.Epidemic.getCode());
         if(CollectionUtils.isNotEmpty(expireVOList)) {
             ExpireVO expireVO = expireVOList.get(0);
             String zhengGongFileName = "";

@@ -14,14 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSON;
 
 import com.base.authority.client.model.AuthorityVO;
-import com.base.authority.client.service.AuthorityService;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserLoginVO;
 import com.base.biz.user.client.model.BizUserPageListVO;
 import com.base.biz.user.server.model.BizUserAddParam;
 import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.model.UpdateParam;
-import com.base.biz.user.server.service.BizUserInnerService;
+import com.base.biz.user.server.service.BizUserService;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.common.exception.BaseException;
@@ -63,7 +62,7 @@ public class BizUserController {
     private String diskStaticUrl;
 
     @Autowired
-    private BizUserInnerService bizUserService;
+    private BizUserService bizUserService;
 
 
     @ApiOperation(value = "人员列表页面" ,  notes="人员列表页面")
@@ -249,33 +248,22 @@ public class BizUserController {
     @ApiOperation(value = "导入人员" , notes = "导入人员")
     @RequestMapping(value = "/importuser", method = RequestMethod.POST,produces = "multipart/form-data;charset=UTF-8")
     @ResponseBody
-    public String importuser(@RequestParam(value = "file", required = false)MultipartFile file) throws Exception{
+    public String importUser(@RequestParam(value = "file", required = false)MultipartFile file) throws Exception{
         if (file == null) {
             return JSON.toJSONString(Result.error("未上传文件"));
         }
-
         if(StringUtils.isEmpty(diskStaticUrl)) {
             return JSON.toJSONString(Result.error("ResourceStaticUrl is null"));
-        }
-
-        String oriName = file.getOriginalFilename();
-
-        String diskPath = diskStaticUrl + "files";
-
-        // 创建目录
-        File pathFolder = new File(diskPath);
-        if (!pathFolder.exists()) {
-            pathFolder.mkdirs();
         }
 
         // 保存文件
         String url = "";
         try {
             String name = UUIDUtil.get();
-            if(!oriName.endsWith("xlsx")) {
+            if(!file.getOriginalFilename().endsWith("xlsx")) {
                 throw new BaseException("请上传xlsx后缀格式的excel文件");
             }
-            url = diskPath + "/" + name + oriName.substring(oriName.lastIndexOf("."),oriName.length());
+            url = diskStaticUrl + "files/" +  name + ".xlsx";
             file.transferTo(new File(url));
             File f = new File(url);
             // 导入

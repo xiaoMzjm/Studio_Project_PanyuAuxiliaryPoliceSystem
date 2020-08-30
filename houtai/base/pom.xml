@@ -14,8 +14,9 @@
 		<module>biz/biz-user</module>
 		<module>biz/biz-expire</module>
 		<module>biz/biz-epidemic</module>
+        <module>biz/biz-wages</module>
 
-	</modules>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>base</name>
@@ -163,6 +164,23 @@
 			<dependency>
 				<groupId>com.base</groupId>
 				<artifactId>biz-epidemic-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- 工资 -->
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-wages</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-wages-server</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.base</groupId>
+				<artifactId>biz-wages-client</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 

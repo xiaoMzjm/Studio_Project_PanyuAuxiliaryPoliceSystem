@@ -56,7 +56,7 @@ import com.base.biz.user.server.model.PersonalExperienceDTO;
 import com.base.biz.user.server.model.SuperPageListParam;
 import com.base.biz.user.server.model.UpdateParam;
 import com.base.biz.user.server.service.BizUserAddUserCheckService;
-import com.base.biz.user.server.service.BizUserInnerService;
+import com.base.biz.user.server.service.BizUserService;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
@@ -87,7 +87,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date:2020/3/30 12:03 AM
  */
 @Service
-public class BizUserInnerServiceImpl implements BizUserInnerService {
+public class BizUserInnerServiceImpl implements BizUserService {
 
     private final static Logger logger = LoggerFactory.getLogger(BizUserInnerServiceImpl.class);
 

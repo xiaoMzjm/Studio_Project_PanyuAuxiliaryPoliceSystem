@@ -19,4 +19,6 @@ public interface ExpireDAO extends JpaRepository<ExpireDO,Long> {
 
     @Query(nativeQuery = true, value = "select * from expire where time >= :start and time < :end and type = :type order by gmt_create desc")
     List<ExpireDO> getByTime(@Param("start")Date start, @Param("end")Date end,@Param("type")Integer type);
+
+    Long deleteByCode(String code);
 }

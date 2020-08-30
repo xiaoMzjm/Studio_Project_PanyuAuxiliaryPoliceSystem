@@ -3,10 +3,9 @@ package com.base.department.server.service.impl;
 import java.util.List;
 import java.util.Objects;
 
-import com.base.biz.user.client.service.BizUserClientService;
+import com.base.biz.user.client.service.BizUserClient;
 import com.base.department.server.manager.CompanyManager;
 import com.base.department.server.model.CompanyConvertor;
-import com.base.department.server.model.CompanyDO;
 import com.base.department.server.model.CompanyDTO;
 import com.base.common.exception.BaseException;
 import com.base.department.client.model.CompanyVO;
@@ -26,7 +25,7 @@ public class CompanyInnerServiceImpl implements CompanyInnerService {
     @Autowired
     private CompanyManager companyManager;
     @Autowired
-    private BizUserClientService bizUserService;
+    private BizUserClient bizUserClient;
 
     /**
      * 获取单位树
@@ -92,7 +91,7 @@ public class CompanyInnerServiceImpl implements CompanyInnerService {
         if (CollectionUtils.isNotEmpty(companyDOList)) {
             throw new BaseException("请先删除该单位下的子单位");
         }
-        Long num = bizUserService.countByCompanyCode(code);
+        Long num = bizUserClient.countByCompanyCode(code);
         if (num != null && num > 0) {
             throw new BaseException(String.format("存在[%d]位人员属于该单位，无法删除，请先删除相关人员",num));
         }

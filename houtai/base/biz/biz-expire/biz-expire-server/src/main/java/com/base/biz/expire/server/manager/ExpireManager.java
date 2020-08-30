@@ -59,4 +59,8 @@ public class ExpireManager {
     public List<ExpireDO> getByTime(Date start, Date end, Integer type) {
         return expireDAO.getByTime(start, end, type);
     }
+
+    public Long delete(String code) {
+        return expireDAO.deleteByCode(code);
+    }
 }
