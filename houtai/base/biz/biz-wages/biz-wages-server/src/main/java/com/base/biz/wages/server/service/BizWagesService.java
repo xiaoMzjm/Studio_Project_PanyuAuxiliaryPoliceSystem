@@ -11,5 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface BizWagesService {
 
-    void importThreeDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception;
+    void importDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception;
+
 }

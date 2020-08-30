@@ -38,6 +38,11 @@ public class WebAspect {
             logger.error(be.getMessage(), logger);
             return JSON.toJSONString(Result.error(be.getErrorCode(), be.getMessage()));
         }
+        catch (IllegalArgumentException ee) {
+            ee.printStackTrace();
+            logger.error(ee.getMessage(), logger);
+            return JSON.toJSONString(Result.error(ee.getMessage()));
+        }
         catch (Throwable e) {
             e.printStackTrace();
             logger.error(e.getMessage(), logger);

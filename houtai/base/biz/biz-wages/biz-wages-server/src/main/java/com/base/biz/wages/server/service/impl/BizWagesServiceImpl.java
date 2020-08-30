@@ -10,11 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
 
 import com.base.biz.expire.client.common.ExpireEnums;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
+import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.model.BizUserDetailVO;
@@ -58,13 +60,25 @@ public class BizWagesServiceImpl implements BizWagesService {
     @Autowired
     private ExpireClient expireClient;
 
-
     @Transactional(rollbackFor = Exception.class)
-    public void importThreeDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception{
+
+    @Override
+    public void importDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception {
         Assert.notNull(webFile , "文件为空");
         Assert.hasText(diskStaticUrl, "diskStaticUrl为空");
         Assert.notNull(time, "time is null");
+        Assert.notNull(type, "type is null");
         Assert.isTrue(webFile.getOriginalFilename().endsWith("xlsx"), "请上传xlsx格式的文件");
+
+        if(WagesDetailImportTypeEnum.THREE.getValue().equals(type) ||
+            WagesDetailImportTypeEnum.FOUR.getValue().equals(type)) {
+            this.importBaseDetail(time, webFile, targetExcel, type);
+        }else {
+            this.importCorrectDetail(time, webFile, targetExcel, type);
+        }
+    }
+
+    private void importBaseDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception{
 
         // 保存到磁盘
         String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
@@ -436,7 +450,219 @@ public class BizWagesServiceImpl implements BizWagesService {
         String fileName2 = DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type + 2);
         String url1 = url;
         String  url2 = savePath + excelName;
-        expireClient.add(code, fileName1 + "@" + fileName2 , url1 + "2" + url2, time, "", ExpireType.Wages.getCode());
+        expireClient.add(code, fileName1 + "@" + fileName2 , url1 + "@" + url2, time, "", ExpireType.Wages.getCode());
+
+    }
+
+    private void importCorrectDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type)
+        throws Exception {
+
+        // 保存到磁盘
+        String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
+        webFile.transferTo(new File(url));
+        File file = new File(url);
+        System.out.println(url);
+
+        // 读取excel
+        InputStream inputStream = new FileInputStream(file);
+        XSSFWorkbook wb = new XSSFWorkbook(inputStream);
+        XSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rows = sheet.rowIterator();
+
+        // 遍历行
+        List<List<CellDTO>> rules = Lists.newArrayList();
+        List<WagesDO> wagesDOList = Lists.newArrayList();
+        int rowNum = 0;
+        boolean isEnd = false;
+        while(rows.hasNext()) {
+            if(isEnd) {
+                break;
+            }
+            if(rowNum <= 2) {
+                rows.next();
+                rowNum++;
+                continue;
+            }
+            rowNum++;
+            XSSFRow row = (XSSFRow) rows.next();
+            if(row != null) {
+                int num = row.getLastCellNum();
+                WagesDO wagesDO = new WagesDO();
+                wagesDO.setTime(time);
+                wagesDO.setGmtCreate(new Date());
+                wagesDO.setGmtModified(new Date());
+                wagesDO.setType(type);
+
+
+                // 遍历单元格
+                BizUserDetailVO bizUserDetailVO = null;
+                for (int i = 0; i < num; i++) {
+                    XSSFCell cell = row.getCell(i);
+                    if(cell == null) {
+                        continue;
+                    }
+
+
+                    // 序号
+                    if(i == 0) {
+                        try {
+                            wagesDO.setSequence(new Double(cell.getNumericCellValue()).intValue());
+                        }catch (Exception e) {
+                            if("合计".equals(cell.getStringCellValue())) {
+                                isEnd = true;
+                                break;
+                            }
+                            throw new BaseException("第" + rowNum + "行的'序号'格式错误，必须为数字");
+                        }
+                    }
+                    // 单位名称
+                    if(i == 1) {
+                        wagesDO.setDepartmentName(cell.getStringCellValue());
+                    }
+                    // 姓名
+                    if(i == 2) {
+                        wagesDO.setName(cell.getStringCellValue());
+                    }
+                    // 性别
+                    if(i == 3) {
+                        wagesDO.setSex(cell.getStringCellValue());
+                    }
+                    // 银行
+                    if(i == 4) {
+                        wagesDO.setBankCode(cell.getStringCellValue());
+                    }
+                    // 身份证
+                    if(i == 5) {
+                        if(StringUtils.isEmpty(cell)) {
+                            throw new BaseException("第" + rowNum + "行的'身份证'为空");
+                        }
+                        wagesDO.setIdentityCard(cell.getStringCellValue());
+                    }
+                    // 租赁岗位连续工作时间
+                    if(i == 6) {
+                        try {
+                            wagesDO.setContinuityWorkDay(new Double(cell.getNumericCellValue()).intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'租赁岗位连续工作时间'格式错误，必须为数字");
+                        }
+                    }
+                    // 基本工资 * 1000 变为分（三级岗>=4000，四级岗>=4500）
+                    if(i == 7) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setBasePay(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'基本工资'格式错误，必须为数字");
+                        }
+                    }
+                    // 连续岗位租赁津贴 * 1000 变为分
+                    if(i == 8) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setAllowance(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'连续岗位租赁津贴'格式错误，必须为数字");
+                        }
+                    }
+                    // 符合晋升待遇
+                    if(i == 9) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setPromotionMoney(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'符合晋升待遇'格式错误，必须为数字");
+                        }
+                    }
+                    // 应发工资合计
+                    if(i == 10) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setWagesPayable(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'应发工资合计'格式错误，必须为数字");
+                        }
+                    }
+                    // 单位扣缴社保费
+                    if(i == 11) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setDepartmentSocialSecurityMoney(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'单位扣缴社保费'格式错误，必须为数字");
+                        }
+                    }
+                    // 个人扣缴社保费
+                    if(i == 12) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setPersonalSocialSecurityMoney(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'个人扣缴社保费'格式错误，必须为数字");
+                        }
+                    }
+                    // 单位扣缴公积金费
+                    if(i == 13) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setDepartmentAccumulat(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'单位扣缴公积金费'格式错误，必须为数字");
+                        }
+                    }
+                    // 个人扣缴公积金费
+                    if(i == 14) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setPersonalAccumulationFund(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'个人扣缴公积金费'格式错误，必须为数字");
+                        }
+                    }
+                    // 应缴个税金额
+                    if(i == 15) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setPersonalIncomeTax(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'应缴个税金额'格式错误，必须为数字");
+                        }
+                    }
+                    // 实发工资合计
+                    if(i == 16) {
+                        try {
+                            Double f = new Double(cell.getNumericCellValue()) * 1000.0;
+                            wagesDO.setRealWages(f.intValue());
+                        }catch (Exception e) {
+                            throw new BaseException("第" + rowNum + "行的'实发工资合计'格式错误，必须为数字");
+                        }
+                    }
+                    // 备注
+                    if(i == 17) {
+                        wagesDO.setRemark(cell.getStringCellValue());
+                    }
+                    wagesDOList.add(wagesDO);
+                }
+            }
+        }
+
+        // 删除数据
+        bizWagesManager.deleteByIdentityList(wagesDOList.stream().map(WagesDO::getIdentityCard).collect(Collectors.toList()));
+
+        // 保存到db
+        bizWagesManager.batchSave(wagesDOList);
+
+
+        // 删除记录
+        String code = ExpireType.Wages.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        ExpireVO expireVO = expireClient.findByCode(code);
+        if(expireVO == null) {
+            throw new BaseException("请先上传工资明细表");
+        }
+
+        // 保存excel到db
+        String fileName = expireVO.getName() + "@" + DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type);
+        String fileUrl = expireVO.getFileUrl() + "@" + url;
+        expireClient.add(code, fileName, fileUrl, time, "", ExpireType.Wages.getCode());
 
     }
 

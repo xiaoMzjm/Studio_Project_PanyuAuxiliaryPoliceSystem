@@ -49,7 +49,7 @@ public class BizWagesController {
     @TokenFilter
     public String importFile(@RequestParam String time, @RequestParam Integer type, @RequestParam(value = "file")MultipartFile file) throws Exception{
         InputStream inputStream = new ClassPathResource("static/file/工资明细.xlsx").getInputStream();
-        bizWagesService.importThreeDetail(DateUtil.convert2Date(time,"yyyy/MM"), file, inputStream, type);
+        bizWagesService.importDetail(DateUtil.convert2Date(time,"yyyy/MM"), file, inputStream, type);
         return JSON.toJSONString(Result.success(""));
     }
     public static class ImportReq{
