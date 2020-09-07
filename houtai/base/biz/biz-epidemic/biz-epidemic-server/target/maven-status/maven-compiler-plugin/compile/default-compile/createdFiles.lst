@@ -1,0 +1,17 @@
+com/base/biz/epidemic/server/manager/EpidemicManager.class
+com/base/biz/epidemic/server/api/EpidemicStatisticsController$CreateRequest.class
+com/base/biz/epidemic/server/api/EpidemicEnumController.class
+com/base/biz/epidemic/server/api/EpidemicController$AddRequest.class
+com/base/biz/epidemic/server/api/EpidemicController$DeleteRequest.class
+com/base/biz/epidemic/server/api/EpidemicStatisticsController$SelectRequest.class
+com/base/biz/epidemic/server/api/EpidemicController.class
+com/base/biz/epidemic/server/dao/EpidemicDAO.class
+com/base/biz/epidemic/server/manager/impl/EpidemicManagerImpl.class
+com/base/biz/epidemic/server/service/impl/EpidemicInnerServiceImpl.class
+com/base/biz/epidemic/server/service/EpidemicInnerService.class
+com/base/biz/epidemic/server/api/EpidemicStatisticsController.class
+com/base/biz/epidemic/server/model/EpidemicSelectParam.class
+com/base/biz/epidemic/server/model/EpidemicDO.class
+com/base/biz/epidemic/server/api/EpidemicController$ConfirmRequest.class
+com/base/biz/epidemic/server/model/convertor/EpidemicConvertor.class
+com/base/biz/epidemic/server/service/impl/ScheduleServiceImpl.class
