@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>com.base</groupId>
-            <artifactId>department-client</artifactId>
+            <artifactId>biz-department-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
