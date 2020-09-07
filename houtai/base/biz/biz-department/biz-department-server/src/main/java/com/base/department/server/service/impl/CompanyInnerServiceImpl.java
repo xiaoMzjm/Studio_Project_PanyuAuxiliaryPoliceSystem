@@ -3,7 +3,7 @@ package com.base.department.server.service.impl;
 import java.util.List;
 import java.util.Objects;
 
-import com.base.biz.user.client.service.BizUserClient;
+import com.base.biz.user.client.client.BizUserClient;
 import com.base.department.server.manager.CompanyManager;
 import com.base.department.server.model.CompanyConvertor;
 import com.base.department.server.model.CompanyDTO;

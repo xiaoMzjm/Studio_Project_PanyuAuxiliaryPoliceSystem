@@ -1,4 +1,4 @@
-package com.base.department.client.service;
+package com.base.department.client.client;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.base.department.client.model.CompanyVO;
  * @author:小M
  * @date:2020/3/28 2:30 AM
  */
-public interface CompanyClientService {
+public interface CompanyClient {
 
     CompanyVO findByCode(String code);
 

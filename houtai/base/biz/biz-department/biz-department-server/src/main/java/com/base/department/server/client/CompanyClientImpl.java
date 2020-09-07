@@ -1,13 +1,11 @@
-package com.base.department.server.service.impl;
+package com.base.department.server.client;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.base.common.exception.BaseException;
 import com.base.department.client.model.CompanyVO;
-import com.base.department.client.service.CompanyClientService;
+import com.base.department.client.client.CompanyClient;
 import com.base.department.server.manager.CompanyManager;
-import com.base.department.server.manager.impl.CompanyManagerImpl;
 import com.base.department.server.model.CompanyConvertor;
 import com.base.department.server.model.CompanyDTO;
 import com.base.department.server.service.CompanyInnerService;
@@ -22,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @date:2020/4/8 12:00 AM
  */
 @Service
-public class CompanyClientServiceImpl implements CompanyClientService {
+public class CompanyClientImpl implements CompanyClient {
 
     @Autowired
     private CompanyManager companyManager;

@@ -1,4 +1,4 @@
-package com.base.biz.user.client.service;
+package com.base.biz.user.client.client;
 
 import java.util.*;
 

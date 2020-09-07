@@ -13,7 +13,7 @@ import com.base.biz.expire.server.service.ExpireService;
 import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.biz.user.client.common.Enums.SexEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserClient;
+import com.base.biz.user.client.client.BizUserClient;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
 import com.google.common.collect.Lists;

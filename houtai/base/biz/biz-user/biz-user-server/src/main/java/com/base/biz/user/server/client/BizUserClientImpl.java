@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserClient;
+import com.base.biz.user.client.client.BizUserClient;
 import com.base.biz.user.server.manager.BizUserManager;
 import com.base.biz.user.server.model.BizUserDTO;
 import com.base.biz.user.server.model.SuperPageListParam;

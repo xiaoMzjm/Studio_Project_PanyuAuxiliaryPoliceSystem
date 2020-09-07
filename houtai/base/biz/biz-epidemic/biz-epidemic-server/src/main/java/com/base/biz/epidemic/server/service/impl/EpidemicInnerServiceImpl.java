@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.base.authority.client.service.AuthorityService;
+import com.base.authority.client.client.AuthorityClient;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicLocationEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicStatusEnum;
 import com.base.biz.epidemic.client.common.EpidemicEnums.EpidemicTypeEnum;
@@ -23,7 +23,7 @@ import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.user.client.common.Enums.UserTypeEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
-import com.base.biz.user.client.service.BizUserClient;
+import com.base.biz.user.client.client.BizUserClient;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
@@ -31,7 +31,7 @@ import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.common.util.WordUtil;
 import com.base.common.util.WordUtil.TextDTO;
 import com.base.department.client.model.CompanyVO;
-import com.base.department.client.service.CompanyClientService;
+import com.base.department.client.client.CompanyClient;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,13 +55,13 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     @Autowired
     private BizUserClient bizUserClient;
     @Autowired
-    private CompanyClientService companyClientService;
+    private CompanyClient companyClient;
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
     @Autowired
     private ExpireClient expireClient;
     @Autowired
-    private AuthorityService authorityService;
+    private AuthorityClient authorityClient;
 
 
     @Override
@@ -130,11 +130,11 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         String beginTime = DateUtil.getCurrentDateStr("yyyy-MM-dd 00:00:00");
 
         // 获取是否有查看全部的权限，没有的话，要设置该人所在的单位列表
-        boolean selectAllAuth = authorityService.hasAuthority(userCode, "EpidemicListManagerSelectAllCompany");
+        boolean selectAllAuth = authorityClient.hasAuthority(userCode, "EpidemicListManagerSelectAllCompany");
         if(!selectAllAuth) {
             BizUserDetailVO bizUserDetailVO = bizUserClient.getByUserCode(userCode);
             Assert.notNull(bizUserDetailVO, "查询不到用户" + userCode);
-            List<String> companyCodeList = companyClientService.findCompanyTree(bizUserDetailVO.getWorkUnit());
+            List<String> companyCodeList = companyClient.findCompanyTree(bizUserDetailVO.getWorkUnit());
             epidemicSelectParam.setCompanyCodeList(companyCodeList);
         }
 
@@ -173,7 +173,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
 
         List<String> companyCodeList = epidemicDTOList.stream().map(EpidemicDTO::getCompanyCode).collect(
             Collectors.toList());
-        List<CompanyVO> companyVOList = companyClientService.findByCodeList(companyCodeList);
+        List<CompanyVO> companyVOList = companyClient.findByCodeList(companyCodeList);
         Map<String, CompanyVO> companyVOMap = new HashMap<>();
         if (CollectionUtils.isNotEmpty(companyVOList)) {
             companyVOMap = companyVOList.stream().collect(Collectors.toMap(CompanyVO::getCode, Function.identity()));
@@ -296,7 +296,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
         }
 
         // 查询出所有的父单位
-        List<CompanyVO>  companyVOList = companyClientService.findAllFaterCompany();
+        List<CompanyVO>  companyVOList = companyClient.findAllFaterCompany();
 
         // 组装excel数组
         List<List<ExcelUtil.CellDTO>> rules = Lists.newArrayList();

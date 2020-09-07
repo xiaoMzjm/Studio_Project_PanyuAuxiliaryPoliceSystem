@@ -12,10 +12,10 @@ import java.util.concurrent.RecursiveTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.base.authority.client.client.AuthorityClient;
+import com.base.authority.client.client.UserRoleClient;
 import com.base.authority.client.model.AuthorityVO;
 import com.base.authority.client.model.UserRoleDTO;
-import com.base.authority.client.service.AuthorityService;
-import com.base.authority.client.service.UserRoleService;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
@@ -65,11 +65,11 @@ import com.base.common.util.VerifyUtil;
 import com.base.common.util.WordUtil;
 import com.base.common.util.WordUtil.*;
 import com.base.department.client.model.CompanyVO;
-import com.base.department.client.service.CompanyClientService;
+import com.base.department.client.client.CompanyClient;
+import com.base.resource.client.client.ResourceClient;
 import com.base.resource.client.model.ResourceVO;
-import com.base.resource.client.service.ResourceService;
+import com.base.user.client.client.UserClient;
 import com.base.user.client.model.UserVO;
-import com.base.user.client.service.UserService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -101,7 +101,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
     @Autowired
     private BizUserAddUserCheckService bizUserAddUserCheckService;
     @Autowired
-    private UserService userService;
+    private UserClient userClient;
     @Autowired
     private PersonalExperienceManager personalExperienceManager;
     @Autowired
@@ -111,13 +111,13 @@ public class BizUserInnerServiceImpl implements BizUserService {
     @Autowired
     private AssessmentManager assessmentManager;
     @Autowired
-    private CompanyClientService companyService;
+    private CompanyClient companyClient;
     @Autowired
-    private ResourceService resourceService;
+    private ResourceClient resourceClient;
     @Autowired
-    private AuthorityService authorityService;
+    private AuthorityClient authorityClient;
     @Autowired
-    private UserRoleService userRoleService;
+    private UserRoleClient userRoleClient;
 
     /**
      *
@@ -134,10 +134,10 @@ public class BizUserInnerServiceImpl implements BizUserService {
 
         // 如果有了名称，忽略单位
         if(StringUtils.isNotEmpty(name)) {
-            boolean hasAuth = authorityService.hasAuthority(userCode, "UserListSelectAllCompany");
+            boolean hasAuth = authorityClient.hasAuthority(userCode, "UserListSelectAllCompany");
             BizUserDTO bizUserDTO = bizUserManager.findByCode(userCode);
             if(!hasAuth) {
-                List<String> companyCodes = companyService.findCompanyTree(bizUserDTO.getWorkUnitCode());
+                List<String> companyCodes = companyClient.findCompanyTree(bizUserDTO.getWorkUnitCode());
                 companyList = companyCodes;
             }else {
                 companyList = null;
@@ -166,7 +166,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
         }
         Map<String,CompanyVO> companyVOMap = new HashMap<>();
         if(CollectionUtils.isNotEmpty(companyCodeList)) {
-            List<CompanyVO> companyVOList = companyService.findByCodeList(companyCodeList);
+            List<CompanyVO> companyVOList = companyClient.findByCodeList(companyCodeList);
             if (CollectionUtils.isNotEmpty(companyVOList)) {
                 for(CompanyVO companyVO : companyVOList) {
                     companyVOMap.put(companyVO.getCode(), companyVO);
@@ -175,7 +175,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
         }
         Map<String, List<UserRoleDTO>> userRoleMap = null;
         if(CollectionUtils.isNotEmpty(userCodeList)) {
-            userRoleMap = userRoleService.selectByUserCodes(userCodeList);
+            userRoleMap = userRoleClient.selectByUserCodes(userCodeList);
         }
         for(BizUserPageListVO bizUserPageListVO : result) {
             CompanyVO companyVO = companyVOMap.get(bizUserPageListVO.getCompanyCode());
@@ -216,7 +216,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
         BizUserDetailVO vo = new BizUserDetailVO();
         vo.setName(dto.getName());
         String picName = dto.getPicUrl();
-        Map<String,ResourceVO> resourceVOMap = resourceService.findByNameList(Lists.newArrayList(picName));
+        Map<String,ResourceVO> resourceVOMap = resourceClient.findByNameList(Lists.newArrayList(picName));
         if(MapUtils.isNotEmpty(resourceVOMap)) {
             ResourceVO resourceVO = resourceVOMap.get(picName);
             if (resourceVO != null) {
@@ -310,7 +310,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
             companyName = "";
             String companyCode = dto.getWorkUnitCode();
             while (true) {
-                List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(companyCode));
+                List<CompanyVO> companyVOList = companyClient.findByCodeList(Lists.newArrayList(companyCode));
                 if (CollectionUtils.isNotEmpty(companyVOList)) {
                     CompanyVO companyVO = companyVOList.get(0);
                     companyName = companyVO.getName() + "/" + companyName;
@@ -337,7 +337,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
             companyName = "";
             String companyCode = dto.getOrganizationUnitCode();
             while (true) {
-                List<CompanyVO> companyVOList = companyService.findByCodeList(Lists.newArrayList(companyCode));
+                List<CompanyVO> companyVOList = companyClient.findByCodeList(Lists.newArrayList(companyCode));
                 if (CollectionUtils.isNotEmpty(companyVOList)) {
                     CompanyVO companyVO = companyVOList.get(0);
                     companyName = companyVO.getName() + "/" + companyName;
@@ -459,7 +459,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
         }
         Map<String,CompanyVO> companyVOMap = new HashMap<>();
         if(CollectionUtils.isNotEmpty(companyCodeList)) {
-            List<CompanyVO> companyVOList = companyService.findByCodeList(companyCodeList);
+            List<CompanyVO> companyVOList = companyClient.findByCodeList(companyCodeList);
             if (CollectionUtils.isNotEmpty(companyVOList)) {
                 for(CompanyVO companyVO : companyVOList) {
                     companyVOMap.put(companyVO.getCode(), companyVO);
@@ -497,7 +497,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
             throw new BaseException("账号或密码错误");
         }
 
-        UserVO userVO = userService.updateToken(bizUserDTO.getCode());
+        UserVO userVO = userClient.updateToken(bizUserDTO.getCode());
 
         BizUserLoginVO bizUserVO = BizUserConvertor.dto2vo(bizUserDTO);
 
@@ -526,7 +526,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
             }
         }
 
-        userService.add(param.identityCard);
+        userClient.add(param.identityCard);
         bizUserDTO = bizUserManager.add(param);
         personalExperienceManager.add(param.identityCard, param.personalExperience);
         familyMemberManager.add(param.identityCard, param.familyMember);
@@ -572,7 +572,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
         }
         if(deleteUser) {
             bizUserManager.deleteByCode(code);
-            userService.deleteByCode(code);
+            userClient.deleteByCode(code);
         }
         personalExperienceManager.deleteByUserCode(code);
         familyMemberManager.deleteByUserCode(code);
@@ -619,7 +619,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
                     throw new BaseException(String.format("该警号[%s]已存在",bizUserAddParam.identityCard));
                 }
             }
-            userService.add(bizUserAddParam.identityCard);
+            userClient.add(bizUserAddParam.identityCard);
             bizUserManager.add(bizUserAddParam);
         }
 
@@ -697,7 +697,7 @@ public class BizUserInnerServiceImpl implements BizUserService {
             String imageCode = identityCard2ImageCode.get(identityCard);
             BizUserDTO bizUserDTO = identityCard2BizUserDTOMap.get(identityCard);
             bizUserManager.updateImage(bizUserDTO.getCode(), imageCode);
-            resourceService.add("/static/images", imageCode, "png", imageCode);
+            resourceClient.add("/static/images", imageCode, "png", imageCode);
             successIdentityCardList.add(identityCard);
         }
 
@@ -1012,8 +1012,8 @@ public class BizUserInnerServiceImpl implements BizUserService {
     @Override
     public List<AuthorityVO> getAuthority(String userCode) throws Exception {
         if(Objects.equals("admin",userCode)) {
-            return authorityService.listAll();
+            return authorityClient.listAll();
         }
-        return authorityService.listByUserCode(userCode);
+        return authorityClient.listByUserCode(userCode);
     }
 }

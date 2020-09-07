@@ -2,17 +2,14 @@ package com.base.biz.user.server.api;
 
 import java.io.File;
 
-import javax.servlet.http.HttpSession;
-
 import com.alibaba.fastjson.JSON;
 
-import com.base.biz.user.client.common.BizUserConstant;
 import com.base.common.annotation.ResultFilter;
 import com.base.common.constant.Result;
 import com.base.common.util.UUIDUtil;
+import com.base.resource.client.client.ResourceClient;
 import com.base.resource.client.common.Constant;
 import com.base.resource.client.model.SingleUpdateVO;
-import com.base.resource.client.service.ResourceService;
 import com.base.user.client.model.TokenFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,7 +38,7 @@ public class ResourceController {
     private String diskStaticUrl;
 
     @Autowired
-    private ResourceService resourceService;
+    private ResourceClient resourceClient;
 
     @ResultFilter
     @TokenFilter
@@ -77,7 +74,7 @@ public class ResourceController {
         String webUrlPrefix = "/static/images/";
 
         // 保存数据库
-        resourceService.add(webUrlPrefix, name, Constant.PIC_EXT, oriName);
+        resourceClient.add(webUrlPrefix, name, Constant.PIC_EXT, oriName);
 
         SingleUpdateVO singleUpdateVO = new SingleUpdateVO();
         singleUpdateVO.setCode(name);

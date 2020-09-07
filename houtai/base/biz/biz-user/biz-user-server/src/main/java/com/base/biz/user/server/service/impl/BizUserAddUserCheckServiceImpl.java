@@ -24,13 +24,12 @@ import com.base.biz.user.server.service.BizUserAddUserCheckService;
 import com.base.common.exception.BaseException;
 import com.base.common.util.DateUtil;
 import com.base.department.client.model.CompanyVO;
-import com.base.department.client.service.CompanyClientService;
+import com.base.department.client.client.CompanyClient;
+import com.base.resource.client.client.ResourceClient;
 import com.base.resource.client.model.ResourceVO;
-import com.base.resource.client.service.ResourceService;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +42,9 @@ import org.springframework.stereotype.Service;
 public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckService {
 
     @Autowired
-    private CompanyClientService companyService;
+    private CompanyClient companyClient;
     @Autowired
-    private ResourceService resourceService;
+    private ResourceClient resourceClient;
 
     public void check(BizUserAddParam param) throws BaseException {
         if (StringUtils.isEmpty(param.identityCard)) {
@@ -78,7 +77,7 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         }
         // 头像
         if (StringUtils.isNotEmpty(param.headPicCode)) {
-            Map<String,ResourceVO> resourceVOMap = resourceService.findByNameList(Lists.newArrayList(param.headPicCode));
+            Map<String,ResourceVO> resourceVOMap = resourceClient.findByNameList(Lists.newArrayList(param.headPicCode));
             if(resourceVOMap == null || resourceVOMap.get(param.headPicCode) == null) {
                 throw new BaseException(String.format("头像Code不存在[%s]",param.headPicCode));
             }
@@ -393,7 +392,7 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         String workUnitName = "";
         if (StringUtils.isNotEmpty(param.workUnit)) {
             param.workUnit = param.workUnit.trim();
-            CompanyVO companyVO = companyService.findByCode(param.workUnit);
+            CompanyVO companyVO = companyClient.findByCode(param.workUnit);
             if (companyVO == null) {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnit));
             }
@@ -401,7 +400,7 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         }
         if (StringUtils.isNotEmpty(param.workUnitName)) {
             param.workUnitName = param.workUnitName.trim();
-            CompanyVO companyVO = companyService.findByMultiName(param.workUnitName);
+            CompanyVO companyVO = companyClient.findByMultiName(param.workUnitName);
             if (companyVO == null) {
                 throw new BaseException(String.format("工作单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.workUnitName));
             }
@@ -411,14 +410,14 @@ public class BizUserAddUserCheckServiceImpl implements BizUserAddUserCheckServic
         // 编制单位
         if (StringUtils.isNotEmpty(param.organizationUnit)) {
             param.organizationUnit = param.organizationUnit.trim();
-            CompanyVO companyVO = companyService.findByCode(param.organizationUnit);
+            CompanyVO companyVO = companyClient.findByCode(param.organizationUnit);
             if (companyVO == null) {
                 throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnit));
             }
         }
         if (StringUtils.isNotEmpty(param.organizationUnitName)) {
             param.organizationUnitName = param.organizationUnitName.trim();
-            CompanyVO companyVO = companyService.findByMultiName(param.organizationUnitName);
+            CompanyVO companyVO = companyClient.findByMultiName(param.organizationUnitName);
             if (companyVO == null) {
                 throw new BaseException(String.format("编制单位[%s]不存在，请填写[单位管理]模块中存在的单位",param.organizationUnitName));
             }

@@ -2,12 +2,12 @@ package com.base.biz.user.server.service.impl;
 
 import javax.annotation.PostConstruct;
 
+import com.base.authority.client.client.AuthorityClient;
 import com.base.authority.client.common.Enums.AuthorityTypeEnum;
 import com.base.authority.client.model.AuthorityVO;
-import com.base.authority.client.service.AuthorityService;
 import com.base.biz.user.server.manager.impl.BizUserManagerImpl;
+import com.base.user.client.client.UserClient;
 import com.base.user.client.model.UserVO;
-import com.base.user.client.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class InitService {
 
     @Autowired
-    private UserService userService;
+    private UserClient userClient;
     @Autowired
     private BizUserManagerImpl bizUserManager;
     @Autowired
-    private AuthorityService authorityService;
+    private AuthorityClient authorityClient;
 
 
     @PostConstruct
@@ -39,11 +39,11 @@ public class InitService {
      */
     @Transactional(rollbackFor = Throwable.class)
     public void initAdmin() throws Exception{
-        UserVO userVO = userService.findByCode("admin");
+        UserVO userVO = userClient.findByCode("admin");
         if (userVO != null) {
             return;
         }
-        userService.add("admin");
+        userClient.add("admin");
         bizUserManager.addSimple("admin","admin", "admin");
     }
 
@@ -56,41 +56,41 @@ public class InitService {
 
         // 系统管理
         try {
-            vo = authorityService.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityClient.add("系统管理", "SystemManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("角色权限绑定", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityClient.add("角色权限绑定", "AuthorityManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
         }catch (Exception e) {
         }
         try {
-            vo = authorityService.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityClient.add("角色管理", "RoleManager", AuthorityTypeEnum.Page.getType(),"SystemManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("用户角色绑定", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
+            vo = authorityClient.add("用户角色绑定", "RoleUserBindManager" , AuthorityTypeEnum.Page.getType(),"SystemManager");
         }catch (Exception e) {}
 
         // 单位管理
         try {
-            vo = authorityService.add("单位管理", "CompanyManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityClient.add("单位管理", "CompanyManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("单位列表", "CompanyList", AuthorityTypeEnum.Page.getType(),"CompanyManager");
+            vo = authorityClient.add("单位列表", "CompanyList", AuthorityTypeEnum.Page.getType(),"CompanyManager");
         }catch (Exception e) {}
 
 
         // 人员管理
         try {
-            vo = authorityService.add("人员管理", "UserManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityClient.add("人员管理", "UserManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("人员列表", "UserList", AuthorityTypeEnum.Page.getType(),"UserManager");
+            vo = authorityClient.add("人员列表", "UserList", AuthorityTypeEnum.Page.getType(),"UserManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("查询所有单位", "UserListSelectAllCompany", AuthorityTypeEnum.Function.getType(),"UserList");
+            vo = authorityClient.add("查询所有单位", "UserListSelectAllCompany", AuthorityTypeEnum.Function.getType(),"UserList");
         }catch (Exception e) {
         }
         try {
-            vo = authorityService.add("删除人员", "UserListDeleteUser", AuthorityTypeEnum.Function.getType(),"UserList");
+            vo = authorityClient.add("删除人员", "UserListDeleteUser", AuthorityTypeEnum.Function.getType(),"UserList");
         }catch (Exception e) {}
         //try {
         //    vo = authorityService.add("导出收入证明", "UserListExportShouRu", AuthorityTypeEnum.Function.getType(),"UserList");
@@ -126,16 +126,16 @@ public class InitService {
 
         // 到期管理
         try {
-            vo = authorityService.add("到期管理", "ExpireManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityClient.add("到期管理", "ExpireManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("工作证到期提醒", "ExpireEmployeeCard", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+            vo = authorityClient.add("工作证到期提醒", "ExpireEmployeeCard", AuthorityTypeEnum.Page.getType(),"ExpireManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("合同证到期提醒", "ExpireContract", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+            vo = authorityClient.add("合同证到期提醒", "ExpireContract", AuthorityTypeEnum.Page.getType(),"ExpireManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("退休提醒", "ExpireRetire", AuthorityTypeEnum.Page.getType(),"ExpireManager");
+            vo = authorityClient.add("退休提醒", "ExpireRetire", AuthorityTypeEnum.Page.getType(),"ExpireManager");
         }catch (Exception e) {}
 
 
@@ -186,21 +186,21 @@ public class InitService {
 
         // 防疫管理
         try {
-            vo = authorityService.add("防疫管理", "EpidemicManager", AuthorityTypeEnum.Page.getType(),null);
+            vo = authorityClient.add("防疫管理", "EpidemicManager", AuthorityTypeEnum.Page.getType(),null);
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("防疫登记和查询", "EpidemicListManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
+            vo = authorityClient.add("防疫登记和查询", "EpidemicListManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {
         }
         try {
-            vo = authorityService.add("随时修改", "EpidemicListManagerSuperUpdate", AuthorityTypeEnum.Page.getType(),"EpidemicListManager");
+            vo = authorityClient.add("随时修改", "EpidemicListManagerSuperUpdate", AuthorityTypeEnum.Page.getType(),"EpidemicListManager");
         }catch (Exception e) {
         }
         try {
-            vo = authorityService.add("查询所有单位", "EpidemicListManagerSelectAllCompany", AuthorityTypeEnum.Function.getType(),"EpidemicListManager");
+            vo = authorityClient.add("查询所有单位", "EpidemicListManagerSelectAllCompany", AuthorityTypeEnum.Function.getType(),"EpidemicListManager");
         }catch (Exception e) {}
         try {
-            vo = authorityService.add("防疫汇总", "EpidemicCollectManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
+            vo = authorityClient.add("防疫汇总", "EpidemicCollectManager", AuthorityTypeEnum.Page.getType(),"EpidemicManager");
         }catch (Exception e) {}
 
 
