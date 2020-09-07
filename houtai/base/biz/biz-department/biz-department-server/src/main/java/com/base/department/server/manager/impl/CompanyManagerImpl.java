@@ -4,16 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.alibaba.fastjson.JSON;
-
 import com.base.common.exception.BaseException;
-import com.base.department.server.dao.CompanyDORepository;
+import com.base.department.server.dao.CompanyDAO;
 import com.base.department.server.manager.CompanyManager;
 import com.base.department.server.model.CompanyConvertor;
 import com.base.department.server.model.CompanyDTO;
 import com.base.department.server.model.CompanyDO;
 import com.base.common.util.UUIDUtil;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -27,14 +24,14 @@ import org.springframework.stereotype.Component;
 public class CompanyManagerImpl implements CompanyManager {
 
     @Autowired
-    private CompanyDORepository companyDORepository;
+    private CompanyDAO companyDAO;
 
     /**
      * 获取所有单位
      * @return
      */
     public List<CompanyDTO> listAll() {
-        List<CompanyDO> companyDOList = companyDORepository.findAll();
+        List<CompanyDO> companyDOList = companyDAO.findAll();
         return CompanyConvertor.do2dtoList(companyDOList);
     }
 
@@ -47,7 +44,7 @@ public class CompanyManagerImpl implements CompanyManager {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setFatherCode(fatherCode);
         Example<CompanyDO> example = Example.of(companyDO);
-        List<CompanyDO> list = companyDORepository.findAll(example);
+        List<CompanyDO> list = companyDAO.findAll(example);
         return CompanyConvertor.do2dtoList(list);
     }
 
@@ -60,7 +57,7 @@ public class CompanyManagerImpl implements CompanyManager {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setName(name);
         Example<CompanyDO> example = Example.of(companyDO);
-        List<CompanyDO> list = companyDORepository.findAll(example);
+        List<CompanyDO> list = companyDAO.findAll(example);
         return CompanyConvertor.do2dtoList(list);
     }
 
@@ -73,7 +70,7 @@ public class CompanyManagerImpl implements CompanyManager {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setCode(code);
         Example<CompanyDO> example = Example.of(companyDO);
-        Optional<CompanyDO> optional = companyDORepository.findOne(example);
+        Optional<CompanyDO> optional = companyDAO.findOne(example);
         if (!optional.isPresent()) {
             return null;
         }
@@ -86,7 +83,7 @@ public class CompanyManagerImpl implements CompanyManager {
      * @return
      */
     public List<CompanyDTO> findByCodeList(List<String> codeList) {
-        List<CompanyDO> companyDOList = companyDORepository.findByCodeIn(codeList);
+        List<CompanyDO> companyDOList = companyDAO.findByCodeIn(codeList);
         return CompanyConvertor.do2dtoList(companyDOList);
     }
 
@@ -95,7 +92,7 @@ public class CompanyManagerImpl implements CompanyManager {
      * @return
      */
     public List<CompanyDTO> findAll(){
-        List<CompanyDO> companyDOList = companyDORepository.findAll();
+        List<CompanyDO> companyDOList = companyDAO.findAll();
         return CompanyConvertor.do2dtoList(companyDOList);
     }
 
@@ -120,7 +117,7 @@ public class CompanyManagerImpl implements CompanyManager {
         companyDO.setName(name);
         companyDO.setDescription(desc);
         companyDO.setFatherCode(fatherCode);
-        companyDO = companyDORepository.save(companyDO);
+        companyDO = companyDAO.save(companyDO);
         return CompanyConvertor.do2dto(companyDO);
     }
 
@@ -132,16 +129,16 @@ public class CompanyManagerImpl implements CompanyManager {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setCode(code);
         Example<CompanyDO> example = Example.of(companyDO);
-        Optional<CompanyDO> optional = companyDORepository.findOne(example);
+        Optional<CompanyDO> optional = companyDAO.findOne(example);
         if (!optional.isPresent()) {
             throw new BaseException(String.format("单位Code[%s]不存在",code));
         }
-        companyDORepository.deleteById(optional.get().getId());
+        companyDAO.deleteById(optional.get().getId());
     }
 
     @Override
     public List<CompanyDTO> findAllFatherCompany() {
-        List<CompanyDO> companyDOList = companyDORepository.findAllFatherCompany();
+        List<CompanyDO> companyDOList = companyDAO.findAllFatherCompany();
         return CompanyConvertor.do2dtoList(companyDOList);
     }
 }

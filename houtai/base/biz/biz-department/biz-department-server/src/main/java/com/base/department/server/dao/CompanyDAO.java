@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @date:2020/3/27 2:03 AM
  */
 @Repository
-public interface CompanyDORepository extends JpaRepository<CompanyDO,Long> {
+public interface CompanyDAO extends JpaRepository<CompanyDO,Long> {
 
     List<CompanyDO> findByCodeIn(List<String> codeList);
 
