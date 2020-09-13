@@ -52,4 +52,17 @@ public class PageController {
     public String systemManager(){
         return "index";
     }
+
+    @ApiOperation(value = "宣传册" ,  notes="宣传册")
+    @RequestMapping("/brochure")
+    public String brochure(){
+        return "brochure";
+    }
+
+    @ApiOperation(value = "宣传册" ,  notes="宣传册")
+    @RequestMapping("/detail")
+    public String brochuredetail(){
+        return "detail";
+    }
+
 }
