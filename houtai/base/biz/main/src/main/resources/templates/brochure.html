@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>宣传册</title>
   <link rel="stylesheet" href="./lib/index.css">
+  <link rel="stylesheet" href="./lib/local.css">
   <style>
     .fp-tableCell {
       vertical-align: top;
@@ -88,7 +89,7 @@
     }
     .num {
       position: absolute;
-      right: 10px;
+      right: 15px;
       top: 16px;
       font-size: 24px;
       color: #2A82E4;
@@ -105,8 +106,11 @@
       color: #ffffff;
       font-weight: bold;
     }
+    .table-header-name div{
+      width: 15%;
+    }
     .table-header div,  .table-detail div{
-      width: 20%;
+      width: 25vw;
       border: 1px solid #eeeeee;
       display: table-cell;
       padding: 6px;
@@ -114,6 +118,9 @@
       vertical-align: middle;
       white-space: pre-wrap;
       text-align: center;
+    }
+    .table-detail-name div{
+      width: 15%;
     }
     .van-grid-item__content--center {
       justify-content: flex-start;
@@ -149,7 +156,7 @@
               left-arrow
               @click-left="pre"
             ></van-nav-bar>
-            <div class="slide-inner">
+            <div class="slide-inner scroll-box">
               <h3 class="title">历史沿革</h3>
               <van-steps :active="active" active-color="#2A82E4">
                 <van-step>
@@ -174,15 +181,22 @@
               <p class="desc">广州市公安局是市人民政府工作部门，为正局级，是本市行政区域公安工作的领导、指挥机关。<br />2010年以来，广州市公安局先后荣获“集体一等功”3次、“集体二等功”1次、“集体三等功”2次。</p>
               <div class="card">
                 <div class="card-inner">
-                  <h3>广州市公安局总机构数</h3>
-                  <span class="desc">含直属单位31个各区公安分局11个另有派出所270个</span>
+                  <h3>广州市公安局机构数</h3>
+                  <span class="desc">市局直属单位：31，各区分局：11</span>
                   <span class="num">42</span>
                 </div>
               </div>
               <div class="card">
                 <div class="card-inner">
-                  <h3>广州市公安局现有民警</h3>
-                  <span class="desc">直属单位民警8707名各区分局23199名</span>
+                  <h3>广州市公安局政法专项编制数</h3>
+                  <span class="desc">市局直属单位：8846，各区分局：21502</span>
+                  <span class="num">30348</span>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-inner">
+                  <h3>广州市公安局实有警力数</h3>
+                  <span class="desc">市局直属单位：8707，各区分局：23199</span>
                   <span class="num">31906</span>
                 </div>
               </div>
@@ -202,14 +216,14 @@
             <div class="scroll-box">
               <div class="table">
                 <div class="table-header">
-                  <div>姓名</div>
+                  <div style="width: 20vw">姓名</div>
                   <div>职务与职级</div>
-                  <div>分管及联系单位</div>
+                  <div style="width: 50vw">分管及联系单位</div>
                 </div>
                   <div class="table-detail" v-for="item in tableList">
-                    <div>{{ item.name }}</div>
+                    <div style="width: 20vw">{{ item.name }}</div>
                     <div>{{ item.level }}</div>
-                    <div>{{ item.unit }}</div>
+                    <div style="width: 50vw">{{ item.unit }}</div>
                   </div>
               </div>
               <div style="text-align: center;">
@@ -284,8 +298,8 @@
           name: '直属单位',
           list: [
             { name: '政治部 *', icon: 'star', color: '#FFCB23', img: 'zhengzhibu' },
-            { name: '政治部人事处', icon: 'star', color: '#FFCB23', img: 'renshichu' },
             { name: '政治部综合处', icon: 'star', color: '#FFCB23', img: 'zonghechu' },
+            { name: '政治部人事处', icon: 'star', color: '#FFCB23', img: 'renshichu' },
             { name: '政治部组织处', icon: 'star', color: '#FFCB23', img: 'zuzhichu' },
             { name: '政治部教育培训处', icon: 'star', color: '#FFCB23', img: 'jiaoyupeixun' },
             { name: '政治部离退休干部处', icon: 'star', color: '#FFCB23', img: 'lituixiuganbugongzuochu' },
@@ -301,7 +315,7 @@
             { name: '指挥中心调研处', icon: 'phone-circle', color: '#2A82E4', img: 'diaoyanchu' },
             { name: '指挥中心宣传处', icon: 'phone-circle', color: '#2A82E4', img: 'xuanchaunchu' },
             { name: '指挥中心情报信息处', icon: 'phone-circle', color: '#2A82E4', img: 'qingbaochu' },
-            { name: '指挥中心警航支队', icon: 'phone-circle', color: '#2A82E4', img: 'jinghangzhidui' },
+            { name: '警航支队', icon: 'phone-circle', color: '#2A82E4', img: 'jinghangzhidui' },
           ]
         },{
           list: [
@@ -310,6 +324,7 @@
             { name: '法制支队', icon: 'column', color: '#2A82E4', img: 'fazhizhidui' },
             { name: '警务督察支队', icon: 'column', color: '#2A82E4', img: 'jingwuducha' },
             { name: '国内安全保卫支队', icon: 'column', color: '#2A82E4', img: 'guoneianquan' },
+            { name: '技术侦察支队', icon: 'column', color: '#2A82E4', img: 'jishuzhencha' },
             { name: '内部安全保卫支队', icon: 'column', color: '#2A82E4', img: 'neibuanquan' },
             { name: '网络警察支队', icon: 'column', color: '#2A82E4', img: 'wangluojingcha' },
             { name: '警卫支队', icon: 'column', color: '#2A82E4', img: 'jingweizhidui' },
@@ -332,7 +347,7 @@
             { name: '港航分局', icon: 'column', color: '#2A82E4', img: 'ganhang' },
           ] 
         },{
-          name: '区分局',
+          name: '各区分局',
           list: [
             { name: '越秀区分局', icon: 'manager', color: '#2A82E4', img: 'yuxiu' },
             { name: '海珠区分局', icon: 'manager', color: '#2A82E4', img: 'haizhu' },

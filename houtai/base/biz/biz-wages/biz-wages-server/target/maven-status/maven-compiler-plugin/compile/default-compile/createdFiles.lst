@@ -1,9 +1,0 @@
-com/base/biz/wages/server/service/BizWagesService.class
-com/base/biz/wages/server/api/BizWagesController.class
-com/base/biz/wages/server/dao/BizWagesDAO.class
-com/base/biz/wages/server/api/BizWagesController$ImportReq.class
-com/base/biz/wages/server/service/impl/BizWagesServiceImpl.class
-com/base/biz/wages/server/manager/BizWagesManager.class
-com/base/biz/wages/server/api/BizWagesController$ListReq.class
-com/base/biz/wages/server/manager/impl/BizWagesManagerImpl.class
-com/base/biz/wages/server/model/WagesDO.class
