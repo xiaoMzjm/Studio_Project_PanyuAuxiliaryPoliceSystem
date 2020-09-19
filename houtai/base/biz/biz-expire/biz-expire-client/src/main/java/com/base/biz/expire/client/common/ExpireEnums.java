@@ -11,7 +11,8 @@ public class ExpireEnums {
         Contract(2, "合同"),
         Retire(3, "退休"),
         Epidemic(4, "防疫"),
-        Wages(5, "工资")
+        WagesThree(5, "三级工资"),
+        WagesFour(6, "四级工资")
         ;
         private Integer code;
         private String name;

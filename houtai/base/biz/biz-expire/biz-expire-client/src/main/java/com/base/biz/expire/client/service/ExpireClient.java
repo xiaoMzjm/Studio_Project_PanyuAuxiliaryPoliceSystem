@@ -15,8 +15,8 @@ public interface ExpireClient {
 
     Long delete(String code);
 
-    List<ExpireVO> selectByTime(Date start, Date end, Integer type) throws Exception;
+    List<ExpireVO> selectByTime(Date start, Date end, Integer type);
 
-    ExpireVO findByCode(String code) throws Exception;
+    ExpireVO findByCode(String code);
 
 }

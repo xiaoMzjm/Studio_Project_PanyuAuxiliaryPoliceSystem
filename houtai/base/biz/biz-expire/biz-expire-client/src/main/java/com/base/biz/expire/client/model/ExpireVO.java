@@ -12,7 +12,6 @@ public class ExpireVO {
     private String code = "";
     private String message = "";
 
-    // 防疫新增
     private Date time;
     private String fileUrl;
     private String remark;

@@ -11,13 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.base.biz.expire.client.common.ExpireEnums;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.user.client.common.BizUserConstant;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.client.BizUserClient;
+import com.base.biz.wages.client.enums.WageTypeEnum;
 import com.base.biz.wages.client.enums.WagesDetailImportTypeEnum;
+import com.base.biz.wages.client.model.WageListVO;
 import com.base.biz.wages.server.manager.BizWagesManager;
 import com.base.biz.wages.server.model.WagesDO;
 import com.base.biz.wages.server.service.BizWagesService;
@@ -27,6 +30,7 @@ import com.base.common.util.ExcelUtil;
 import com.base.common.util.ExcelUtil.CellDTO;
 import com.base.common.util.UUIDUtil;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -74,7 +78,69 @@ public class BizWagesServiceImpl implements BizWagesService {
         }
     }
 
+    @Override
+    public List<WageListVO> list(Integer year, Integer type) {
+        Assert.notNull(year, "year is null");
+        Assert.isTrue(WageTypeEnum.THREE.getType().equals(type) ||
+            WageTypeEnum.FOUR.getType().equals(type), "type error");
+
+
+        // 年初时间
+        Date begin = DateUtil.getFirstDayOfYear(year);
+        // 下一年初时间
+        Date end = DateUtil.addYears(begin, 1);
+        // 查询整年的记录
+        if(WageTypeEnum.THREE.getType().equals(type)) {
+            type = ExpireType.WagesThree.getCode();
+        }else {
+            type = ExpireType.WagesFour.getCode();
+        }
+        List<ExpireVO> expireVOList = expireClient.selectByTime(begin, end, type);
+
+        List<WageListVO> result = Lists.newArrayList();
+        for(int i = 1 ; i <= 12 ; i++) {
+            WageListVO wageListVO = new WageListVO();
+
+            Date monthBegin = DateUtil.getFirstDayOfMonth(year, i);
+            Date nextMonthBegin = DateUtil.addMonths(monthBegin, 1);
+
+            if(CollectionUtils.isNotEmpty(expireVOList)) {
+                for(ExpireVO expireVO : expireVOList) {
+                    if(monthBegin.getTime() <= expireVO.getTime().getTime() &&
+                        expireVO.getTime().getTime() < nextMonthBegin.getTime()) {
+                        String nameArrayStr = expireVO.getName();
+                        String urlArrayStr = expireVO.getFileUrl();
+                        String[] nameArray = nameArrayStr.split("@");
+                        String[] urlArray = urlArrayStr.split("@");
+                        Assert.isTrue(nameArray.length >= 2, "nameArray length error");
+                        Assert.isTrue(urlArray.length >= 2, "urlArray length error");
+                        wageListVO.setImportReportName(nameArray[0]);
+                        wageListVO.setSystemReportName(nameArray[1]);
+                        if(nameArray.length > 2 && urlArray.length > 2) {
+                            wageListVO.setCorrectReportName(nameArray[2]);
+                        }
+                        wageListVO.setCode(expireVO.getCode());
+                    }
+                }
+            }
+            result.add(wageListVO);
+        }
+
+        return result;
+    }
+
+    /**
+     * 上传初始的工资明细
+     * @param time
+     * @param webFile
+     * @param targetExcel
+     * @param type
+     * @throws Exception
+     */
     private void importBaseDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception{
+
+        Assert.isTrue(WagesDetailImportTypeEnum.THREE.getValue().equals(type) ||
+            WagesDetailImportTypeEnum.FOUR.getValue().equals(type), "type error");
 
         // 保存到磁盘
         String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
@@ -90,7 +156,7 @@ public class BizWagesServiceImpl implements BizWagesService {
         // 身份证集合
         List<String> identityCodeList = Lists.newArrayList();
 
-        // 遍历行
+        // 遍历行，获取全部的身份证，然后一次查询所有身份信息，供后面使用
         int rowNum = 1;
         while(rows.hasNext()) {
             if(rowNum <= 3) {
@@ -114,14 +180,14 @@ public class BizWagesServiceImpl implements BizWagesService {
             }
         }
 
-        // 查询人员
+        // 根据身份证集合，查询人员集合
         Map<String,BizUserDetailVO> code2UserMap = bizUserClient.listByCodeList(identityCodeList);
 
         // 重新读取excel
         sheet = wb.getSheetAt(0);
         rows = sheet.rowIterator();
 
-        // 总计
+        // 初始化统计字段
         Double basePay = 0.0; // 基本工资
         Double allowance = 0.0; // 连续租赁岗位津贴
         Double promotionMoney = 0.0; // 符合晋升待遇
@@ -155,8 +221,11 @@ public class BizWagesServiceImpl implements BizWagesService {
                 wagesDO.setTime(time);
                 wagesDO.setGmtCreate(new Date());
                 wagesDO.setGmtModified(new Date());
-                wagesDO.setType(type);
-
+                if(WagesDetailImportTypeEnum.THREE.getValue().equals(type)) {
+                    wagesDO.setType(WageTypeEnum.THREE.getType());
+                }else {
+                    wagesDO.setType(WageTypeEnum.FOUR.getType());
+                }
 
                 // 遍历单元格
                 List<CellDTO> cellDTOList = Lists.newArrayList();
@@ -409,16 +478,11 @@ public class BizWagesServiceImpl implements BizWagesService {
             }
         }
 
-        // 最终数据保存到db
-        if(WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type) ||
-            WagesDetailImportTypeEnum.CORRECT_FOUR.getValue().equals(type)) {
-            // 删除数据
-            bizWagesManager.deleteByIdentityList(identityCodeList);
+        // 删除数据
+        bizWagesManager.deleteByIdentityList(identityCodeList);
 
-            // 保存到db
-            bizWagesManager.batchSave(wagesDOList);
-        }
-
+        // 保存到db
+        bizWagesManager.batchSave(wagesDOList);
 
         // 保存新的excel
         Map<String,String> replaceMap = new HashMap<>();
@@ -437,21 +501,42 @@ public class BizWagesServiceImpl implements BizWagesService {
         String excelName = ExcelUtil.insertExcelAndSave(targetExcel, 3, 0, savePath, rules, replaceMap);
         System.out.println(excelName);
 
-        // 删除记录
-        String code = ExpireType.Wages.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        // 删除expire记录
+
+        String code = "";
+        if(WagesDetailImportTypeEnum.THREE.getValue().equals(type)) {
+            code = ExpireType.WagesThree.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        }else {
+            code = ExpireType.WagesFour.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        }
         expireClient.delete(code);
 
-        // 保存excel到db
+        // 重新保存expire记录
         String fileName1 = DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type);
         String fileName2 = DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type + 2);
         String url1 = url;
         String  url2 = savePath + excelName;
-        expireClient.add(code, fileName1 + "@" + fileName2 , url1 + "@" + url2, time, "", ExpireType.Wages.getCode());
+        if(WagesDetailImportTypeEnum.THREE.getValue().equals(type)) {
+            expireClient.add(code, fileName1 + "@" + fileName2 , url1 + "@" + url2, time, "", ExpireType.WagesThree.getCode());
+        }else {
+            expireClient.add(code, fileName1 + "@" + fileName2 , url1 + "@" + url2, time, "", ExpireType.WagesFour.getCode());
+        }
 
     }
 
+    /**
+     * 上传正确的工资明细
+     * @param time
+     * @param webFile
+     * @param targetExcel
+     * @param type
+     * @throws Exception
+     */
     private void importCorrectDetail(Date time, MultipartFile webFile, InputStream targetExcel, Integer type)
         throws Exception {
+
+        Assert.isTrue(WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type) ||
+            WagesDetailImportTypeEnum.CORRECT_FOUR.getValue().equals(type), "type error");
 
         // 保存到磁盘
         String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
@@ -487,7 +572,11 @@ public class BizWagesServiceImpl implements BizWagesService {
                 wagesDO.setTime(time);
                 wagesDO.setGmtCreate(new Date());
                 wagesDO.setGmtModified(new Date());
-                wagesDO.setType(type);
+                if(WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type)) {
+                    wagesDO.setType(WageTypeEnum.THREE.getType());
+                }else {
+                    wagesDO.setType(WageTypeEnum.FOUR.getType());
+                }
 
 
                 // 遍历单元格
@@ -641,24 +730,42 @@ public class BizWagesServiceImpl implements BizWagesService {
             }
         }
 
-        // 删除数据
+        // 删除wages数据
         bizWagesManager.deleteByIdentityList(wagesDOList.stream().map(WagesDO::getIdentityCard).collect(Collectors.toList()));
 
         // 保存到db
         bizWagesManager.batchSave(wagesDOList);
 
-
-        // 删除记录
-        String code = ExpireType.Wages.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        String code = "";
+        if(WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type)) {
+            code = ExpireType.WagesThree.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        }else {
+            code = ExpireType.WagesFour.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        }
         ExpireVO expireVO = expireClient.findByCode(code);
         if(expireVO == null) {
             throw new BaseException("请先上传工资明细表");
         }
 
         // 保存excel到db
-        String fileName = expireVO.getName() + "@" + DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type);
-        String fileUrl = expireVO.getFileUrl() + "@" + url;
-        expireClient.add(code, fileName, fileUrl, time, "", ExpireType.Wages.getCode());
+        String[] nameArray = expireVO.getName().split("@");
+        String[] fileUrlArray = expireVO.getFileUrl().split("@");
+        String fileName = "";
+        String fileUrl = "";
+        if(nameArray.length == 2) {
+            fileName = expireVO.getName() + "@" + DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type);
+            fileUrl = expireVO.getFileUrl() + "@" + url;
+        }else {
+            fileName = nameArray[0] + "@" + nameArray[1] + DateUtil.convert2String(time , "yyyy年MM月") + WagesDetailImportTypeEnum.getName(type);
+            fileUrl = fileUrlArray[0] + "@" + fileUrlArray[1] + url;
+        }
+
+        // 保存expire
+        if(WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type)) {
+            expireClient.add(code, fileName, fileUrl, time, "", ExpireType.WagesThree.getCode());
+        }else {
+            expireClient.add(code, fileName, fileUrl, time, "", ExpireType.WagesFour.getCode());
+        }
 
     }
 
