@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
@@ -187,16 +189,16 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         rows = sheet.rowIterator();
 
         // 初始化统计字段
-        Double basePay = 0.0; // 基本工资
-        Double allowance = 0.0; // 连续租赁岗位津贴
-        Double promotionMoney = 0.0; // 符合晋升待遇
-        Double wagesPayable = 0.0; // 应发工资合计
-        Double departmentSocialSecurityMoney = 0.0; // 单位扣缴社保费
-        Double personalSocialSecurityMoney = 0.0; // 个人扣缴社保费
-        Double departmentAccumulat = 0.0; // 单位扣缴公积金费
-        Double personalAccumulationFund = 0.0; // 个人扣缴公积金费
-        Double personalIncomeTax = 0.0; // 应缴个税金额
-        Double realWages = 0.0; // 实发工资合计
+        BigDecimal basePay = new BigDecimal(0.0); // 基本工资
+        BigDecimal allowance = new BigDecimal(0.0); // 连续租赁岗位津贴
+        BigDecimal promotionMoney = new BigDecimal(0.0); // 符合晋升待遇
+        BigDecimal wagesPayable = new BigDecimal(0.0); // 应发工资合计
+        BigDecimal departmentSocialSecurityMoney = new BigDecimal(0.0); // 单位扣缴社保费
+        BigDecimal personalSocialSecurityMoney = new BigDecimal(0.0); // 个人扣缴社保费
+        BigDecimal departmentAccumulat = new BigDecimal(0.0); // 单位扣缴公积金费
+        BigDecimal personalAccumulationFund = new BigDecimal(0.0); // 个人扣缴公积金费
+        BigDecimal personalIncomeTax = new BigDecimal(0.0); // 应缴个税金额
+        BigDecimal realWages = new BigDecimal(0.0); // 实发工资合计
 
         // 遍历行
         List<List<CellDTO>> rules = Lists.newArrayList();
@@ -309,7 +311,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setBasePay(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            basePay += new Double(cell.getNumericCellValue());
+                            basePay = basePay.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                             if(WagesDetailImportTypeEnum.THREE.getValue().equals(type) ||
                                 WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type)) {
                                 if(f < 4000000.0) {
@@ -335,8 +337,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setAllowance(f.intValue());
                             CellDTO cellDTO = new CellDTO(String.valueOf(cell.getNumericCellValue()));
-                            allowance += new Double(cell.getNumericCellValue());
-
+                            allowance = allowance.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                             Integer systemAllowance = (wagesDO.getContinuityWorkDay() + 1) * 100 * 1000;
                             if(!systemAllowance.equals(f.intValue())) {
                                 cellDTO = new CellDTO(getNewValue(String.valueOf(f.intValue()/1000),String.valueOf(systemAllowance/1000)));
@@ -355,7 +356,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setPromotionMoney(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            promotionMoney += new Double(cell.getNumericCellValue());
+                            promotionMoney = promotionMoney.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                         }catch (Exception e) {
                             throw new BaseException("第" + rowNum + "行的'符合晋升待遇'格式错误，必须为数字");
                         }
@@ -367,7 +368,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             wagesDO.setWagesPayable(f.intValue());
                             CellDTO cellDTO = new CellDTO(String.valueOf(cell.getNumericCellValue()));
 
-                            wagesPayable += new Double(cell.getNumericCellValue());
+                            wagesPayable = wagesPayable.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
 
                             Integer systemWagesPayable = wagesDO.getBasePay() + wagesDO.getAllowance() + wagesDO.getPromotionMoney();
                             if(!systemWagesPayable.equals(f.intValue())) {
@@ -386,7 +387,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setDepartmentSocialSecurityMoney(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            departmentSocialSecurityMoney += new Double(cell.getNumericCellValue());
+                            departmentSocialSecurityMoney = departmentSocialSecurityMoney.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                         }catch (Exception e) {
                             throw new BaseException("第" + rowNum + "行的'单位扣缴社保费'格式错误，必须为数字");
                         }
@@ -397,7 +398,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setPersonalSocialSecurityMoney(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            personalSocialSecurityMoney += new Double(cell.getNumericCellValue());
+                            personalSocialSecurityMoney = personalSocialSecurityMoney.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                         }catch (Exception e) {
                             throw new BaseException("第" + rowNum + "行的'个人扣缴社保费'格式错误，必须为数字");
                         }
@@ -408,7 +409,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setDepartmentAccumulat(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            departmentAccumulat += new Double(cell.getNumericCellValue());
+                            departmentAccumulat = departmentAccumulat.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                         }catch (Exception e) {
                             throw new BaseException("第" + rowNum + "行的'单位扣缴公积金费'格式错误，必须为数字");
                         }
@@ -419,7 +420,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setPersonalAccumulationFund(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            personalAccumulationFund += new Double(cell.getNumericCellValue());
+                            personalAccumulationFund = personalAccumulationFund.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                         }catch (Exception e) {
                             throw new BaseException("第" + rowNum + "行的'个人扣缴公积金费'格式错误，必须为数字");
                         }
@@ -430,7 +431,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setPersonalIncomeTax(f.intValue());
                             cellDTOList.add(new CellDTO(String.valueOf(cell.getNumericCellValue())));
-                            personalIncomeTax += new Double(cell.getNumericCellValue());
+                            personalIncomeTax = personalIncomeTax.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
                             if(WagesDetailImportTypeEnum.THREE.getValue().equals(type) ||
                                 WagesDetailImportTypeEnum.CORRECT_THREE.getValue().equals(type)) {
                                 if(!f.equals(0.0)) {
@@ -450,7 +451,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                             Double f = new Double(cell.getNumericCellValue()) * 1000.0;
                             wagesDO.setRealWages(f.intValue());
                             CellDTO cellDTO = new CellDTO(String.valueOf(cell.getNumericCellValue()));
-                            realWages += new Double(cell.getNumericCellValue());
+                            realWages = realWages.add(new BigDecimal(String.valueOf(cell.getNumericCellValue())));
 
                             Integer systemRealWages = wagesDO.getWagesPayable() -
                                 wagesDO.getPersonalSocialSecurityMoney() -
@@ -471,30 +472,33 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                         wagesDO.setRemark(cell.getStringCellValue());
                         cellDTOList.add(new CellDTO(cell.getStringCellValue()));
                     }
-                    wagesDOList.add(wagesDO);
+
                 }
-                rules.add(cellDTOList);
+                if(!StringUtils.isEmpty(wagesDO.getName())) {
+                    wagesDOList.add(wagesDO);
+                    rules.add(cellDTOList);
+                }
             }
         }
 
-        // 删除数据
+        // 删除工资数据
         bizWagesManager.deleteByIdentityList(identityCodeList);
 
-        // 保存到db
+        // 保存工资到db
         bizWagesManager.batchSave(wagesDOList);
 
         // 保存新的excel
         Map<String,String> replaceMap = new HashMap<>();
-        replaceMap.put("basePay" , new BigDecimal(basePay).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("allowance" , new BigDecimal(allowance).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("promotionMoney" , new BigDecimal(promotionMoney).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("wagesPayable" , new BigDecimal(wagesPayable).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("departmentSocialSecurityMoney" , new BigDecimal(departmentSocialSecurityMoney).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalSocialSecurityMoney" , new BigDecimal(personalSocialSecurityMoney).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("departmentAccumulat" , new BigDecimal(departmentAccumulat).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalAccumulationFund" , new BigDecimal(personalAccumulationFund).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalIncomeTax" , new BigDecimal(personalIncomeTax).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("realWages" , new BigDecimal(realWages).setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("basePay" , basePay.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("allowance" , allowance.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("promotionMoney" , promotionMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("wagesPayable" , wagesPayable.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("departmentSocialSecurityMoney" , departmentSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("personalSocialSecurityMoney" , personalSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("departmentAccumulat" , departmentAccumulat.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("personalAccumulationFund" , personalAccumulationFund.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("personalIncomeTax" , personalIncomeTax.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
+        replaceMap.put("realWages" , realWages.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
         replaceMap.put("date" , DateUtil.getCurrentDateStr("yyyy年MM月dd日"));
         String savePath = diskStaticUrl + "files/";
         String excelName = ExcelUtil.insertExcelAndSave(targetExcel, 3, 0, savePath, rules, replaceMap);

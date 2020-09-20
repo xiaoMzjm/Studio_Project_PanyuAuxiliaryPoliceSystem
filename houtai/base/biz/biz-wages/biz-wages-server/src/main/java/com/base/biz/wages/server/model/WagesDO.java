@@ -50,7 +50,7 @@ public class WagesDO {
     private Integer continuityWorkDay;
 
     @Column(nullable = false)
-    private Integer basePay; // 基本攻击
+    private Integer basePay; // 基本工资
 
     @Column(nullable = false)
     private Integer allowance; // 连续租赁岗位津贴

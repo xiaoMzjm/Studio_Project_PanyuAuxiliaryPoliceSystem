@@ -6,6 +6,7 @@ import java.util.List;
 import com.base.biz.wages.server.dao.BizWagesDAO;
 import com.base.biz.wages.server.manager.BizWagesManager;
 import com.base.biz.wages.server.model.WagesDO;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,11 @@ public class BizWagesManagerImpl implements BizWagesManager {
         if(CollectionUtils.isEmpty(wagesDOList)) {
             return null;
         }
-        List<WagesDO> result = bizWagesDAO.saveAll(wagesDOList);
+        List<WagesDO> result = Lists.newArrayList();
+        List<List<WagesDO>> list = Lists.partition(wagesDOList, 500);
+        for(List<WagesDO> item : list) {
+            result.addAll(bizWagesDAO.saveAll(item));
+        }
         return result;
     }
 
