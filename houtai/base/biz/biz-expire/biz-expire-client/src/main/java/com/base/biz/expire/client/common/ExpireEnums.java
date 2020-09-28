@@ -12,7 +12,8 @@ public class ExpireEnums {
         Retire(3, "退休"),
         Epidemic(4, "防疫"),
         WagesThree(5, "三级工资"),
-        WagesFour(6, "四级工资")
+        WagesFour(6, "四级工资"),
+        WagesReimbursement(7, "工资报销封面")
         ;
         private Integer code;
         private String name;

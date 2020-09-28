@@ -488,18 +488,18 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         bizWagesManager.batchSave(wagesDOList);
 
         // 保存新的excel
-        Map<String,String> replaceMap = new HashMap<>();
-        replaceMap.put("basePay" , basePay.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("allowance" , allowance.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("promotionMoney" , promotionMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("wagesPayable" , wagesPayable.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("departmentSocialSecurityMoney" , departmentSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalSocialSecurityMoney" , personalSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("departmentAccumulat" , departmentAccumulat.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalAccumulationFund" , personalAccumulationFund.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("personalIncomeTax" , personalIncomeTax.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("realWages" , realWages.setScale(2,BigDecimal.ROUND_HALF_UP).toString());
-        replaceMap.put("date" , DateUtil.getCurrentDateStr("yyyy年MM月dd日"));
+        Map<String,CellDTO> replaceMap = new HashMap<>();
+        replaceMap.put("basePay" , new CellDTO(basePay.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("allowance" , new CellDTO(allowance.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("promotionMoney" , new CellDTO(promotionMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("wagesPayable" , new CellDTO(wagesPayable.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("departmentSocialSecurityMoney" , new CellDTO(departmentSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("personalSocialSecurityMoney" , new CellDTO(personalSocialSecurityMoney.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("departmentAccumulat" , new CellDTO(departmentAccumulat.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("personalAccumulationFund" , new CellDTO(personalAccumulationFund.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("personalIncomeTax" , new CellDTO(personalIncomeTax.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("realWages" , new CellDTO(realWages.setScale(2,BigDecimal.ROUND_HALF_UP).toString()));
+        replaceMap.put("date" , new CellDTO(DateUtil.getCurrentDateStr("yyyy年MM月dd日")));
         String savePath = diskStaticUrl + "files/";
         String excelName = ExcelUtil.insertExcelAndSave(targetExcel, 3, 0, savePath, rules, replaceMap);
 
