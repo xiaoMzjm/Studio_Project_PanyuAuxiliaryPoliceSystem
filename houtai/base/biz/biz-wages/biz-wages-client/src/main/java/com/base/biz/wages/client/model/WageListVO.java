@@ -7,13 +7,17 @@ package com.base.biz.wages.client.model;
  */
 public class WageListVO {
 
+    private String importReportCode;
+
     private String importReportName;
+
+    private String systemReportCode;
 
     private String systemReportName;
 
-    private String correctReportName;
+    private String correctReportCode;
 
-    private String code;
+    private String correctReportName;
 
     public String getImportReportName() {
         return importReportName;
@@ -39,11 +43,27 @@ public class WageListVO {
         this.correctReportName = correctReportName;
     }
 
-    public String getCode() {
-        return code;
+    public String getImportReportCode() {
+        return importReportCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setImportReportCode(String importReportCode) {
+        this.importReportCode = importReportCode;
+    }
+
+    public String getSystemReportCode() {
+        return systemReportCode;
+    }
+
+    public void setSystemReportCode(String systemReportCode) {
+        this.systemReportCode = systemReportCode;
+    }
+
+    public String getCorrectReportCode() {
+        return correctReportCode;
+    }
+
+    public void setCorrectReportCode(String correctReportCode) {
+        this.correctReportCode = correctReportCode;
     }
 }

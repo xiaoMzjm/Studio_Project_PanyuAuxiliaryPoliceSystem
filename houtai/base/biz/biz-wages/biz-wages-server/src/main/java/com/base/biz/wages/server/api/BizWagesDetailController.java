@@ -68,11 +68,11 @@ public class BizWagesDetailController {
     @ResultFilter
     @TokenFilter
     public String list(@RequestBody ListReq req){
-        List<WageListVO> wageListVOList = bizWagesDetailService.list(req.year, req.type);
+        List<WageListVO> wageListVOList = bizWagesDetailService.list(req.time, req.type);
         return JSON.toJSONString(wageListVOList);
     }
     public static class ListReq{
-        public Integer year;
+        public Integer time;
         public Integer type;
     }
 
@@ -87,11 +87,15 @@ public class BizWagesDetailController {
     @RequestMapping(value = "/download", method = RequestMethod.GET)
     @ResultFilter
     @TokenFilter
-    public void download(HttpServletResponse response, String code, Integer type) throws Exception{
+    public void download(HttpServletResponse response, String code) throws Exception{
         Assert.notNull(code , "code is null");
-        Assert.notNull(type , "type is null");
 
-        ExpireVO expireVO = expireClient.findByCode(code);
+        String[] codeArray = code.split("@");
+        Assert.isTrue(codeArray.length == 2, "code错误");
+        String codeStr = codeArray[0];
+        Integer type = Integer.valueOf(codeArray[1]);
+
+        ExpireVO expireVO = expireClient.getByCode(codeStr);
         Assert.notNull(expireVO , "文件不存在");
 
         Integer index = null;

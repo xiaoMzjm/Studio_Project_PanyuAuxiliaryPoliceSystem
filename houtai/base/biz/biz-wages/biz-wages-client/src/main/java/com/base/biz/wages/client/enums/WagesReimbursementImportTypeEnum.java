@@ -7,7 +7,8 @@ package com.base.biz.wages.client.enums;
 public enum WagesReimbursementImportTypeEnum {
 
     REIMBURSEMENT(1 , "报销封面"),
-    COLLECT_REIMBURSEMENT(2, "正确的报销封面")
+    SYSTEM_REIMBURSEMENT(2 , "报销封面"),
+    COLLECT_REIMBURSEMENT(3, "正确的报销封面")
 
     ;
     private Integer type;

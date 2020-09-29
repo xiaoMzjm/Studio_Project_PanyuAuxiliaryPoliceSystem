@@ -641,8 +641,8 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
             rules.add(list);
         }
 
-        Map<String,String> replacemap = new HashMap<>();
-        replacemap.put("date",dateStr);
+        Map<String,CellDTO> replacemap = new HashMap<>();
+        replacemap.put("date",new CellDTO(dateStr));
         String savePath = diskStaticUrl + "files/";
         String wordName = ExcelUtil.insertExcelAndSave(zhengGongBan, 5, 0, savePath, rules, replacemap);
 
@@ -746,7 +746,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public List<EpidemicStatisticsVO> selectStatistics(String date) throws Exception {
         Date monthBegin = DateUtil.convert2Date(date, "yyyy/MM");
         Date nextMonthBegin = DateUtil.addMonths(monthBegin,1);
-        List<ExpireVO> expireVOList = expireClient.selectByTime(monthBegin, nextMonthBegin, ExpireType.Epidemic.getCode());
+        List<ExpireVO> expireVOList = expireClient.listByTime(monthBegin, nextMonthBegin, ExpireType.Epidemic.getCode());
 
         Integer dayNumOfMonth = DateUtil.getDayNumOfMonth(DateUtil.getYear(monthBegin),DateUtil.getMonth(monthBegin));
 
@@ -790,7 +790,7 @@ public class EpidemicInnerServiceImpl implements EpidemicInnerService {
     public EpidemicStatisticsVO selectStatisticsByDay(String date) throws Exception {
         Date dayBegin = DateUtil.convert2Date(date, "yyyy/MM/dd");
         Date nextDayBegin = DateUtil.addDays(dayBegin,1);
-        List<ExpireVO> expireVOList = expireClient.selectByTime(dayBegin, nextDayBegin, ExpireType.Epidemic.getCode());
+        List<ExpireVO> expireVOList = expireClient.listByTime(dayBegin, nextDayBegin, ExpireType.Epidemic.getCode());
         if(CollectionUtils.isNotEmpty(expireVOList)) {
             ExpireVO expireVO = expireVOList.get(0);
             String zhengGongFileName = "";

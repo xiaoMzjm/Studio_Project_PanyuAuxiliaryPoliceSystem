@@ -2,7 +2,9 @@ package com.base.biz.wages.server.service;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
+import com.base.biz.wages.client.model.WagesReimbursementVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -12,4 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface BizWagesReimbursementService {
 
     void importReimbursement(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception;
+
+    List<WagesReimbursementVO> list(Integer time);
 }

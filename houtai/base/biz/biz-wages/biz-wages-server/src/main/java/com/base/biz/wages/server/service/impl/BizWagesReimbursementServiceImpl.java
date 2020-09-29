@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.base.biz.expire.client.common.ExpireEnums;
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.wages.client.enums.WageTypeEnum;
 import com.base.biz.wages.client.enums.WagesReimbursementImportTypeEnum;
+import com.base.biz.wages.client.model.WagesReimbursementVO;
 import com.base.biz.wages.server.manager.BizWagesManager;
 import com.base.biz.wages.server.model.WagesDO;
 import com.base.biz.wages.server.service.BizWagesReimbursementService;
@@ -54,7 +56,7 @@ public class BizWagesReimbursementServiceImpl implements BizWagesReimbursementSe
     private ExpireClient expireClient;
 
     /**
-     *
+     * 导入
      * @param time
      * @param webFile
      * @param targetExcel
@@ -69,10 +71,63 @@ public class BizWagesReimbursementServiceImpl implements BizWagesReimbursementSe
         Assert.notNull(type, "type is null");
 
         if(WagesReimbursementImportTypeEnum.REIMBURSEMENT.getType().equals(type)) {
-            this.importBaseReimbursement(time, webFile, targetExcel, type);
+            this.importBaseReimbursement(time, webFile, targetExcel);
         }else {
-
+            this.importCorrectBaseReimbursement(time, webFile, targetExcel);
         }
+
+    }
+
+    /**
+     * 查询
+     * @param time
+     * @return
+     */
+    @Override
+    public List<WagesReimbursementVO> list(Integer time) {
+        Assert.notNull(time, "time is null");
+        Date timeStart = DateUtil.convert2Date(String.valueOf(time),"yyyy");
+        Date timeEnd = DateUtil.addYears(timeStart, 1);
+        List<ExpireVO> expireVOList = expireClient.listByTime(timeStart, timeEnd, ExpireEnums.ExpireType.WagesReimbursement.getCode());
+        Assert.notNull(expireVOList, "查不到记录");
+
+        List<WagesReimbursementVO> result = Lists.newArrayList();
+
+        for(int i = 1 ;i <= 12;) {
+
+            WagesReimbursementVO wagesReimbursementVO = new WagesReimbursementVO();
+            result.add(wagesReimbursementVO);
+
+            ExpireVO targetExpireVO = null;
+            for(ExpireVO expireVO : expireVOList) {
+                Date expireVOTime = expireVO.getTime();
+                Integer month = DateUtil.getMonth(expireVOTime);
+                if(month == i) {
+                    targetExpireVO = expireVO;
+                    break;
+                }
+            }
+            if(targetExpireVO != null) {
+                String names = targetExpireVO.getName();
+                String code = targetExpireVO.getCode();
+
+                String[] nameArray = names.split("@");
+
+                wagesReimbursementVO.setImportReimbursementCode(code + "@" + WagesReimbursementImportTypeEnum.REIMBURSEMENT.getType());
+                wagesReimbursementVO.setImportReimbursementName(nameArray[0]);
+
+                wagesReimbursementVO.setSystemReimbursementCode(code + "@" + WagesReimbursementImportTypeEnum.SYSTEM_REIMBURSEMENT.getType());
+                wagesReimbursementVO.setSystemReimbursementName(nameArray[1]);
+
+                if(nameArray.length > 2) {
+                    wagesReimbursementVO.setCorrectReimbursementCode(code + "@" + WagesReimbursementImportTypeEnum.COLLECT_REIMBURSEMENT.getType());
+                    wagesReimbursementVO.setCorrectReimbursementName(nameArray[2]);
+                }
+            }
+            i++;
+        }
+
+        return result;
 
     }
 
@@ -81,10 +136,9 @@ public class BizWagesReimbursementServiceImpl implements BizWagesReimbursementSe
      * @param time
      * @param webFile
      * @param targetExcel
-     * @param type
      * @throws Exception
      */
-    private void importBaseReimbursement(Date time, MultipartFile webFile, InputStream targetExcel, Integer type) throws Exception{
+    private void importBaseReimbursement(Date time, MultipartFile webFile, InputStream targetExcel) throws Exception{
         // 保存上传的文件到磁盘
         String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
         webFile.transferTo(new File(url));
@@ -411,5 +465,46 @@ public class BizWagesReimbursementServiceImpl implements BizWagesReimbursementSe
         String url1 = url;
         String url2 = savePath + excelName;
         expireClient.add(code, fileName1 + "@" + fileName2, url1 + "@" + url2, time, "", ExpireType.WagesReimbursement.getCode());
+    }
+
+    /**
+     * 导入正确的报销封面
+     * @param time
+     * @param webFile
+     * @param targetExcel
+     * @throws Exception
+     */
+    private void importCorrectBaseReimbursement(Date time, MultipartFile webFile, InputStream targetExcel) throws Exception{
+        // 保存上传的文件到磁盘
+        String url = diskStaticUrl + "files/" + UUIDUtil.get() + ".xlsx";
+        webFile.transferTo(new File(url));
+        File file = new File(url);
+        System.out.println(url);
+
+        // 查询expire表
+        String code = ExpireType.WagesReimbursement.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
+        ExpireVO expireVO = expireClient.getByCode(code);
+        Assert.notNull(expireVO, "请先上传原始文件");
+
+        // 修改expire表
+        String oldName = expireVO.getName();
+        String oldUrl = expireVO.getFileUrl();
+
+        String[] oldNameArray = oldName.split("@");
+        if(oldNameArray.length == 3) {
+            oldName = oldNameArray[0] + "@" + oldNameArray[1];
+        }
+        String[] oldUrlArray = oldUrl.split("@");
+        if(oldUrlArray.length == 3) {
+            oldUrl = oldUrlArray[0] + "@" + oldUrlArray[1];
+        }
+
+        String newName = oldName + "@" + DateUtil.convert2String(time, "yyyy年MM月") + "工资报销封面(正确)";
+        String newUrl = oldUrl + "@" + url;
+
+
+        expireClient.delete(code);
+        expireClient.add(code, newName, newUrl, time, "", ExpireType.WagesReimbursement.getCode());
+
     }
 }

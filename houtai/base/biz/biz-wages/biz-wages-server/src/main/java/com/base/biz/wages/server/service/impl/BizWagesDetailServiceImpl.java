@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.JSON;
-
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
@@ -96,7 +94,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         }else {
             type = ExpireType.WagesFour.getCode();
         }
-        List<ExpireVO> expireVOList = expireClient.selectByTime(begin, end, type);
+        List<ExpireVO> expireVOList = expireClient.listByTime(begin, end, type);
 
         List<WageListVO> result = Lists.newArrayList();
         for(int i = 1 ; i <= 12 ; i++) {
@@ -120,7 +118,16 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
                         if(nameArray.length > 2 && urlArray.length > 2) {
                             wageListVO.setCorrectReportName(nameArray[2]);
                         }
-                        wageListVO.setCode(expireVO.getCode());
+                        if(WageTypeEnum.THREE.getType().equals(type)) {
+                            wageListVO.setImportReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.THREE.getValue());
+                            wageListVO.setSystemReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.SYSTEM_THREE.getValue());
+                            wageListVO.setCorrectReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.CORRECT_THREE.getValue());
+                        }else {
+                            wageListVO.setImportReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.FOUR.getValue());
+                            wageListVO.setSystemReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.SYSTEM_FOUR.getValue());
+                            wageListVO.setCorrectReportCode(expireVO.getCode() + "@" + WagesDetailImportTypeEnum.CORRECT_FOUR.getValue());
+                        }
+
                     }
                 }
             }
@@ -743,7 +750,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         }else {
             code = ExpireType.WagesFour.getCode() + "-" + DateUtil.convert2String(time, "yyyy-MM");
         }
-        ExpireVO expireVO = expireClient.findByCode(code);
+        ExpireVO expireVO = expireClient.getByCode(code);
         if(expireVO == null) {
             throw new BaseException("请先上传工资明细表");
         }

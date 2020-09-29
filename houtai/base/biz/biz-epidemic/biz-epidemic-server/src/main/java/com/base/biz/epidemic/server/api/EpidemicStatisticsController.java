@@ -105,7 +105,7 @@ public class EpidemicStatisticsController {
         String fileName = "";
         String fileUrl = "";
 
-        ExpireVO expireVO = expireClient.findByCode(expireCode);
+        ExpireVO expireVO = expireClient.getByCode(expireCode);
         if (expireVO == null) {
             throw new BaseException("文件不存在，请重新生成");
         }

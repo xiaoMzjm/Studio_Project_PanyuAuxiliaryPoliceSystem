@@ -25,7 +25,7 @@ public class ExpireClientImpl implements ExpireClient {
     private ExpireManager expireManager;
 
     @Override
-    public List<ExpireVO> selectByTime(Date start, Date end, Integer type){
+    public List<ExpireVO> listByTime(Date start, Date end, Integer type){
 
         List<ExpireDO> expireDOList = expireManager.getByTime(start, end, type);
         if(CollectionUtils.isEmpty(expireDOList)) {
@@ -59,7 +59,7 @@ public class ExpireClientImpl implements ExpireClient {
     }
 
     @Override
-    public ExpireVO findByCode(String code) {
+    public ExpireVO getByCode(String code) {
         ExpireDO expireDO = expireManager.getByCode(code);
         if(expireDO == null) {
             return null;
