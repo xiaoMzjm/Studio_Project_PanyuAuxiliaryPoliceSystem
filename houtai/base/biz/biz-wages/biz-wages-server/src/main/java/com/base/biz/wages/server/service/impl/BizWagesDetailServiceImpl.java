@@ -489,7 +489,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         }
 
         // 删除工资数据
-        bizWagesManager.deleteByIdentityList(identityCodeList);
+        bizWagesManager.deleteByIdentityListAndTime(identityCodeList, time);
 
         // 保存工资到db
         bizWagesManager.batchSave(wagesDOList);
@@ -739,7 +739,7 @@ public class BizWagesDetailServiceImpl implements BizWagesDetailService {
         }
 
         // 删除wages数据
-        bizWagesManager.deleteByIdentityList(wagesDOList.stream().map(WagesDO::getIdentityCard).collect(Collectors.toList()));
+        bizWagesManager.deleteByIdentityListAndTime(wagesDOList.stream().map(WagesDO::getIdentityCard).collect(Collectors.toList()), time);
 
         // 保存到db
         bizWagesManager.batchSave(wagesDOList);

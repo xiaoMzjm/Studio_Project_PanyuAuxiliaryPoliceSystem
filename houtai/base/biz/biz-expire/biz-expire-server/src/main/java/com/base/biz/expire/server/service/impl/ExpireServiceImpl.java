@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.base.biz.expire.client.common.ExpireEnums.ExpireType;
 import com.base.biz.expire.client.model.ExpireVO;
-import com.base.biz.expire.server.manager.ExpireManager;
+import com.base.biz.expire.server.manager.impl.ExpireManagerImpl;
 import com.base.biz.expire.server.model.ExpireDO;
 import com.base.biz.expire.server.service.ExpireService;
 import com.base.common.util.ExcelUtil.CellDTO;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 public class ExpireServiceImpl implements ExpireService {
 
     @Autowired
-    private ExpireManager expireManager;
+    private ExpireManagerImpl expireManager;
     @Value("${ResourceStaticUrl}")
     private String diskStaticUrl;
     @Autowired
@@ -72,7 +72,7 @@ public class ExpireServiceImpl implements ExpireService {
 
         Date start = DateUtil.getFirstDayOfYear(year);
         Date end = DateUtil.addYears(start, 1);
-        List<ExpireDO> expireDOList = expireManager.getByTime(start, end, type);
+        List<ExpireDO> expireDOList = expireManager.listByTime(start, end, type);
         List<ExpireVO> expireVOList = Lists.newArrayList();
         Integer size = 0;
         if(CollectionUtils.isNotEmpty(expireDOList)) {

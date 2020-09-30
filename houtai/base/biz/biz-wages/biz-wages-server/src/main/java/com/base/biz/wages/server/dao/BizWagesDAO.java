@@ -19,7 +19,7 @@ public interface BizWagesDAO extends JpaRepository<WagesDO,Long> {
      * @param identityCardList
      * @return
      */
-    List<WagesDO> findByIdentityCardIn(List<String> identityCardList);
+    List<WagesDO> findByIdentityCardInAndTime(List<String> identityCardList, Date time);
 
     /**
      * 根据时间搜索

@@ -11,11 +11,13 @@ import com.base.biz.expire.client.model.ExpireVO;
  */
 public interface ExpireClient {
 
-    void add(String code, String fileName, String fileUrl, Date time, String remark, int type) throws Exception;
+    void add(String code, String fileName, String fileUrl, Date time, String remark, int type);
 
     Long delete(String code);
 
     List<ExpireVO> listByTime(Date start, Date end, Integer type);
+
+    List<ExpireVO> listAllByType(Integer type);
 
     ExpireVO getByCode(String code);
 

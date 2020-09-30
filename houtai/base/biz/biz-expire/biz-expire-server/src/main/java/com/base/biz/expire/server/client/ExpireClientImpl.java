@@ -6,6 +6,8 @@ import java.util.List;
 import com.base.biz.expire.client.model.ExpireVO;
 import com.base.biz.expire.client.service.ExpireClient;
 import com.base.biz.expire.server.manager.ExpireManager;
+import com.base.biz.expire.server.manager.impl.ExpireManagerImpl;
+import com.base.biz.expire.server.model.ExpireConvertor;
 import com.base.biz.expire.server.model.ExpireDO;
 import com.base.common.util.UUIDUtil;
 import com.google.common.collect.Lists;
@@ -27,25 +29,18 @@ public class ExpireClientImpl implements ExpireClient {
     @Override
     public List<ExpireVO> listByTime(Date start, Date end, Integer type){
 
-        List<ExpireDO> expireDOList = expireManager.getByTime(start, end, type);
-        if(CollectionUtils.isEmpty(expireDOList)) {
-            return Lists.newArrayList();
-        }
-        List<ExpireVO> result = Lists.newArrayList();
-        for(ExpireDO expireDO : expireDOList) {
-            ExpireVO expireVO = new ExpireVO();
-            expireVO.setCode(expireDO.getCode());
-            expireVO.setName(expireDO.getFileName());
-            expireVO.setTime(expireDO.getTime());
-            expireVO.setFileUrl(expireDO.getFileUrl());
-            expireVO.setRemark(expireDO.getRemark());
-            result.add(expireVO);
-        }
-        return result;
+        List<ExpireDO> expireDOList = expireManager.listByTime(start, end, type);
+        return ExpireConvertor.do2voList(expireDOList);
     }
 
     @Override
-    public void add(String code, String fileName, String fileUrl, Date time, String remark, int type) throws Exception {
+    public List<ExpireVO> listAllByType(Integer type) {
+        List<ExpireDO> expireDOList = expireManager.listByTypeOrderByTimeDesc(type);
+        return ExpireConvertor.do2voList(expireDOList);
+    }
+
+    @Override
+    public void add(String code, String fileName, String fileUrl, Date time, String remark, int type){
         String c = UUIDUtil.get();
         if(StringUtils.isNotEmpty(code)) {
             c = code;
@@ -61,23 +56,9 @@ public class ExpireClientImpl implements ExpireClient {
     @Override
     public ExpireVO getByCode(String code) {
         ExpireDO expireDO = expireManager.getByCode(code);
-        if(expireDO == null) {
-            return null;
-        }
-        ExpireVO expireVO = new ExpireVO();
-        expireVO.setCode(expireDO.getCode());
-        expireVO.setName(expireDO.getFileName());
-        expireVO.setTime(expireDO.getTime());
-        expireVO.setFileUrl(expireDO.getFileUrl());
-        expireVO.setRemark(expireDO.getRemark());
-        return expireVO;
+        return ExpireConvertor.do2vo(expireDO);
     }
 
-    public ExpireManager getExpireManager() {
-        return expireManager;
-    }
 
-    public void setExpireManager(ExpireManager expireManager) {
-        this.expireManager = expireManager;
-    }
+
 }

@@ -13,9 +13,9 @@ public interface BizWagesManager {
 
     List<WagesDO> batchSave(List<WagesDO> wagesDOList);
 
-    void deleteByIdentityList(List<String> identityList);
+    void deleteByIdentityListAndTime(List<String> identityList, Date time);
 
-    List<WagesDO> listByIdentityList(List<String> identityList);
+    List<WagesDO> listByIdentityListAndTime(List<String> identityList, Date time);
 
     List<WagesDO> listByTime(Date time);
 

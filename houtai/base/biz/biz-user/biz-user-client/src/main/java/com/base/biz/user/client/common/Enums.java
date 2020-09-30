@@ -1850,4 +1850,57 @@ public class Enums {
         }
     }
 
+    /**
+     * 年度考核情况职级
+     */
+    public enum AssessmentGradeEnum {
+        YOU_XIU(0, "优秀"),
+        CHEN_ZHI(1, "称职"),
+        JI_BEN_CHEN_ZHI(2, "基本称职"),
+        BU_CHEN_ZHI(3, "不称职"),
+        BU_QUE_DING(4, "不确定等级");
+
+        private Integer code;
+        private String name;
+
+        AssessmentGradeEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getName(Integer type) {
+            for(UserTypeEnum e : UserTypeEnum.values()) {
+                if(e.getCode().equals(type)) {
+                    return e.getName();
+                }
+            }
+            return "";
+        }
+
+        public static List<EnumVO> getAll() {
+            List<EnumVO> list = Lists.newArrayList();
+            for (AssessmentGradeEnum e : AssessmentGradeEnum.values()) {
+                list.add(new EnumVO(e.getCode(), e.getName()));
+            }
+            return list;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
+
 }

@@ -75,7 +75,7 @@ public class BizUserDTO {
 
     private Integer placeOfWork; // 工作岗位 @see PlaceOfWorkEnum
 
-    private Integer jobGrade; // 工作职级 @see JopGradeEnum
+    private Integer jobGrade; // 工作职级 @see JobGradeEnum
 
     private Integer treatmentGrade; // 待遇级别
 

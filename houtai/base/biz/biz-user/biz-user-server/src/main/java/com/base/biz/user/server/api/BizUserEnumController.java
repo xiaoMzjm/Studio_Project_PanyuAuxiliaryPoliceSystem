@@ -3,6 +3,7 @@ package com.base.biz.user.server.api;
 import java.util.*;
 import com.alibaba.fastjson.JSON;
 
+import com.base.biz.user.client.common.Enums.AssessmentGradeEnum;
 import com.base.biz.user.client.common.Enums.AuthorizedStrengthTypeEnum;
 import com.base.biz.user.client.common.Enums.DimssionTypeEnum;
 import com.base.biz.user.client.common.Enums.DrivingTypeEnum;
@@ -63,6 +64,7 @@ public class BizUserEnumController {
         map.put("jobcategory", JobCategoryEnum.getAll());
         map.put("specialpeople", SpecialPeopleEnum.getAll());
         map.put("duecontract", DueContractEnum.getAll());
+        map.put("assessment", AssessmentGradeEnum.getAll());
 
         return JSON.toJSONString(Result.success(map));
     }

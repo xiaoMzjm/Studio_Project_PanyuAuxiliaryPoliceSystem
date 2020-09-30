@@ -35,16 +35,16 @@ public class BizWagesManagerImpl implements BizWagesManager {
     }
 
     @Override
-    public void deleteByIdentityList(List<String> identityList) {
-        List<WagesDO> wagesDOList = listByIdentityList(identityList);
+    public void deleteByIdentityListAndTime(List<String> identityList, Date time) {
+        List<WagesDO> wagesDOList = listByIdentityListAndTime(identityList, time);
         if(CollectionUtils.isNotEmpty(wagesDOList)) {
             bizWagesDAO.deleteAll(wagesDOList);
         }
     }
 
     @Override
-    public List<WagesDO> listByIdentityList(List<String> identityList) {
-        return bizWagesDAO.findByIdentityCardIn(identityList);
+    public List<WagesDO> listByIdentityListAndTime(List<String> identityList, Date time) {
+        return bizWagesDAO.findByIdentityCardInAndTime(identityList, time);
     }
 
     @Override

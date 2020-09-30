@@ -115,15 +115,6 @@ public class InitService {
         //}catch (Exception e) {}
 
 
-        // 考核管理
-        //try {
-        //    vo = authorityService.add("考核管理", "BaseDataStatistics", AuthorityTypeEnum.Page.getType(),null);
-        //}catch (Exception e) {}
-        //try {
-        //    vo = authorityService.add("年度考核列表", "YearStatistics", AuthorityTypeEnum.Page.getType(),"BaseDataStatistics");
-        //}catch (Exception e) {}
-
-
         // 到期管理
         try {
             vo = authorityClient.add("到期管理", "ExpireManager", AuthorityTypeEnum.Page.getType(),null);
@@ -140,18 +131,18 @@ public class InitService {
 
 
         // 工资管理
-        //try {
-        //    vo = authorityService.add("工资管理", "WagesManager", AuthorityTypeEnum.Page.getType(),null);
-        //}catch (Exception e) {}
-        //try {
-        //    vo = authorityService.add("工资明细", "WagesDetail", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        //}catch (Exception e) {}
-        //try {
-        //    vo = authorityService.add("工资报销封面", "WagesReimbursement", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        //}catch (Exception e) {}
-        //try {
-        //    vo = authorityService.add("工资变动", "WagesChange", AuthorityTypeEnum.Page.getType(),"WagesManager");
-        //}catch (Exception e) {}
+        try {
+            vo = authorityClient.add("工资管理", "WagesManager", AuthorityTypeEnum.Page.getType(),null);
+        }catch (Exception e) {}
+        try {
+            vo = authorityClient.add("工资明细", "WagesDetail", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityClient.add("工资报销封面", "WagesReimbursement", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
+        try {
+            vo = authorityClient.add("工资变动", "WagesChange", AuthorityTypeEnum.Page.getType(),"WagesManager");
+        }catch (Exception e) {}
 
 
         // 考核管理
