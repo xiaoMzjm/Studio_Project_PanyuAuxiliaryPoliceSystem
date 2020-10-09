@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 考核管理
  * @author:小M
  * @date:2020/9/20 12:52 AM
  */
@@ -32,6 +33,10 @@ public class BizAssessmentController {
     @Autowired
     private BizAssessmentService bizAssessmentService;
 
+    /**
+     * 获取考核列表
+     * @return
+     */
     @RequestMapping("/list")
     @ResultFilter
     @TokenFilter
@@ -40,6 +45,11 @@ public class BizAssessmentController {
         return JSON.toJSONString(Result.success(assementPageListVOList));
     }
 
+    /**
+     * 完成录入
+     * @param complateReq
+     * @return
+     */
     @RequestMapping("/complete")
     @ResultFilter
     @TokenFilter

@@ -372,7 +372,9 @@ public class BizUserInnerServiceImpl implements BizUserService {
             List<BizUserDetailVO.Experience> personalExperiences = Lists.newArrayList();
             for(PersonalExperienceDTO personalExperienceDTO : personalExperienceList) {
                 Experience experience = new Experience();
+                experience.setTimeStartDate(personalExperienceDTO.getTimeStart());
                 experience.setTimeStart(DateUtil.convert2String(personalExperienceDTO.getTimeStart(), BizUserConstant.DateFormat));
+                experience.setTimeEndDate(personalExperienceDTO.getTimeEnd());
                 experience.setTimeEnd(DateUtil.convert2String(personalExperienceDTO.getTimeEnd(), BizUserConstant.DateFormat));
                 experience.setUnit(personalExperienceDTO.getUnit());
                 experience.setDepartment(personalExperienceDTO.getCompany());
@@ -416,14 +418,16 @@ public class BizUserInnerServiceImpl implements BizUserService {
         }
 
         // 考核
-        List<AssessmentDTO> assessmentDTOList = assessmentManager.findByUserCode(dto.getCode());
+        List<AssessmentDTO> assessmentDTOList = assessmentManager.listByUserCode(dto.getCode());
         if(CollectionUtils.isNotEmpty(assessmentDTOList)) {
             List<BizUserDetailVO.Assessment> assessmentList = Lists.newArrayList();
             for(AssessmentDTO assessmentDTO : assessmentDTOList) {
                 BizUserDetailVO.Assessment assessment = new BizUserDetailVO.Assessment();
                 assessment.setTime(DateUtil.convert2String(assessmentDTO.getTime(), BizUserConstant.DateFormat));
-                assessment.setGrade(assessmentDTO.getGrade());
+                assessment.setTimeDate(assessmentDTO.getTime());
+                assessment.setGrade(Integer.valueOf(assessmentDTO.getGrade()));
                 assessment.setRemark(assessmentDTO.getRemark());
+                assessment.setUserCode(assessmentDTO.getUserCode());
                 assessmentList.add(assessment);
             }
             vo.setAssessment(assessmentList);

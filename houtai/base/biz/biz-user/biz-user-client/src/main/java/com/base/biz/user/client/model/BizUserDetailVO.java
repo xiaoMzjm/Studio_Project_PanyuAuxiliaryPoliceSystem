@@ -1,5 +1,6 @@
 package com.base.biz.user.client.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * @author:小M
  * @date:2020/4/10 1:46 AM
  */
-public class BizUserDetailVO {
+public class BizUserDetailVO implements Comparable{
     private String code;
     private String name;
     private String headPicCode;
@@ -126,6 +127,8 @@ public class BizUserDetailVO {
     private List<FamilyMember> familyMember;
     private List<Award> award;
     private List<Assessment> assessment;
+
+
 
     public String getName() {
         return name;
@@ -754,8 +757,22 @@ public class BizUserDetailVO {
         this.userType = userType;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        if(this == o) {
+            return 0;
+        }else if(o != null && o instanceof BizUserDetailVO) {
+            BizUserDetailVO vo = (BizUserDetailVO)o;
+            return workUnitName.compareTo(vo.getWorkUnitName());
+        }else {
+            return -1;
+        }
+    }
+
     public static class Experience {
+        private Date timeStartDate;
         private String timeStart;
+        private Date timeEndDate;
         private String timeEnd;
         private String unit;
         private String department;
@@ -799,6 +816,22 @@ public class BizUserDetailVO {
 
         public void setDuty(String duty) {
             this.duty = duty;
+        }
+
+        public Date getTimeStartDate() {
+            return timeStartDate;
+        }
+
+        public void setTimeStartDate(Date timeStartDate) {
+            this.timeStartDate = timeStartDate;
+        }
+
+        public Date getTimeEndDate() {
+            return timeEndDate;
+        }
+
+        public void setTimeEndDate(Date timeEndDate) {
+            this.timeEndDate = timeEndDate;
         }
     }
 
@@ -908,9 +941,19 @@ public class BizUserDetailVO {
     }
 
     public static class Assessment{
+        private Date timeDate;
         private String time;
-        private String grade;
+        private Integer grade;
         private String remark;
+        private String userCode;
+
+        public Date getTimeDate() {
+            return timeDate;
+        }
+
+        public void setTimeDate(Date timeDate) {
+            this.timeDate = timeDate;
+        }
 
         public String getTime() {
             return time;
@@ -920,11 +963,11 @@ public class BizUserDetailVO {
             this.time = time;
         }
 
-        public String getGrade() {
+        public Integer getGrade() {
             return grade;
         }
 
-        public void setGrade(String grade) {
+        public void setGrade(Integer grade) {
             this.grade = grade;
         }
 
@@ -934,6 +977,14 @@ public class BizUserDetailVO {
 
         public void setRemark(String remark) {
             this.remark = remark;
+        }
+
+        public String getUserCode() {
+            return userCode;
+        }
+
+        public void setUserCode(String userCode) {
+            this.userCode = userCode;
         }
     }
 

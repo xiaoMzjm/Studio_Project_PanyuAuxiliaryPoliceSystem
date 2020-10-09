@@ -55,12 +55,19 @@ public class AssessmentManagerImpl implements AssessmentManager {
      * @param userCode
      * @return
      */
-    public List<AssessmentDTO> findByUserCode(String userCode) {
+    public List<AssessmentDTO> listByUserCode(String userCode) {
         AssessmentDO ddo = new AssessmentDO();
         ddo.setUserCode(userCode);
         Example<AssessmentDO> example = Example.of(ddo);
         List<AssessmentDO> list = assessmentDao.findAll(example);
         return AssessmentConvertor.do2dtoList(list);
+    }
+
+    @Override
+    public List<AssessmentDTO> listByTime(Date timeStart, Date timeEnd) {
+        List<AssessmentDO> assessmentDOList = assessmentDao.findByTimeGreaterThanEqualAndTimeLessThan(timeStart, timeEnd);
+        return AssessmentConvertor.do2dtoList(assessmentDOList);
+
     }
 
     /**

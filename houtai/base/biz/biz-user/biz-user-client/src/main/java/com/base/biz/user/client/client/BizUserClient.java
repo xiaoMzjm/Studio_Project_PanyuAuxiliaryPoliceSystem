@@ -3,6 +3,7 @@ package com.base.biz.user.client.client;
 import java.util.*;
 
 import com.base.biz.user.client.model.BizUserDetailVO;
+import com.base.biz.user.client.model.BizUserDetailVO.Assessment;
 
 /**
  * @author:小M
@@ -23,4 +24,10 @@ public interface BizUserClient {
     Map<String,BizUserDetailVO> listByCodeList(List<String> codeList) ;
 
     BizUserDetailVO getByUserCode(String userCode);
+
+    /**
+     * 根据时间获取奖惩记录
+     * @return
+     */
+    List<Assessment> listByTime(Date timeStart, Date timeEnd);
 }
