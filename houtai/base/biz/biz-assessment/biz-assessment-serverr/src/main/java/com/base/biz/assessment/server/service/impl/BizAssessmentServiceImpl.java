@@ -22,7 +22,6 @@ import com.base.biz.user.client.client.BizUserClient;
 import com.base.biz.user.client.common.Enums.AssessmentGradeEnum;
 import com.base.biz.user.client.model.BizUserDetailVO;
 import com.base.biz.user.client.model.BizUserDetailVO.Assessment;
-import com.base.biz.user.client.model.BizUserDetailVO.Experience;
 import com.base.common.util.DateUtil;
 import com.base.common.util.ExcelUtil;
 import com.base.common.util.ExcelUtil.CellDTO;

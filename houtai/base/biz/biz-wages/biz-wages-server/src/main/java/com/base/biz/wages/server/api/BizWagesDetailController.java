@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * 工资明细
  * @author:小M
  * @date:2020/8/30 11:47 AM
  */
@@ -69,7 +70,7 @@ public class BizWagesDetailController {
     @TokenFilter
     public String list(@RequestBody ListReq req){
         List<WageListVO> wageListVOList = bizWagesDetailService.list(req.time, req.type);
-        return JSON.toJSONString(wageListVOList);
+        return JSON.toJSONString(Result.success(wageListVOList));
     }
     public static class ListReq{
         public Integer time;
