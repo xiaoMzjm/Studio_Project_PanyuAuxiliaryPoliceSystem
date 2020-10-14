@@ -1,0 +1,211 @@
+{
+  "name": { 
+    "name": "姓名",
+    "type": ""  
+  },
+  "birthdate": { 
+    "name": "出生日期",
+    "type": "date"
+  },
+  "nation": { 
+    "name": "民族",
+    "type": "enum"  
+  },
+  "politicalLandscape": { 
+    "name": "政治面貌",
+    "type": "enum"
+  },
+  "headPicCode": {
+    "name": "头像",
+    "type": "pic"
+  },
+  "graduateInstitutions": { 
+    "name": "毕业院校",
+    "type": ""
+  },
+  "policeCode": { 
+    "name": "警号",
+    "type": ""  
+  },
+  "quasiDrivingTypeList": { 
+    "name": "准驾车型",
+    "type": "multiple"
+  },
+  "specialPeopleList": { 
+    "name": "特殊人员",
+    "type": "multiple"  
+  },
+  "qualification": { 
+    "name": "资格证书",
+    "type": ""
+  },
+  "permanentResidenceAddress": { 
+    "name": "户籍地址",
+    "type": ""
+  },
+  "familyAddress": { 
+    "name": "家庭地址",
+    "type": ""
+  },
+  "sex": { 
+    "name": "性别",
+    "type": "enum"  
+  },
+  "age": { 
+    "name": "年龄",
+    "type": "range",
+    "disabled": true
+  },
+  "nativePlace": { 
+    "name": "籍贯",
+    "type": ""  
+  },
+  "education": { 
+    "name": "学历",
+    "type": "enum"
+  },
+  "major": { 
+    "name": "专业",
+    "type": ""  
+  },
+  "maritalStatus": { 
+    "name": "婚姻状况",
+    "type": "enum"
+  },
+  "identityCard": { 
+    "name": "身份证",
+    "type": ""
+  },
+  "phone": { 
+    "name": "手机号码",
+    "type": ""
+  },
+  "personnelType": { 
+    "name": "人员类别",
+    "type": "enum"
+  },
+  "authorizedStrengthType": { 
+    "name": "编制类别",
+    "type": "enum"
+  },
+  "placeOfWork": { 
+    "name": "工作岗位",
+    "type": "enum"
+  },
+  "jobGrade": { 
+    "name": "职级",
+    "type": "enum"  
+  },
+  "treatmentGrade": { 
+    "name": "待遇级别",
+    "type": "enum"
+  },
+  "enrollWay": { 
+    "name": "招录方式",
+    "type": "enum"
+  },
+  "beginWorkTime": { 
+    "name": "参加工作时间",
+    "type": "date"
+  },
+  "effectiveDateOfTheContract": { 
+    "name": "合同生效时间",
+    "type": "date"
+  },
+  "workUnit": { 
+    "name": "工作单位",
+    "type": "enums"
+  },
+  "organizationUnit": { 
+    "name": "编制单位",
+    "type": "enums"
+  },
+  "jobCategory": { 
+    "name": "岗位类别",
+    "type": "enum"
+  },
+  "duty": { 
+    "name": "职务",
+    "type": ""  
+  },
+  "socialSecurityNumber": { 
+    "name": "社保账号",
+    "type": ""
+  },
+  "beginPoliceWorkTime": { 
+    "name": "参加工作时间",
+    "type": "date"
+  },
+  "contractExpirationDate": { 
+    "name": "合同失效时间",
+    "type": "date"
+  },
+  "dimissionDate": { 
+    "name": "离职时间",
+    "type": "date"
+  },
+  "dimissionReason": { 
+    "name": "离职原因",
+    "type": ""
+  },
+  "personalExperience": {
+    "name": "个人经历",
+    "type": "table"
+  },
+  "firstGradeTime": {
+    "name": "任一级辅警起算时间",
+    "type": "date"
+  },
+  "workCardBeginTime": {
+    "name": "工作证起始日期",
+    "type": "date"
+  },
+  "firstContractBeginTime": {
+    "name": "第一次合同生效时间",
+    "type": "date"
+  },
+  "firstContractEngTime": {
+    "name": "第一次合同终止时间",
+    "type": "date"
+  },
+  "secondContractBeginTime": {
+    "name": "第二次合同生效时间",
+    "type": "date"
+  },
+  "secondContractEngTime": {
+    "name": "第二次合同终止时间",
+    "type": "date"
+  },
+  "thirdContractBeginTime": {
+    "name": "第三次合同生效时间",
+    "type": "date"
+  },
+  "thirdContractEngTime": {
+    "name": "第三次合同终止时间",
+    "type": "date"
+  },
+  "dueContract": {
+    "name": "到期合同",
+    "type": "enum"
+  },
+  "icbcCardAccount": {
+    "name": "工商银行账号",
+    "type": ""
+  },
+  "ruZhiZuLinTime": {
+    "name": "入职租赁日期",
+    "type": "date"
+  },
+  "familyMember": {
+    "name": "家庭成员",
+    "type": "table"
+  },
+  "award": {
+    "name": "奖罚情况",
+    "type": "table"
+  },
+  "assessment": {
+    "name": "年度考核情况",
+    "type": "table"
+  }
+}

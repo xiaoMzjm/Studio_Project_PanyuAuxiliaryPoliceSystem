@@ -1,0 +1,137 @@
+[
+  {
+    "code": "SystemManager",
+    "name": "系统管理",
+    "icon": "el-icon-s-tools",
+    "children": [{
+      "code": "AuthorityManager",
+      "name": "权限管理",
+      "icon": "el-icon-s-tools"
+    },{
+      "code": "RoleManager",
+      "name": "角色管理",
+      "icon": "el-icon-s-tools"
+    },{
+      "code": "RoleUserBindManager",
+      "name": "角色绑定管理",
+      "icon": "el-icon-s-tools"
+    }]
+  },
+  {
+    "code": "CompanyManager",
+    "name": "单位管理",
+    "icon": "el-icon-s-home",
+    "children": [{
+      "code": "CompanyList",
+      "name": "单位列表",
+      "icon": "el-icon-s-home"
+    }]
+  },
+  {
+    "code": "UserManager",
+    "name": "人员管理",
+    "icon": "el-icon-user-solid",
+    "children": [{
+      "code": "UserList",
+      "name": "人员列表",
+      "icon": "el-icon-user-solid"
+    }]
+  },
+  {
+    "code": "BaseDataStatistics",
+    "name": "年月报表管理",
+    "icon": "el-icon-date",
+    "children": [{
+      "code": "YearStatistics",
+      "name": "年度报表",
+      "icon": "el-icon-date"
+    },{
+      "code": "MonthStatistics",
+      "name": "月度报表",
+      "icon": "el-icon-date"
+    }]
+  },
+{
+    "code": "ExpireManager",
+    "name": "到期管理",
+    "icon": "el-icon-alarm-clock",
+    "children": [{
+      "code": "ExpireEmployeeCard",
+      "name": "工作证到期提醒",
+      "icon": "el-icon-alarm-clock"
+    },{
+      "code": "ExpireContract",
+      "name": "合同证到期提醒",
+      "icon": "el-icon-alarm-clock"
+    },{
+      "code": "ExpireRetire",
+      "name": "退休提醒",
+      "icon": "el-icon-alarm-clock"
+    }]
+  },
+{
+    "code": "WagesManager",
+    "name": "工资管理",
+    "icon": "el-icon-money",
+    "children": [{
+      "code": "WagesDetail",
+      "name": "工资明细",
+      "icon": "el-icon-money"
+    },{
+      "code": "WagesReimbursement",
+      "name": "工资报销封面",
+      "icon": "el-icon-money"
+    },{
+      "code": "WagesChange",
+      "name": "工资变动",
+      "icon": "el-icon-money"
+    }]
+  },
+{
+    "code": "AssessmentManager",
+    "name": "年度考核管理",
+    "icon": "el-icon-medal-1",
+    "children": [{
+      "code": "AssessmentList",
+      "name": "年度考核列表",
+      "icon": "el-icon-medal-1"
+    },{
+      "code": "AssessmentResult",
+      "name": "年度考核结果登记",
+      "icon": "el-icon-medal-1"
+    }]
+  },{
+    "code": "ChartManger",
+    "name": "图表管理",
+    "icon": "el-icon-pie-chart",
+    "children": [{
+      "code": "ChartList",
+      "name": "图表列表",
+      "icon": "el-icon-pie-chart"
+    }]
+  },
+  {
+    "code": "WorkShiftManger",
+    "name": "轮岗管理",
+    "icon": "el-icon-c-scale-to-original",
+    "children": [{
+      "code": "WorkShiftList",
+      "name": "轮岗人员列表",
+      "icon": "el-icon-c-scale-to-original"
+    }]
+  },
+  {
+    "code": "EpidemicManager",
+    "name": "防疫管理",
+    "icon": "el-icon-c-scale-to-original",
+    "children": [{
+      "code": "EpidemicListManager",
+      "name": "防疫登记和查询",
+      "icon": "el-icon-c-scale-to-original"
+    },{
+      "code": "EpidemicCollectManager",
+      "name": "防疫汇总",
+      "icon": "el-icon-c-scale-to-original"
+    }]
+  }
+]
