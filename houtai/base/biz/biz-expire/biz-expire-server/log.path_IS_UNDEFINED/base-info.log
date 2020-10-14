@@ -1,0 +1,32 @@
+2020-09-20 11:18:08.649 [main] INFO  ExpireServiceTest - Starting ExpireServiceTest on zhangjiingdeMBP with PID 1149 (started by zhangjiaming in /Users/zhangjiaming/Documents/workspace/studio/Studio_Project_PanyuAuxiliaryPoliceSystem/houtai/base/biz/biz-expire/biz-expire-server)
+2020-09-20 11:18:08.650 [main] INFO  ExpireServiceTest - The following profiles are active: local
+2020-09-20 11:18:09.589 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-09-20 11:18:09.728 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 117ms. Found 1 repository interfaces.
+2020-09-20 11:18:11.041 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3a0c586f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-20 11:18:11.194 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-20 11:18:11.330 [main] INFO  ExpireServiceTest - Starting ExpireServiceTest on zhangjiingdeMBP with PID 1149 (started by zhangjiaming in /Users/zhangjiaming/Documents/workspace/studio/Studio_Project_PanyuAuxiliaryPoliceSystem/houtai/base/biz/biz-expire/biz-expire-server)
+2020-09-20 11:18:11.331 [main] INFO  ExpireServiceTest - The following profiles are active: local
+2020-09-20 11:18:11.552 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-09-20 11:18:11.578 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25ms. Found 1 repository interfaces.
+2020-09-20 11:18:11.743 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3a0c586f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-20 11:18:11.779 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-20 11:18:11.887 [main] INFO  ExpireServiceTest - Starting ExpireServiceTest on zhangjiingdeMBP with PID 1149 (started by zhangjiaming in /Users/zhangjiaming/Documents/workspace/studio/Studio_Project_PanyuAuxiliaryPoliceSystem/houtai/base/biz/biz-expire/biz-expire-server)
+2020-09-20 11:18:11.887 [main] INFO  ExpireServiceTest - The following profiles are active: local
+2020-09-20 11:18:12.010 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-09-20 11:18:12.025 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14ms. Found 1 repository interfaces.
+2020-09-20 11:18:12.124 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3a0c586f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-20 11:18:12.159 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-20 11:18:12.260 [main] INFO  ExpireServiceTest - Starting ExpireServiceTest on zhangjiingdeMBP with PID 1149 (started by zhangjiaming in /Users/zhangjiaming/Documents/workspace/studio/Studio_Project_PanyuAuxiliaryPoliceSystem/houtai/base/biz/biz-expire/biz-expire-server)
+2020-09-20 11:18:12.261 [main] INFO  ExpireServiceTest - The following profiles are active: local
+2020-09-20 11:18:12.416 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-09-20 11:18:12.435 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18ms. Found 1 repository interfaces.
+2020-09-20 11:18:12.740 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3a0c586f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-20 11:18:12.791 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
