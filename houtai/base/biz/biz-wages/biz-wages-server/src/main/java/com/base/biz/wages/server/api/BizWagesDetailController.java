@@ -40,7 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/wages/detail", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://192.168.50.196:8080")
+@CrossOrigin(origins = "http://${crossorigin.ip}:8080")
 public class BizWagesDetailController {
 
     @Autowired

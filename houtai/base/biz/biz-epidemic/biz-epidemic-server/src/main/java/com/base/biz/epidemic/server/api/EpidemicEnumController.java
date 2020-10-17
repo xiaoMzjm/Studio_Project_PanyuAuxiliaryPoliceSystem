@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/epidemic/enum/" , produces = "application/json;charset=UTF-8")
-@CrossOrigin(origins = "http://192.168.50.196:8080")
+@CrossOrigin(origins = "http://${crossorigin.ip}:8080")
 public class EpidemicEnumController {
 
     @ResultFilter

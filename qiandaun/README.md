@@ -3,7 +3,6 @@
 ## Project setup
 ```
 npm install
-```-0po
 
 ### Compiles and hot-reloads for development
 ```
