@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Api(description = "到期提醒接口")
 @Controller
 @RequestMapping(value = "expire", produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://${crossorigin.ip}:8080")
+@CrossOrigin(origins = "http://${crossorigin.ip}")
 public class ExpireController {
 
     @Autowired

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(description = "单位接口")
 @Controller
 @RequestMapping(produces = {"application/json;charset=UTF-8"})
-@CrossOrigin(origins = "http://${crossorigin.ip}:8080")
+@CrossOrigin(origins = "http://${crossorigin.ip}")
 public class PageController {
 
     @ApiOperation(value = "单位管理" ,  notes="单位管理")

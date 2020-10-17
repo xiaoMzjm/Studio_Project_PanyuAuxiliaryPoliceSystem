@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/epidemic/statistics/" , produces = "application/json;charset=UTF-8")
-@CrossOrigin(origins = "http://${crossorigin.ip}:8080")
+@CrossOrigin(origins = "http://${crossorigin.ip}")
 public class EpidemicStatisticsController {
 
     @Autowired
